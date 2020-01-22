@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "197482246728",
+    "firebase_url": "https://krishibaaar.firebaseio.com",
+    "project_id": "krishibaaar",
+    "storage_bucket": "krishibaaar.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:197482246728:android:552a09d4a8960c1b42de7d",
+        "android_client_info": {
+          "package_name": "com.rk.smsserver"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "197482246728-r2flr8bvhk6qbf8oin83ja13khd8r7dv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.rk.smsserver",
+            "certificate_hash": "3b99bc8a195c4837fd834cebc2d28654f6cee1f5"
+          }
+        },
+        {
+          "client_id": "197482246728-7jokh9hqvs6vlrnd74h4ijqgihruv3p7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAUBZjkI7npcN55P5u3MLmLaJi6xyfmQWE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "197482246728-7jokh9hqvs6vlrnd74h4ijqgihruv3p7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
