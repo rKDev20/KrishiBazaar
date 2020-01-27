@@ -29,14 +29,6 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.krishibazaar.Models.LocationDetails;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import static com.krishibazaar.Utils.Constants.ADDRESS;
-import static com.krishibazaar.Utils.Constants.LATITUDE;
-import static com.krishibazaar.Utils.Constants.LONGITUDE;
-import static com.krishibazaar.Utils.Constants.SUCCESS;
-
 @SuppressLint("Registered")
 public class LocationManagerActivity extends AppCompatActivity {
 
@@ -47,14 +39,14 @@ public class LocationManagerActivity extends AppCompatActivity {
 
     public void getLocation(LocationListener listener) {
         if (!onGoing) {
-            this.listener=listener;
+            this.listener = listener;
             onGoing = true;
             checkForLocationPermission();
         }
     }
 
     private void checkForLocationPermission() {
-        Log.d("abcd","checkForLocationPermission()");
+        Log.d("abcd", "checkForLocationPermission()");
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED)
                 permissionAvailable();
@@ -64,7 +56,7 @@ public class LocationManagerActivity extends AppCompatActivity {
     }
 
     private void permissionAvailable() {
-        Log.d("abcd","permissionAvailable()");
+        Log.d("abcd", "permissionAvailable()");
         LocationRequest gps = new LocationRequest();
         gps.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
         gps.setInterval(1000);
@@ -99,7 +91,7 @@ public class LocationManagerActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.d("abcd","onAvtivityResult()");
+        Log.d("abcd", "onAvtivityResult()");
         if (requestCode == RC_LOCATION_REQUEST && resultCode == RESULT_OK) {
             searchLocationPassively();
         } else {
@@ -109,7 +101,7 @@ public class LocationManagerActivity extends AppCompatActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        Log.d("abcd","onPermissionResult()");
+        Log.d("abcd", "onPermissionResult()");
         if (requestCode == RC_PERMISSION_LOCATION) {
             if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 permissionAvailable();
@@ -120,7 +112,7 @@ public class LocationManagerActivity extends AppCompatActivity {
     }
 
     private void searchLocationPassively() {
-        Log.d("abcd","searchLocationPassively()");
+        Log.d("abcd", "searchLocationPassively()");
         FusedLocationProviderClient client = LocationServices.getFusedLocationProviderClient(this);
         client.getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
             @Override
@@ -138,12 +130,12 @@ public class LocationManagerActivity extends AppCompatActivity {
     }
 
     private void searchLocationActively() {
-        Log.d("abcd","searchLocationActively()");
+        Log.d("abcd", "searchLocationActively()");
         final FusedLocationProviderClient client = LocationServices.getFusedLocationProviderClient(this);
         LocationRequest request = new LocationRequest();
         request.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
         request.setInterval(1000);
-        final LocationCallback callback= new LocationCallback() {
+        final LocationCallback callback = new LocationCallback() {
             @Override
             public void onLocationResult(LocationResult locationResult) {
                 getLocationAddress(locationResult.getLastLocation().getLatitude(), locationResult.getLastLocation().getLongitude());
@@ -161,44 +153,36 @@ public class LocationManagerActivity extends AppCompatActivity {
     }
 
     private void getLocationAddress(final double latitude, final double longitude) {
-        Log.d("abcd","getLocationAddress()");
-        try {
-            JSONObject params = new JSONObject();
-            params.put(LATITUDE, latitude);
-            params.put(LONGITUDE, longitude);
-            VolleyRequestMaker.makeRequest(this, params, new VolleyRequestMaker.RequestListener() {
-                @Override
-                public void onResponse(JSONObject response) {
-                    try {
-                        response = (JSONObject) response.get(SUCCESS);
-                        onSuccess((String) response.get(ADDRESS), latitude, longitude);
-                    } catch (JSONException e) {
-                        LocationManagerActivity.this.onError("Server error");
-                    }
-                }
+        Log.d("abcd", "getLocationAddress()");
 
-                @Override
-                public void onError(String error) {
-                    LocationManagerActivity.this.onError(error);
-                }
-            });
-        } catch (JSONException e) {
-            onError("Server error");
-        }
+        VolleyRequestMaker.getLocationByCoordinates(this, latitude, longitude, new VolleyRequestMaker.FetchLocationListener() {
+            @Override
+            public void onSuccess(LocationDetails details) {
+                LocationManagerActivity.this.onSuccess(details);
+            }
+
+            @Override
+            public void onError(String error) {
+                LocationManagerActivity.this.onError(error);
+            }
+        });
+
+        onError("Server error");
     }
 
-    private void onSuccess(String name, double lat, double lon) {
+    private void onSuccess(LocationDetails details) {
         onGoing = false;
-        listener.onSuccess(new LocationDetails(name, lat, lon));
+        listener.onSuccess(details);
     }
 
     private void onError(String error) {
-        onGoing=false;
+        onGoing = false;
         listener.onError(error);
     }
 
     public interface LocationListener {
         void onSuccess(LocationDetails details);
+
         void onError(String error);
     }
 }
