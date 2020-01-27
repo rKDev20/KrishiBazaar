@@ -11,7 +11,7 @@ import com.krishibazaar.Models.LocationDetails;
 import com.krishibazaar.Popups.LocationChooser;
 import com.krishibazaar.Popups.PopupListener;
 import com.krishibazaar.Utils.LocationManagerActivity;
-
+//Part 2 comment
 public class HomeActivity extends LocationManagerActivity {
 
     LocationDetails locationDetails;
