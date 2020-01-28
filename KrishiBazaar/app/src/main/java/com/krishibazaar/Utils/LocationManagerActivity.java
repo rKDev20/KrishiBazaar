@@ -138,15 +138,17 @@ public class LocationManagerActivity extends AppCompatActivity {
         final LocationCallback callback = new LocationCallback() {
             @Override
             public void onLocationResult(LocationResult locationResult) {
+                Log.d("abcd", "onLocationResult()");
+
                 getLocationAddress(locationResult.getLastLocation().getLatitude(), locationResult.getLastLocation().getLongitude());
                 client.removeLocationUpdates(this);
             }
 
             @Override
             public void onLocationAvailability(LocationAvailability locationAvailability) {
+                Log.d("abcd", "onLocationAvailable()");
                 if (!locationAvailability.isLocationAvailable())
                     onError("Cannot get your location");
-                else client.removeLocationUpdates(this);
             }
         };
         client.requestLocationUpdates(request, callback, null);
@@ -154,7 +156,6 @@ public class LocationManagerActivity extends AppCompatActivity {
 
     private void getLocationAddress(final double latitude, final double longitude) {
         Log.d("abcd", "getLocationAddress()");
-
         VolleyRequestMaker.getLocationByCoordinates(this, latitude, longitude, new VolleyRequestMaker.FetchLocationListener() {
             @Override
             public void onSuccess(LocationDetails details) {
@@ -166,8 +167,6 @@ public class LocationManagerActivity extends AppCompatActivity {
                 LocationManagerActivity.this.onError(error);
             }
         });
-
-        onError("Server error");
     }
 
     private void onSuccess(LocationDetails details) {
