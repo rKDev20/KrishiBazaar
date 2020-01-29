@@ -32,6 +32,7 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         this.listener = listener;
     }
 
+
     public void addData(List<Search.Response> data) {
         this.data.addAll(data);
     }

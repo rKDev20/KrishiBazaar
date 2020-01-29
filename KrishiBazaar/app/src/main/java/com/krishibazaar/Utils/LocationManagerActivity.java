@@ -156,7 +156,7 @@ public class LocationManagerActivity extends AppCompatActivity {
 
     private void getLocationAddress(final double latitude, final double longitude) {
         Log.d("abcd", "getLocationAddress()");
-        VolleyRequestMaker.getLocationByCoordinates(this, latitude, longitude, new VolleyRequestMaker.FetchLocationListener() {
+        VolleyRequestMaker.getLocationByCoordinates(this, latitude, longitude, new VolleyRequestMaker.TaskFinishListener<LocationDetails>() {
             @Override
             public void onSuccess(LocationDetails details) {
                 LocationManagerActivity.this.onSuccess(details);

@@ -95,7 +95,7 @@ public class HomeActivity extends LocationManagerActivity {
         String searchText = searchBox.getText().toString();
         if (!searchText.isEmpty()) {
             Search.Query query = new Search.Query(searchText, null, ITEMS_TO_LOAD, pageOffset + 1, null, null);
-            VolleyRequestMaker.loadProducts(this, query, new VolleyRequestMaker.SearchListener() {
+            VolleyRequestMaker.loadProducts(this, query, new VolleyRequestMaker.TaskFinishListener<List<Search.Response>>() {
                 @Override
                 public void onSuccess(List<Search.Response> response) {
                     refreshList(response);

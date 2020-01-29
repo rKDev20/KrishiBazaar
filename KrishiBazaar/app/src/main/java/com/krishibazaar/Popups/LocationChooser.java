@@ -31,8 +31,7 @@ public class LocationChooser {
             @Override
             public void onClick(View view) {
                 if (!location.getText().toString().isEmpty()) {
-
-                    VolleyRequestMaker.getLocationByAddress(context, location.getText().toString(), new VolleyRequestMaker.FetchLocationListener() {
+                    VolleyRequestMaker.getLocationByAddress(context, location.getText().toString(), new VolleyRequestMaker.TaskFinishListener<LocationDetails>() {
                         @Override
                         public void onSuccess(final LocationDetails details) {
 
