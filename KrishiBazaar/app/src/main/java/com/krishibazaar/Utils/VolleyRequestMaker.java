@@ -11,6 +11,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.krishibazaar.Models.LocationDetails;
 import com.krishibazaar.Models.Search;
+import com.krishibazaar.Models.Transaction;
 import com.krishibazaar.Models.User;
 
 import org.json.JSONArray;
@@ -22,9 +23,10 @@ import java.util.List;
 
 import static com.krishibazaar.Utils.Constants.ADDRESS;
 import static com.krishibazaar.Utils.Constants.GEOCODE_PHP;
+import static com.krishibazaar.Utils.Constants.GET_PROFILE_PHP;
+import static com.krishibazaar.Utils.Constants.GET_TRANSACTION_PHP;
 import static com.krishibazaar.Utils.Constants.LATITUDE;
 import static com.krishibazaar.Utils.Constants.LONGITUDE;
-import static com.krishibazaar.Utils.Constants.GET_PROFILE_PHP;
 import static com.krishibazaar.Utils.Constants.SEARCH;
 import static com.krishibazaar.Utils.Constants.SEARCH_PHP;
 import static com.krishibazaar.Utils.Constants.STATUS;
@@ -156,6 +158,7 @@ public class VolleyRequestMaker {
             listener.onError(e.getMessage());
         }
     }
+
     public static void updateUserDetails(Context context, String token, final User user, final TaskFinishListener<User> listener) {
         try {
             final JSONObject params = user.getJSON();
@@ -168,7 +171,7 @@ public class VolleyRequestMaker {
                         public void onResponse(JSONObject response) {
                             try {
                                 Log.d("abcd", response.toString());
-                                if (response.getInt(STATUS)==STATUS_SUCCESS) {
+                                if (response.getInt(STATUS) == STATUS_SUCCESS) {
                                     listener.onSuccess(user);
                                 } else listener.onError("User not found");
                             } catch (JSONException e) {
@@ -179,8 +182,8 @@ public class VolleyRequestMaker {
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            Log.d("abcd",params.toString());
-                            listener.onError("Network error" + error.networkResponse+error.getMessage());
+                            Log.d("abcd", params.toString());
+                            listener.onError("Network error" + error.networkResponse + error.getMessage());
                         }
                     });
             queue.add(request);
@@ -188,8 +191,50 @@ public class VolleyRequestMaker {
             listener.onError(e.getMessage());
         }
     }
+
+    public static void getTransactions(Context context, String token, final TaskFinishListener<List<Transaction>> listener) {
+        try {
+            final JSONObject params = new JSONObject();
+            params.put(TOKEN, token);
+            if (queue == null)
+                queue = Volley.newRequestQueue(context);
+            final JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, GET_TRANSACTION_PHP, params,
+                    new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            try {
+                                Log.d("abcd", response.toString());
+                                if (response.has(SUCCESS)) {
+                                    List<Transaction> list = new ArrayList<>();
+                                    JSONArray array = response.getJSONArray(SUCCESS);
+                                    for (int i = 0; i < array.length(); i++) {
+                                        Transaction transaction = new Transaction(array.getJSONObject(i));
+                                        list.add(transaction);
+                                    }
+                                    listener.onSuccess(list);
+                                } else listener.onError("User not found");
+                            } catch (JSONException e) {
+                                listener.onError(e.getMessage());
+                            }
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Log.d("abcd", params.toString());
+                            listener.onError("Network error" + error.networkResponse + error.getMessage());
+                        }
+                    });
+            queue.add(request);
+        } catch (JSONException e) {
+            listener.onError(e.getMessage());
+        }
+    }
+
     public interface TaskFinishListener<T> {
+
         void onSuccess(T response);
+
         void onError(String error);
     }
 }
