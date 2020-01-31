@@ -19,34 +19,11 @@ body{
   transform: translate(-50%,-50%);
   width: 900px;
   display: flex;
-  box-shadow: 0 1px 20px 0 rgba(69,90,100,.08);
 }
 
-.wrapper .left{
-  width: 35%;
-  background: linear-gradient(to right,#01a9ac,#01dbdf);
-  padding: 30px 25px;
-  border-top-left-radius: 5px;
-  border-bottom-left-radius: 5px;
-  text-align: center;
-  color: #fff;
-}
-
-.wrapper .left img{
-  border-radius: 5px;
-  margin-bottom: 10px;
-}
-
-.wrapper .left h4{
-  margin-bottom: 10px;
-}
-
-.wrapper .left p{
-  font-size: 12px;
-}
 
 .wrapper .right{
-  width: 65%;
+  width: 100%;
   background: #fff;
   padding: 30px 25px;
   border-top-right-radius: 5px;

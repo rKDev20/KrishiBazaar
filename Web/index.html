@@ -11,6 +11,7 @@
         <link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css?family=Uncial+Antiqua&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+        <script src="min.js"></script>   
     </head>
     
     <body>
@@ -31,10 +32,10 @@
         <a class="nav-link" href="#">Home<span class="sr-only">(current)</span></a>
         </li>
         <li class="nav-item">
-        <a class="nav-link" href="#">LOGIN</a>
+        <a class="nav-link" href="#"  data-target="#mymodel" data-toggle="modal">LOGIN</a>
         </li>
         <li class="nav-item">
-        <a class="nav-link" href="#">SIGNUP</a>
+        <a class="nav-link" href="signup/sign.html">SIGNUP</a>
         </li>
         <li class="nav-item">
         <a class="nav-link" href="userprofile/index.html">PROFILE</a>
@@ -83,12 +84,12 @@
                     <div class="col-md-6 services" >
                         <p>NO INTERNET NO PROBLEM</p>
                         <p>CONNECTING FARMERS AROUND INDIA</p>
-                        <p>FREE SERVICE</p>
+                        <p>FREE SERVICES</p>
                     </div>
                     <div class="col-md-6 services" >
                         <p>FREE ADVERTISEMENT</p>
                         <p>INCREASE PROFITS</p>
-                        <p>TRUSTED MIDDLEMEN</p>
+                        <p>TRUSTED MEDIATOR</p>
                     </div>
                 </div>
             </div>        
@@ -104,14 +105,18 @@
                     <div class="col-md-4 services" >
                         <h4>BUY PRODUCTS</h4>
                         <hr>
-                        <p> now buy products online</p>
-                        <button type="button" class="btn btn-primary">SEE ALL</button>
+                        <p>buy products online</p>
+                        <a href="productview/index.html">
+                        <button type="button" class="btn btn-primary" onclick=>SEE ALL</button>
+                        </a>    
                     </div>
                     <div class="col-md-4 services" >
                         <h4>POST ADS</h4>
                         <hr>
                         <p>post ads to sell your products</p>
+                        <a href="sellitem/sell.html">
                         <button type="button" class="btn btn-primary">POST ADS</button>
+                        </a>    
                     </div>
                      <div class="col-md-4 services" >
                         <h4>SMS ADS</h4>
@@ -126,6 +131,34 @@
     
         </div>
         </header>
+        <div class="modal" tabindex="-1" role="dialog" id="mymodel">
+			  <div class="modal-dialog" role="document">
+			    <div class="modal-content">
+			      <div class="modal-header">
+			        <h5 class="modal-title">Login</h5>
+			        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			          <span aria-hidden="true">&times;</span>
+			        </button>
+			      </div>
+			      <div class="modal-body">
+						<form>
+						  <div class="form-group">
+						    <label > Enter Mobile</label>
+						    <input type="tel" class="form-control" id="mobile" aria-describedby="emailHelp" placeholder="Enter Number">
+                              <div id="otpForm" hidden>
+						    <label >Enter OTP</label>
+						    <input  type="number" class="form-control" id="exampleInputPassword1" placeholder="OTP">
+                                  </div>
+                              <center><button type="button" id ="sendOtp" onclick="buttonclick()"class="btn btn-primary">Send OTP</button></center>
+						  </div>
+						   <!---<div class="form-group">
+						 <center><button type="button" class="btn btn-primary" data-dismiss="modal">Verify</button></center>
+						</div>--->
+						</form>
+			      </div>
+			    </div>
+			  </div>
+			</div>
         
             
             <footer>
