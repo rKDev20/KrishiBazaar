@@ -1,0 +1,408 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"max",
+				"maxsize"
+			],
+			[
+				"j",
+				"json"
+			],
+			[
+				"res",
+				"res2"
+			],
+			[
+				"lon",
+				"longitude"
+			],
+			[
+				"qu",
+				"query"
+			],
+			[
+				"el",
+				"else"
+			],
+			[
+				"js",
+				"json_encode"
+			],
+			[
+				"erro",
+				"error_text"
+			],
+			[
+				"lo",
+				"longitude"
+			],
+			[
+				"las",
+				"lastindex2"
+			],
+			[
+				"last",
+				"lastindex2"
+			],
+			[
+				"ac",
+				"accuracy"
+			],
+			[
+				"mysqli_",
+				"mysqli_execute"
+			],
+			[
+				"mys",
+				"mysqli_connect"
+			],
+			[
+				"la",
+				"lastIndex"
+			],
+			[
+				"lastin",
+				"lastindex2"
+			],
+			[
+				"eve",
+				"event_id"
+			],
+			[
+				"e",
+				"event_id"
+			],
+			[
+				"attach",
+				"fdf_get_attachment"
+			],
+			[
+				"co",
+				"conn"
+			],
+			[
+				"ad",
+				"admin_query"
+			],
+			[
+				"mysqli_erro",
+				"mysqli_connect_error"
+			],
+			[
+				"my",
+				"mysqli_execute"
+			],
+			[
+				"pas",
+				"pass"
+			],
+			[
+				"us",
+				"user"
+			],
+			[
+				"mysqli",
+				"mysqli_execute"
+			],
+			[
+				"c",
+				"com"
+			],
+			[
+				"di",
+				"div\tTag"
+			],
+			[
+				"se",
+				"selectbox"
+			],
+			[
+				"checkbox",
+				"checkbox"
+			],
+			[
+				"cell",
+				"cellspacing\tAttr"
+			],
+			[
+				"singl",
+				"single-line"
+			],
+			[
+				"cli",
+				"clickable"
+			],
+			[
+				"fi",
+				"file"
+			],
+			[
+				"text",
+				"text-input"
+			],
+			[
+				"form",
+				"form-control"
+			],
+			[
+				"padd",
+				"padding-left\tproperty"
+			],
+			[
+				"border",
+				"border-radius\tproperty"
+			],
+			[
+				"padding",
+				"padding\tproperty"
+			],
+			[
+				"paddin",
+				"padding\tproperty"
+			],
+			[
+				"margin",
+				"margin-right\tproperty"
+			],
+			[
+				"alig",
+				"align-content\tproperty"
+			],
+			[
+				"image",
+				"image"
+			],
+			[
+				"bord",
+				"border\tproperty"
+			],
+			[
+				"borde",
+				"border-left\tproperty"
+			],
+			[
+				"bor",
+				"border-radius\tproperty"
+			],
+			[
+				"fon",
+				"font-size\tproperty"
+			],
+			[
+				"background-c",
+				"background-color\tproperty"
+			],
+			[
+				"b",
+				"background\tproperty"
+			],
+			[
+				"paddi",
+				"padding-left"
+			]
+		]
+	},
+	"buffers":
+	[
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"console":
+	{
+		"height": 0.0,
+		"history":
+		[
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/C/xampp/htdocs/KrishiBazaar/updateProfile.php",
+		"/C/xampp/htdocs/KrishiBazaar/profile.php",
+		"/C/xampp/htdocs/KrishiBazaar/geocode.php",
+		"/C/xampp/htdocs/KrishiBazaar/file.php",
+		"/C/xampp/htdocs/KrishiBazaar/search.php",
+		"/D/Documents/Projects/KrishiBazaar/KrishiBazaar/app/src/main/java/com/krishibazaar/HomeActivity.java",
+		"/C/Users/KIIT/AppData/Local/Microsoft/Windows/INetCache/IE/XB9D2DMT/notfound[1].html",
+		"/C/Users/KIIT/AppData/Roaming/Sublime Text 3/Packages/User/Default (Windows).sublime-keymap",
+		"/D/Downloads/kritarth_up-master/soldout/.DS_Store",
+		"/C/Users/KIIT/AppData/Roaming/Sublime Text 3/Packages/Default/Default (Windows).sublime-keymap",
+		"/C/xampp/htdocs/Chimera/index.php",
+		"/C/Users/KIIT/Desktop/pattern.sh",
+		"/C/Users/KIIT/Desktop/oslab/oslab/day3/menu.sh",
+		"/D/Games/Disney's Hercules 1997 - For Windows 10 and 8- FocDownloads.blogspot.com/Disney's Hercules/SETUP.BAT",
+		"/D/Documents/Projects/Pyhton/mail.py",
+		"/D/Games/Disney's Hercules 1997 - For Windows 10 and 8- FocDownloads.blogspot.com/Disney's Hercules/HERCULES.EXE",
+		"/D/Android Studio/Notifications/app/build/outputs/apk/debug/mail.py",
+		"/D/Android Studio/Notifications/app/build/outputs/apk/debug/output.json",
+		"/D/Documents/Android.txt",
+		"/C/Users/KIIT/Desktop/archive.xml",
+		"/D/Documents/NetBeansProjects/HTML TUTORIAL/public_html/form.css",
+		"/D/Documents/NetBeansProjects/HTML TUTORIAL/public_html/feedback.html",
+		"/D/Documents/NetBeansProjects/HTML TUTORIAL/public_html/resource.html",
+		"/D/Documents/NetBeansProjects/HTML TUTORIAL/public_html/about.html",
+		"/D/Documents/NetBeansProjects/HTML TUTORIAL/public_html/buttons.html",
+		"/D/Documents/NetBeansProjects/HTML TUTORIAL/public_html/hidden.html",
+		"/D/Documents/NetBeansProjects/HTML TUTORIAL/public_html/index.html",
+		"/D/Documents/NetBeansProjects/HTML TUTORIAL/public_html/file.html",
+		"/D/Documents/NetBeansProjects/HTML TUTORIAL/public_html/selectbox.html",
+		"/D/Documents/NetBeansProjects/HTML TUTORIAL/public_html/radiobox.html",
+		"/D/Documents/NetBeansProjects/HTML TUTORIAL/public_html/checkbox.html",
+		"/D/Documents/NetBeansProjects/HTML TUTORIAL/public_html/text-input.html",
+		"/D/Documents/NetBeansProjects/HTML TUTORIAL/public_html/form-control.html",
+		"/D/Documents/NetBeansProjects/HTML TUTORIAL/public_html/form.html",
+		"/D/Documents/NetBeansProjects/HTML TUTORIAL/public_html/style.css",
+		"/D/Documents/NetBeansProjects/HTML TUTORIAL/public_html/intro.html",
+		"/C/Users/KIIT/Desktop/New folder/csv.py",
+		"/C/Users/KIIT/Desktop/New folder/data.csv",
+		"/C/Program Files/VideoLAN/VLC/lua/extensions/VLSub.bin",
+		"/C/Program Files/VideoLAN/VLC/lua/extensions/VLSub.luac"
+	],
+	"find":
+	{
+		"height": 34.0
+	},
+	"find_in_files":
+	{
+		"height": 130.4,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": true,
+		"find_history":
+		[
+			"lastindex",
+			"lastIndex2"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"lastIndex",
+			"lastindex2"
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": true,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"sheets":
+			[
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 34.0
+	},
+	"input":
+	{
+		"height": 48.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"pinned_build_system": "",
+	"project": "handleSms.sublime-project",
+	"replace":
+	{
+		"height": 64.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 258.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}

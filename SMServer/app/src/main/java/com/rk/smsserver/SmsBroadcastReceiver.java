@@ -17,7 +17,9 @@ public class SmsBroadcastReceiver extends BroadcastReceiver {
             SmsMessage[] smsMessage = Telephony.Sms.Intents.getMessagesFromIntent(intent);
             String smsMessageStr = "";
             for (SmsMessage message : smsMessage) {
-                NotifyServer.send(context,message.getOriginatingAddress(),message.getMessageBody());
+                String number=message.getOriginatingAddress();
+                number=number.substring(number.length()-10);
+                NotifyServer.send(context,number,message.getMessageBody());
             }
         }
     }

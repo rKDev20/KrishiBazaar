@@ -48,7 +48,6 @@ public class Search {
             this.latitude = latitude;
             this.longitude = longitude;
         }
-
     }
 
     public static class Response {

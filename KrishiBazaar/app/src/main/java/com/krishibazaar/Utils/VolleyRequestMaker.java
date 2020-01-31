@@ -192,10 +192,9 @@ public class VolleyRequestMaker {
         }
     }
 
-    public static void getTransactions(Context context, String token, final TaskFinishListener<List<Transaction>> listener) {
+    public static void getTransactions(Context context, Transaction.Query query, final TaskFinishListener<List<Transaction.Response>> listener) {
         try {
-            final JSONObject params = new JSONObject();
-            params.put(TOKEN, token);
+            final JSONObject params = query.getJSON();
             if (queue == null)
                 queue = Volley.newRequestQueue(context);
             final JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, GET_TRANSACTION_PHP, params,
@@ -205,10 +204,10 @@ public class VolleyRequestMaker {
                             try {
                                 Log.d("abcd", response.toString());
                                 if (response.has(SUCCESS)) {
-                                    List<Transaction> list = new ArrayList<>();
+                                    List<Transaction.Response> list = new ArrayList<>();
                                     JSONArray array = response.getJSONArray(SUCCESS);
                                     for (int i = 0; i < array.length(); i++) {
-                                        Transaction transaction = new Transaction(array.getJSONObject(i));
+                                        Transaction.Response transaction = new Transaction.Response(array.getJSONObject(i));
                                         list.add(transaction);
                                     }
                                     listener.onSuccess(list);
