@@ -28,6 +28,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.krishibazaar.Models.LocationDetails;
+import com.krishibazaar.R;
 
 @SuppressLint("Registered")
 public class LocationManagerActivity extends AppCompatActivity {
@@ -38,8 +39,8 @@ public class LocationManagerActivity extends AppCompatActivity {
     private LocationListener listener;
 
     public void getLocation(LocationListener listener) {
+        this.listener = listener;
         if (!onGoing) {
-            this.listener = listener;
             onGoing = true;
             checkForLocationPermission();
         }
@@ -77,7 +78,7 @@ public class LocationManagerActivity extends AppCompatActivity {
                     try {
                         resolvable.startResolutionForResult(LocationManagerActivity.this, RC_LOCATION_REQUEST);
                     } catch (IntentSender.SendIntentException e1) {
-                        onError("Google play services is required");
+                        onError(getString(R.string.play_services_required));
                     }
                 }
             }
@@ -95,7 +96,7 @@ public class LocationManagerActivity extends AppCompatActivity {
         if (requestCode == RC_LOCATION_REQUEST && resultCode == RESULT_OK) {
             searchLocationPassively();
         } else {
-            onError("Please enable location");
+            onError(getString(R.string.turn_on_location));
         }
     }
 
@@ -106,7 +107,7 @@ public class LocationManagerActivity extends AppCompatActivity {
             if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 permissionAvailable();
             } else {
-                onError("Please enable location permissions");
+                onError(getString(R.string.enable_location));
             }
         }
     }
@@ -124,7 +125,7 @@ public class LocationManagerActivity extends AppCompatActivity {
         }).addOnFailureListener(this, new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                onError("cannot get location");
+                onError(getString(R.string.failed_location));
             }
         });
     }
@@ -148,7 +149,7 @@ public class LocationManagerActivity extends AppCompatActivity {
             public void onLocationAvailability(LocationAvailability locationAvailability) {
                 Log.d("abcd", "onLocationAvailable()");
                 if (!locationAvailability.isLocationAvailable())
-                    onError("Cannot get your location");
+                    onError(getString(R.string.failed_location));
             }
         };
         client.requestLocationUpdates(request, callback, null);
@@ -159,7 +160,8 @@ public class LocationManagerActivity extends AppCompatActivity {
         VolleyRequestMaker.getLocationByCoordinates(this, latitude, longitude, new VolleyRequestMaker.TaskFinishListener<LocationDetails>() {
             @Override
             public void onSuccess(LocationDetails details) {
-                LocationManagerActivity.this.onSuccess(details);
+                onGoing = false;
+                listener.onSuccess(details);
             }
 
             @Override
@@ -167,11 +169,6 @@ public class LocationManagerActivity extends AppCompatActivity {
                 LocationManagerActivity.this.onError(error);
             }
         });
-    }
-
-    private void onSuccess(LocationDetails details) {
-        onGoing = false;
-        listener.onSuccess(details);
     }
 
     private void onError(String error) {

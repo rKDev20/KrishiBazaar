@@ -3,9 +3,10 @@ package com.krishibazaar.Models;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import static com.krishibazaar.Utils.Constants.CATEGORY;
+import static com.krishibazaar.Utils.Constants.BASE_ADDRESS;
 import static com.krishibazaar.Utils.Constants.DESCRIPTION;
 import static com.krishibazaar.Utils.Constants.DISTANCE;
+import static com.krishibazaar.Utils.Constants.IMAGE_URL;
 import static com.krishibazaar.Utils.Constants.LATITUDE;
 import static com.krishibazaar.Utils.Constants.LONGITUDE;
 import static com.krishibazaar.Utils.Constants.NAME;
@@ -14,13 +15,11 @@ import static com.krishibazaar.Utils.Constants.PRICE;
 import static com.krishibazaar.Utils.Constants.PRODUCT_ID;
 import static com.krishibazaar.Utils.Constants.QUANTITY;
 import static com.krishibazaar.Utils.Constants.SEARCH;
-import static com.krishibazaar.Utils.Constants.SEARCH_PHP;
 import static com.krishibazaar.Utils.Constants.SIZE;
 
 public class Search {
     public static class Query {
         public String search;
-        public String category;
         public int size;
         public int pageOffset;
         public Double latitude;
@@ -29,8 +28,6 @@ public class Search {
         public JSONObject getJSON() throws JSONException {
             JSONObject params = new JSONObject();
             params.put(SEARCH, search);
-            if (category != null)
-                params.put(CATEGORY, category);
             params.put(SIZE, size);
             params.put(PAGE_OFFSET, pageOffset);
             if (latitude != null && longitude != null) {
@@ -40,9 +37,8 @@ public class Search {
             return params;
         }
 
-        public Query(String search, String category, int size, int pageOffset, Double latitude, Double longitude) {
+        public Query(String search, int size, int pageOffset, Double latitude, Double longitude) {
             this.search = search;
-            this.category = category;
             this.size = size;
             this.pageOffset = pageOffset;
             this.latitude = latitude;
@@ -51,23 +47,32 @@ public class Search {
     }
 
     public static class Response {
-        public long product_id;
-        public String name;
-        public float quantity;
-        public float price;
-        public String description;
-        public float distance;
+        private String image_url;
+        private long product_id;
+        private String name;
+        private float quantity;
+        private float price;
+        private String description;
+        private Float distance;
 
         public Response(JSONObject object) throws JSONException {
+            image_url = object.getString(IMAGE_URL);
             product_id = object.getLong(PRODUCT_ID);
             name = object.getString(NAME);
             quantity = (float) object.getDouble(QUANTITY);
             price = (float) object.getDouble(PRICE);
             description = object.getString(DESCRIPTION);
-            distance = (float) object.getDouble(DISTANCE);
+            if (object.has(DISTANCE))
+                distance = (float) object.getDouble(DISTANCE);
+            else distance = null;
         }
 
-        public long getProduct_id() {
+        public String getImageUrl() {
+            return BASE_ADDRESS + image_url;
+        }
+
+
+        public long getProductId() {
             return product_id;
         }
 
@@ -80,7 +85,7 @@ public class Search {
         }
 
         public String getPrice() {
-            return "Rs. " + price + "/q";
+            return "₹" + price;
         }
 
         public String getDescription() {

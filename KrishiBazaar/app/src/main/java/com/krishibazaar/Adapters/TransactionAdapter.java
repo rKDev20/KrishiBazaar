@@ -55,8 +55,8 @@ public class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof TransactionViewHolder) {
             TransactionViewHolder viewHolder = (TransactionViewHolder) holder;
-            viewHolder.name.setText(data.get(position).name);
-            viewHolder.description.setText(data.get(position).description);
+            viewHolder.name.setText(data.get(position).getName());
+            viewHolder.description.setText(data.get(position).getDescription());
             viewHolder.quantity.setText(data.get(position).getQuantity());
             viewHolder.price.setText(data.get(position).getPrice());
             viewHolder.status.setText(data.get(position).getStatus());

@@ -7,6 +7,8 @@ public class LocationDetails {
     private int pincode;
 
     public LocationDetails(String name, double latitude, double longitude) {
+        if (name == null || latitude == -1 || longitude == -1)
+            throw new IllegalArgumentException();
         this.name = name;
         this.latitude = latitude;
         this.longitude = longitude;

@@ -1,5 +1,10 @@
 package com.krishibazaar.Adapters;
 
+import android.content.Context;
+import android.content.res.ColorStateList;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,11 +14,22 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.view.ViewCompat;
+import androidx.palette.graphics.Palette;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
+import com.google.android.material.card.MaterialCardView;
 import com.krishibazaar.Models.Search;
 import com.krishibazaar.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -24,25 +40,26 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     private boolean isMaxLimitReached;
     private boolean isReloadFailed;
     private ReloadListener listener;
-
-    public SearchAdapter(List<Search.Response> data, ReloadListener listener) {
-        this.data = data;
+    private Context context;
+    public SearchAdapter(ReloadListener listener, Context context) {
+        this.data = new ArrayList<>();
+        this.context = context;
         isMaxLimitReached = false;
-        isReloadFailed=false;
+        isReloadFailed = false;
         this.listener = listener;
     }
 
-
     public void addData(List<Search.Response> data) {
         this.data.addAll(data);
-    }
-
-    public void reset(){
-        data.clear();
-        isMaxLimitReached = false;
-        isReloadFailed=false;
         notifyDataSetChanged();
     }
+
+    public void reset() {
+        data.clear();
+        isMaxLimitReached = false;
+        isReloadFailed = false;
+    }
+
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -53,22 +70,49 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, final int position) {
         if (holder instanceof SearchViewHolder) {
-            SearchViewHolder viewHolder = (SearchViewHolder) holder;
-            viewHolder.name.setText(data.get(position).name);
-            viewHolder.description.setText(data.get(position).description);
+            final SearchViewHolder viewHolder = (SearchViewHolder) holder;
+            Glide.with(context).clear(viewHolder.image);
+            viewHolder.image.setImageResource(R.drawable.image);
+            Glide.with(context).load(data.get(position)
+                    .getImageUrl())
+                    .listener(new RequestListener<Drawable>() {
+                        @Override
+                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                            return false;
+                        }
+
+                        @Override
+                        public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                            BitmapDrawable drawable = (BitmapDrawable) resource;
+                            Bitmap bitmap = drawable.getBitmap();
+                            Palette.from(bitmap).generate(new Palette.PaletteAsyncListener() {
+                                public void onGenerated(Palette p) {
+                                    int color=p.getDominantColor(context.getResources().getColor(R.color.blue));
+                                    ViewCompat.setBackgroundTintList(viewHolder.wave,ColorStateList.valueOf(color));
+                                    viewHolder.container.setStrokeColor(color);
+                                }
+                            });
+                            return false;
+                        }
+                    })
+                    .into(viewHolder.image);
+            viewHolder.name.setText(data.get(position).getName());
+            viewHolder.description.setText(data.get(position).getDescription());
             viewHolder.quantity.setText(data.get(position).getQuantity());
             viewHolder.price.setText(data.get(position).getPrice());
             viewHolder.location.setText(data.get(position).getDistance());
         } else {
             LoadingViewHolder viewHolder = (LoadingViewHolder) holder;
-            Log.d("abcd","here");
+            Log.d("abcd", "here");
             if (isReloadFailed)
                 viewHolder.setRefresh(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        isReloadFailed = false;
                         listener.onReload();
+                        notifyItemChanged(position);
                     }
                 });
             else viewHolder.setProgressBar();
@@ -113,9 +157,14 @@ class SearchViewHolder extends RecyclerView.ViewHolder {
     TextView quantity;
     TextView price;
     TextView location;
-
+    ImageView image;
+    ConstraintLayout wave;
+    MaterialCardView container;
     public SearchViewHolder(@NonNull View itemView) {
         super(itemView);
+        wave=itemView.findViewById(R.id.wave);
+        container =itemView.findViewById(R.id.container);
+        image = itemView.findViewById(R.id.image);
         name = itemView.findViewById(R.id.name);
         description = itemView.findViewById(R.id.description);
         quantity = itemView.findViewById(R.id.quantity);
@@ -135,7 +184,7 @@ class LoadingViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void setRefresh(View.OnClickListener listener) {
-        Log.d("abcd","setRefresh()");
+        Log.d("abcd", "setRefresh()");
         refresh.setVisibility(View.VISIBLE);
         refresh.setOnClickListener(listener);
         progressBar.setVisibility(View.GONE);

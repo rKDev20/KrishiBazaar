@@ -1,4 +1,16 @@
 <resources>
     <string name="app_name">Krishi Bazaar</string>
     <string name="action_settings">Settings</string>
+
+    <string name="play_services_required">Google play services is required.</string>
+    <string name="turn_on_location">Turn on location and try again.</string>
+    <string name="enable_location">Please enable location permissions.</string>
+    <string name="failed_location">Failed to get location.</string>
+    <string name="no_location">Did\'nt find any location</string>
+    <string name="error_unknown">Some error occurred</string>
+    <string name="error_network">Network error.</string>
+
+
+    <string name="error_nothing_found">No products found</string>
+
 </resources>

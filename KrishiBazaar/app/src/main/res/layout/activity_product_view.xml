@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ProductView">
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="269dp"
+        android:layout_height="146dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="73dp"
+        android:layout_marginBottom="556dp"
+        app:srcCompat="@drawable/gehu" />
+
+    <TextView
+        android:id="@+id/qty"
+        android:layout_width="340dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="48dp"
+        android:layout_marginBottom="400dp"
+        android:text="Quantity : "
+        android:textSize="24sp" />
+
+    <TextView
+        android:id="@+id/scat"
+        android:layout_width="357dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="38dp"
+        android:layout_marginBottom="454dp"
+        android:text="Sub Category : "
+        android:textSize="24sp" />
+
+    <TextView
+        android:id="@+id/prc"
+        android:layout_width="336dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="35dp"
+        android:layout_marginBottom="354dp"
+        android:text="Price : "
+        android:textSize="24sp" />
+
+    <TextView
+        android:id="@+id/desc"
+        android:layout_width="353dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="40dp"
+        android:layout_marginBottom="309dp"
+        android:text="Description : "
+        android:textSize="24sp" />
+
+    <TextView
+        android:id="@+id/pin"
+        android:layout_width="330dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="45dp"
+        android:layout_marginBottom="262dp"
+        android:text="Pincode : "
+        android:textSize="24sp" />
+
+    <TextView
+        android:id="@+id/dis"
+        android:layout_width="339dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="43dp"
+        android:layout_marginBottom="216dp"
+        android:text="Distance : "
+        android:textSize="24sp" />
+
+    <TextView
+        android:id="@+id/cat"
+        android:layout_width="358dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="38dp"
+        android:layout_marginBottom="503dp"
+        android:text="Category : "
+        android:textSize="24sp" />
+
+    <TextView
+        android:id="@+id/status"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="140dp"
+        android:textAlignment="center"
+        android:textSize="36sp" />
+
+    <EditText
+        android:id="@+id/neg_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="101dp"
+        android:layout_marginBottom="131dp"
+        android:ems="10"
+        android:inputType="number" />
+
+    <Button
+        android:id="@+id/actions"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="168dp"
+        android:layout_marginBottom="59dp"
+        android:text="Button" />
+
+    <ImageButton
+        android:id="@+id/call"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="187dp"
+        android:layout_marginBottom="40dp"
+        app:srcCompat="@android:drawable/ic_menu_call" />
+
+</RelativeLayout>

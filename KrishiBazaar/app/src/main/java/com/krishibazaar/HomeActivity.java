@@ -1,14 +1,20 @@
 package com.krishibazaar;
 
+import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
+import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -18,118 +24,189 @@ import com.krishibazaar.Models.Search;
 import com.krishibazaar.Popups.LocationChooser;
 import com.krishibazaar.Popups.PopupListener;
 import com.krishibazaar.Utils.LocationManagerActivity;
+import com.krishibazaar.Utils.SharedPreferenceManager;
 import com.krishibazaar.Utils.VolleyRequestMaker;
 
 import java.util.List;
 
-public class HomeActivity extends LocationManagerActivity {
+public class HomeActivity extends Fragment {
 
     private final int ITEMS_TO_LOAD = 3;
-    int pageOffset = 0;
-    boolean isLoading = false;
-    LocationDetails locationDetails;
-    TextView locationText;
-    EditText searchBox;
-    Button searchButton;
-    RecyclerView recyclerView;
-    RecyclerView.OnScrollListener scrollListener;
-    SearchAdapter adapter;
+    private int pageOffset = 0;
+    private boolean isLoading = false;
+    private LocationDetails locationDetails;
+    private TextView locationText;
+    private EditText searchBox;
+    private ImageButton searchButton;
+    private RecyclerView recyclerView;
+    private RecyclerView.OnScrollListener scrollListener;
+    private SearchAdapter adapter;
+    private LocationManagerActivity activity;
+    private Context context;
+    private String searchText;
+    private LocationManagerActivity.LocationListener listener;
+    private ProgressBar progressBar;
+    private TextView errorText;
+    private ConstraintLayout errorBox;
+    private ConstraintLayout loadingBox;
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.activity_home, container, false);
+        initViews(view);
+        return view;
+    }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
-        initViews();
-        getLocation(new LocationListener() {
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        activity = (LocationManagerActivity) getActivity();
+        context = activity.getApplicationContext();
+        locationDetails = SharedPreferenceManager.getLocation(context);
+        if (locationDetails != null)
+            locationText.setText(locationDetails.getName());
+        listener = new LocationManagerActivity.LocationListener() {
             @Override
             public void onSuccess(LocationDetails details) {
+                SharedPreferenceManager.setLocation(context, details);
                 locationText.setText(details.getName());
                 locationDetails = details;
             }
 
             @Override
             public void onError(String error) {
-                locationText.setText(error);
+                Toast.makeText(context, error, Toast.LENGTH_SHORT).show();
             }
-        });
+        };
+        activity.getLocation(listener);
+        initSearch(true);
     }
 
-    void initViews() {
-        locationText = findViewById(R.id.location);
+    private void initViews(View view) {
+        locationText = view.findViewById(R.id.location);
         locationText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                LocationChooser.popup(HomeActivity.this, new PopupListener() {
+                LocationChooser chooser = new LocationChooser(activity, new PopupListener() {
                     @Override
                     public void onLocationSelected(LocationDetails details) {
                         locationText.setText(details.getName());
                         locationDetails = details;
                     }
                 });
+                chooser.popup();
             }
         });
-        searchBox = findViewById(R.id.search_box);
-        searchButton = findViewById(R.id.searchButton);
+        searchBox = view.findViewById(R.id.search_box);
+        progressBar = view.findViewById(R.id.progressBar);
+        searchButton = view.findViewById(R.id.searchButton);
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                initSearch();
+            public void onClick(View v) {
+                initSearch(false);
             }
         });
-        recyclerView = findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView = view.findViewById(R.id.recyclerView);
+        errorText = view.findViewById(R.id.errorText);
+        errorBox = view.findViewById(R.id.errorContainer);
+        loadingBox = view.findViewById(R.id.loadingContainer);
+        recyclerView.setLayoutManager(new LinearLayoutManager(context));
         initScrollListener();
     }
 
-    private void initSearch() {
-        pageOffset = 0;
-        isLoading = false;
-        recyclerView.addOnScrollListener(scrollListener);
-        if (adapter != null)
-            adapter.reset();
-        loadProducts();
+    private void initSearch(boolean blank) {
+        String temp = searchBox.getText().toString();
+        if ((!temp.isEmpty() && temp.length() > 3) || blank) {
+            searchText = temp;
+            pageOffset = 0;
+            isLoading = false;
+            recyclerView.addOnScrollListener(scrollListener);
+            if (blank) {
+                searchText = null;
+                setLoading();
+            } else setSearchLoading();
+            loadProducts();
+        } else
+            Toast.makeText(context, "Search text must be greater than 3 characters", Toast.LENGTH_SHORT).show();
     }
 
-    void loadProducts() {
+    private void setSearchLoading() {
         isLoading = true;
-        String searchText = searchBox.getText().toString();
-        if (!searchText.isEmpty()) {
-            Search.Query query = new Search.Query(searchText, null, ITEMS_TO_LOAD, pageOffset + 1, null, null);
-            VolleyRequestMaker.loadProducts(this, query, new VolleyRequestMaker.TaskFinishListener<List<Search.Response>>() {
-                @Override
-                public void onSuccess(List<Search.Response> response) {
-                    refreshList(response);
-                    isLoading = false;
-                    ++pageOffset;
-                    adapter.setReloadFailed(false);
-                    if (response.size() < ITEMS_TO_LOAD) {
-                        adapter.setMaxLimitReached(true);
-                        recyclerView.removeOnScrollListener(scrollListener);
-                    }
-                }
-
-                @Override
-                public void onError(String error) {
-                    Log.d("abcd", error);
-                    isLoading = false;
-                    if (adapter != null)
-                        adapter.setReloadFailed(true);
-                }
-            });
+        if (pageOffset == 0) {
+            searchButton.setVisibility(View.GONE);
+            progressBar.setVisibility(View.VISIBLE);
         }
     }
 
-    void refreshList(List<Search.Response> response) {
+    private void unsetLoading() {
+        isLoading = false;
+        searchButton.setVisibility(View.VISIBLE);
+        progressBar.setVisibility(View.GONE);
+        loadingBox.setVisibility(View.GONE);
+    }
+
+    private void setLoading() {
+        loadingBox.setVisibility(View.VISIBLE);
+    }
+
+    private void showError(String error) {
+        if (pageOffset == 0) {
+            errorBox.setVisibility(View.VISIBLE);
+            errorText.setText(error);
+        }
+    }
+
+    private void removeError() {
+        errorBox.setVisibility(View.GONE);
+    }
+
+    private void loadProducts() {
+        isLoading = true;
+        Double latitude = null;
+        Double longitude = null;
+        if (locationDetails != null) {
+            longitude = locationDetails.getLongitude();
+            latitude = locationDetails.getLatitude();
+        }
+        Search.Query query = new Search.Query(searchText, ITEMS_TO_LOAD, pageOffset + 1, latitude, longitude);
+        VolleyRequestMaker.loadProducts(context, query, new VolleyRequestMaker.TaskFinishListener<List<Search.Response>>() {
+            @Override
+            public void onSuccess(List<Search.Response> response) {
+                refreshList(response);
+                removeError();
+                unsetLoading();
+                ++pageOffset;
+                adapter.setReloadFailed(false);
+                if (response.size() < ITEMS_TO_LOAD) {
+                    adapter.setMaxLimitReached(true);
+                    recyclerView.removeOnScrollListener(scrollListener);
+                }
+            }
+
+            @Override
+            public void onError(String error) {
+                showError(error);
+                unsetLoading();
+                if (adapter != null)
+                    adapter.setReloadFailed(true);
+            }
+        });
+    }
+
+    private void refreshList(List<Search.Response> response) {
         if (adapter == null) {
-            adapter = new SearchAdapter(response, new SearchAdapter.ReloadListener() {
+            adapter = new SearchAdapter(new SearchAdapter.ReloadListener() {
                 @Override
                 public void onReload() {
                     loadProducts();
                 }
-            });
+            },context);
             recyclerView.setAdapter(adapter);
-        } else adapter.addData(response);
-        adapter.notifyDataSetChanged();
+        }
+        if (pageOffset == 0)
+            adapter.reset();
+        adapter.addData(response);
     }
 
     private void initScrollListener() {

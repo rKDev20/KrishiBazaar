@@ -38,6 +38,11 @@
             </intent-filter>
         </activity>
         <activity android:name=".TransactionActivity" />
+        <activity android:name=".LoginActivity" />
+        <activity android:name=".RegisterActivity" />
+        <activity android:name=".ProductViewActivity" />
+        <activity android:name=".SellProductsActivity" />
+        <activity android:name=".SellProductActivity" />
     </application>
 
 </manifest>
