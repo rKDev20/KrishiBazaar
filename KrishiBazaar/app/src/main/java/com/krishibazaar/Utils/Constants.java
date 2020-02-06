@@ -60,6 +60,8 @@ public class Constants {
     public static final int ACCEPTED = 3;
     public static final int REJECTED = 4;
     public static final int SOLD = 5;
+    public static final int DELETED = 6;
+
 
 
     //sendOtp

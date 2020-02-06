@@ -41,6 +41,7 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     private boolean isReloadFailed;
     private ReloadListener listener;
     private Context context;
+
     public SearchAdapter(ReloadListener listener, Context context) {
         this.data = new ArrayList<>();
         this.context = context;
@@ -89,8 +90,8 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                             Bitmap bitmap = drawable.getBitmap();
                             Palette.from(bitmap).generate(new Palette.PaletteAsyncListener() {
                                 public void onGenerated(Palette p) {
-                                    int color=p.getDominantColor(context.getResources().getColor(R.color.blue));
-                                    ViewCompat.setBackgroundTintList(viewHolder.wave,ColorStateList.valueOf(color));
+                                    int color = p.getDominantColor(context.getResources().getColor(R.color.blue));
+                                    ViewCompat.setBackgroundTintList(viewHolder.wave, ColorStateList.valueOf(color));
                                     viewHolder.container.setStrokeColor(color);
                                 }
                             });
@@ -160,10 +161,11 @@ class SearchViewHolder extends RecyclerView.ViewHolder {
     ImageView image;
     ConstraintLayout wave;
     MaterialCardView container;
-    public SearchViewHolder(@NonNull View itemView) {
+
+    SearchViewHolder(@NonNull View itemView) {
         super(itemView);
-        wave=itemView.findViewById(R.id.wave);
-        container =itemView.findViewById(R.id.container);
+        wave = itemView.findViewById(R.id.wave);
+        container = itemView.findViewById(R.id.container);
         image = itemView.findViewById(R.id.image);
         name = itemView.findViewById(R.id.name);
         description = itemView.findViewById(R.id.description);
@@ -177,20 +179,20 @@ class LoadingViewHolder extends RecyclerView.ViewHolder {
     private ProgressBar progressBar;
     private ImageView refresh;
 
-    public LoadingViewHolder(@NonNull View itemView) {
+    LoadingViewHolder(@NonNull View itemView) {
         super(itemView);
         progressBar = itemView.findViewById(R.id.progressBar);
         refresh = itemView.findViewById(R.id.refresh);
     }
 
-    public void setRefresh(View.OnClickListener listener) {
+    void setRefresh(View.OnClickListener listener) {
         Log.d("abcd", "setRefresh()");
         refresh.setVisibility(View.VISIBLE);
         refresh.setOnClickListener(listener);
         progressBar.setVisibility(View.GONE);
     }
 
-    public void setProgressBar() {
+    void setProgressBar() {
         refresh.setVisibility(View.GONE);
         progressBar.setVisibility(View.VISIBLE);
     }

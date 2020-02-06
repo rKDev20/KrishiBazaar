@@ -1,5 +1,7 @@
 package com.krishibazaar.Models;
 
+import android.util.Log;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -31,8 +33,12 @@ public class User {
         return object;
     }
     public User(String name, long mobile, String address, int pincode) throws IllegalArgumentException{
-        if (name==null||mobile==-1||address==null||pincode==-1)
+        Log.d("abcd",name+mobile+address+pincode);
+
+        if (name==null||mobile==-1||address==null||pincode==-1){
+            Log.d("abcd","exeption thrown");
             throw new IllegalArgumentException();
+        }
         this.name = name;
         this.mobile = mobile;
         this.address = address;

@@ -1,5 +1,6 @@
 package com.krishibazaar.Adapters;
 
+import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,23 +24,21 @@ public class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     private boolean isReloadFailed;
     private ReloadListener listener;
 
-    public TransactionAdapter(List<Transaction.Response> data, ReloadListener listener) {
+    private String[] statusText;
+    private int[] statusColor;
+
+    public TransactionAdapter(Context context,List<Transaction.Response> data, ReloadListener listener) {
         this.data = data;
         isMaxLimitReached = false;
         isReloadFailed = false;
         this.listener = listener;
+        statusColor=context.getResources().getIntArray(R.array.status_color);
+        statusText=context.getResources().getStringArray(R.array.status_array);
     }
 
 
     public void addData(List<Transaction.Response> data) {
         this.data.addAll(data);
-    }
-
-    public void reset() {
-        data.clear();
-        isMaxLimitReached = false;
-        isReloadFailed = false;
-        notifyDataSetChanged();
     }
 
     @NonNull
@@ -52,14 +51,15 @@ public class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, final int position) {
         if (holder instanceof TransactionViewHolder) {
             TransactionViewHolder viewHolder = (TransactionViewHolder) holder;
-            viewHolder.name.setText(data.get(position).getName());
-            viewHolder.description.setText(data.get(position).getDescription());
-            viewHolder.quantity.setText(data.get(position).getQuantity());
-            viewHolder.price.setText(data.get(position).getPrice());
-            viewHolder.status.setText(data.get(position).getStatus());
+            Transaction.Response response=data.get(position);
+            viewHolder.name.setText(response.getName());
+            viewHolder.quantity.setText(response.getQuantity());
+            viewHolder.price.setText(response.getPrice());
+            viewHolder.status.setText(statusText[response.getStatus()]);
+            viewHolder.status.setBackgroundColor(statusColor[response.getStatus()]);
             viewHolder.location.setText(data.get(position).getDistance());
         } else {
             LoadingViewHolder viewHolder = (LoadingViewHolder) holder;
@@ -68,6 +68,8 @@ public class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 viewHolder.setRefresh(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        isReloadFailed=false;
+                        notifyItemChanged(position);
                         listener.onReload();
                     }
                 });
@@ -109,7 +111,6 @@ public class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
 class TransactionViewHolder extends RecyclerView.ViewHolder {
     TextView name;
-    TextView description;
     TextView quantity;
     TextView price;
     TextView location;
@@ -118,7 +119,6 @@ class TransactionViewHolder extends RecyclerView.ViewHolder {
     TransactionViewHolder(@NonNull View itemView) {
         super(itemView);
         name = itemView.findViewById(R.id.name);
-        description = itemView.findViewById(R.id.description);
         quantity = itemView.findViewById(R.id.quantity);
         price = itemView.findViewById(R.id.price);
         location = itemView.findViewById(R.id.location);
