@@ -2,6 +2,7 @@ package com.krishibazaar;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,6 +62,8 @@ public class HomeActivity extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        Log.d("abcd","here mf");
+
         activity = (LocationManagerActivity) getActivity();
         context = activity.getApplicationContext();
         locationDetails = SharedPreferenceManager.getLocation(context);
@@ -201,7 +204,7 @@ public class HomeActivity extends Fragment {
                 public void onReload() {
                     loadProducts();
                 }
-            },context);
+            }, context);
             recyclerView.setAdapter(adapter);
         }
         if (pageOffset == 0)

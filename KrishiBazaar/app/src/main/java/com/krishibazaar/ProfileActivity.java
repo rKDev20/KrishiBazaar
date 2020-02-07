@@ -1,62 +1,162 @@
 package com.krishibazaar;
 
+import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.krishibazaar.Adapters.TransactionAdapter;
+import com.krishibazaar.Models.Transaction;
 import com.krishibazaar.Models.User;
 import com.krishibazaar.Utils.SharedPreferenceManager;
 import com.krishibazaar.Utils.VolleyRequestMaker;
 
+import java.util.List;
+
 import static android.view.View.GONE;
 
-public class ProfileActivity extends AppCompatActivity {
-    EditText mobile;
-    EditText name;
-    EditText pincode;
-    EditText address;
-    Button edit;
-    Button transactions;
-    User user;
-    ConstraintLayout error;
+public class ProfileActivity extends Fragment {
+    private EditText mobile;
+    private EditText name;
+    private EditText pincode;
+    private EditText address;
+    private ImageButton edit;
+    private ProgressBar editProgressBar;
 
-    boolean editMode=false;
+    private User user;
+    private ConstraintLayout error;
+    private ConstraintLayout container;
+    private boolean editMode = false;
+    private TextView errorText;
+    private Button retry;
+    private ProgressBar errorProgress;
+    private Context context;
+
+
+    private RecyclerView recyclerView;
+    private final int ITEMS_TO_LOAD = 3;
+    private int pageOffset = 0;
+    private boolean isLoading = false;
+    private RecyclerView.OnScrollListener scrollListener;
+    private TransactionAdapter adapter;
+
+    private ConstraintLayout transactionContainer;
+    private CardView transactionError;
+    private CardView transactionProgress;
+    private TextView transactionErrorText;
+    private Button transactionRetry;
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.activity_profile, container, false);
+        initViews(view);
+        return view;
+    }
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile);
-        initViews();
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        Log.d("abcd","here mf");
+        context = getContext();
         initUser();
+        initTransactions();
+    }
+
+    private void initViews(View view) {
+        mobile = view.findViewById(R.id.mobile);
+        address = view.findViewById(R.id.address);
+        pincode = view.findViewById(R.id.pincode);
+        name = view.findViewById(R.id.name);
+        edit = view.findViewById(R.id.edit);
+        error = view.findViewById(R.id.errorBox);
+        retry = view.findViewById(R.id.retry);
+        errorText = view.findViewById(R.id.loadingText);
+        errorProgress = view.findViewById(R.id.progressBar);
+        container = view.findViewById(R.id.container);
+        recyclerView = view.findViewById(R.id.recyclerView);
+        editProgressBar = view.findViewById(R.id.edit_progress_bar);
+        transactionContainer = view.findViewById(R.id.transactionContainer);
+        transactionError = view.findViewById(R.id.transactionError);
+        transactionErrorText = view.findViewById(R.id.transactionErrorText);
+        transactionProgress = view.findViewById(R.id.transactionProgress);
+        transactionRetry = view.findViewById(R.id.transactionErrorRetry);
+        retry.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                initUser();
+            }
+        });
+        transactionRetry.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadTransactions();
+            }
+        });
+        edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (editMode) {
+                    changeProfile();
+                } else {
+                    setEdit(true);
+                }
+            }
+        });
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(context));
+        initScrollListener();
+    }
+
+    boolean onBackPressed() {
+        if (editMode) {
+            setEdit(false);
+            return false;
+        } else return true;
     }
 
     private void initUser() {
-        user = SharedPreferenceManager.getUser(this);
+        user = SharedPreferenceManager.getUser(context);
         if (user != null) {
-            stopLoading();
+            showProfileContainer();
             setUser();
-        } else showLoading();
-        updateProfile();
+        } else showBigLoading();
+        fetchProfile();
         setEdit(false);
     }
 
     private void setUser() {
-        mobile.setText(String.valueOf(user.getMobile()));
-        address.setText(user.getAddress());
-        pincode.setText(String.valueOf(user.getPincode()));
-        name.setText(user.getName());
+        if (user != null) {
+            mobile.setText(String.valueOf(user.getMobile()));
+            address.setText(user.getAddress());
+            pincode.setText(String.valueOf(user.getPincode()));
+            name.setText(user.getName());
+        }
     }
 
     private void setEdit(boolean enable) {
+        setUser();
         mobile.setFocusable(false);
         mobile.setCursorVisible(false);
-        editMode=enable;
+        editMode = enable;
         address.setFocusable(enable);
         address.setFocusableInTouchMode(enable);
         address.setCursorVisible(enable);
@@ -66,89 +166,206 @@ public class ProfileActivity extends AppCompatActivity {
         name.setFocusable(enable);
         name.setFocusableInTouchMode(enable);
         name.setCursorVisible(enable);
+        if (!enable) {
+            edit.setImageDrawable(getResources().getDrawable(R.drawable.ic_edit));
+            pincode.setBackground(getResources().getDrawable(android.R.color.transparent));
+            name.setBackground(getResources().getDrawable(android.R.color.transparent));
+            address.setBackground(getResources().getDrawable(android.R.color.transparent));
+        } else {
+            name.requestFocus();
+            InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+            assert imm != null;
+            imm.showSoftInput(name, InputMethodManager.SHOW_IMPLICIT);
+            EditText tmp = new EditText(context);
+            Drawable drawable = tmp.getBackground();
+            edit.setImageDrawable(getResources().getDrawable(R.drawable.ic_done));
+            pincode.setBackground(drawable);
+            name.setBackground(drawable);
+            address.setBackground(drawable);
+        }
     }
 
-    private void updateProfile() {
+    private void fetchProfile() {
         //TODO
-        VolleyRequestMaker.getUserDetails(this, "rishabh", new VolleyRequestMaker.TaskFinishListener<User>() {
+        VolleyRequestMaker.getUserDetails(context, "rishabh", new VolleyRequestMaker.TaskFinishListener<User>() {
             @Override
             public void onSuccess(User response) {
                 user = response;
-                SharedPreferenceManager.setUser(ProfileActivity.this, user);
+                SharedPreferenceManager.setUser(context, user);
+                showProfileContainer();
                 stopLoading();
                 setUser();
             }
 
             @Override
             public void onError(String error) {
+                stopLoading();
                 if (user == null)
-                    showError(error);
+                    showBigError(error);
+                else Toast.makeText(context, error, Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    private void showError(String err) {
+    private void showBigError(String err) {
         error.setVisibility(View.VISIBLE);
-        error.findViewById(R.id.progressBar).setVisibility(GONE);
-        ((TextView) (error.findViewById(R.id.loadingText))).setText(err);
-        error.findViewById(R.id.loadingText).setVisibility(View.VISIBLE);
+        container.setVisibility(View.INVISIBLE);
+        errorProgress.setVisibility(GONE);
+        errorText.setText(err);
+        errorText.setVisibility(View.VISIBLE);
+        retry.setVisibility(View.VISIBLE);
+        edit.setVisibility(GONE);
+    }
+
+    private void showBigLoading() {
+        error.setVisibility(View.VISIBLE);
+        container.setVisibility(View.INVISIBLE);
+        errorText.setVisibility(GONE);
+        retry.setVisibility(GONE);
+        errorProgress.setVisibility(View.VISIBLE);
+        edit.setVisibility(GONE);
+    }
+
+    private void showProfileContainer() {
+        error.setVisibility(GONE);
+        container.setVisibility(View.VISIBLE);
+        edit.setVisibility(View.VISIBLE);
     }
 
     private void showLoading() {
-        error.setVisibility(View.VISIBLE);
-        error.findViewById(R.id.progressBar).setVisibility(View.VISIBLE);
-        error.findViewById(R.id.loadingText).setVisibility(GONE);
+        editProgressBar.setVisibility(View.VISIBLE);
+        edit.setVisibility(GONE);
     }
 
     private void stopLoading() {
-        error.setVisibility(GONE);
-    }
-
-    private void initViews() {
-        mobile = findViewById(R.id.mobile);
-        address = findViewById(R.id.address);
-        pincode = findViewById(R.id.pincode);
-        name = findViewById(R.id.name);
-        edit = findViewById(R.id.edit);
-        transactions = findViewById(R.id.transactions);
-        error = findViewById(R.id.errorBox);
-        edit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(editMode){
-                    changeProfile();
-                    showLoading();
-                }
-                else {
-                    edit.setText("Update");
-                    setEdit(true);
-                }
-            }
-        });
+        edit.setVisibility(View.VISIBLE);
+        editProgressBar.setVisibility(GONE);
     }
 
     private void changeProfile() {
-        String nameText=name.getText().toString();
-        int pincodeText = Integer.valueOf(pincode.getText().toString());
-        long mobileText = Long.valueOf(mobile.getText().toString());
+        String nameText = name.getText().toString();
+        String pincodeText = pincode.getText().toString();
+        String mobileText = mobile.getText().toString();
         String addressText = address.getText().toString();
-        final User user=new User(nameText,mobileText,addressText,pincodeText);
-        //TODO
-        VolleyRequestMaker.updateUserDetails(this,"rihsbah",user,new VolleyRequestMaker.TaskFinishListener<User>(){
+        if (!nameText.isEmpty() && pincodeText.length() == 6 && mobileText.length() == 10 && !addressText.isEmpty()) {
+            showLoading();
+            int pin = Integer.valueOf(pincodeText);
+            long mob = Long.valueOf(mobileText);
+            final User tmp = new User(nameText, mob, addressText, pin);
+            //TODO
+            VolleyRequestMaker.updateUserDetails(context, "rihsbah", tmp, new VolleyRequestMaker.TaskFinishListener<User>() {
+                @Override
+                public void onSuccess(User response) {
+                    user = response;
+                    setEdit(false);
+                    setUser();
+                    SharedPreferenceManager.setUser(context, response);
+                    stopLoading();
+                }
+
+                @Override
+                public void onError(String error) {
+                    Toast.makeText(context, error, Toast.LENGTH_SHORT).show();
+                    stopLoading();
+                }
+            });
+        }
+    }
+
+    private void initScrollListener() {
+        scrollListener = new RecyclerView.OnScrollListener() {
             @Override
-            public void onSuccess(User response) {
-                ProfileActivity.this.user=response;
-                editMode=false;
-                edit.setText("Edit");
-                setUser();
-                SharedPreferenceManager.setUser(ProfileActivity.this,response);
-                stopLoading();
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+            }
+
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (!isLoading) {
+                    LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                    if (linearLayoutManager != null && linearLayoutManager.findLastCompletelyVisibleItemPosition() == adapter.getItemCount() - 1) {
+                        loadTransactions();
+                        isLoading = true;
+                    }
+                }
+            }
+        };
+    }
+
+    private void initTransactions() {
+        pageOffset = 0;
+        isLoading = false;
+        recyclerView.addOnScrollListener(scrollListener);
+        loadTransactions();
+    }
+
+    private void showTransactionError(String error) {
+        transactionErrorText.setText(error);
+        transactionError.setVisibility(View.VISIBLE);
+        transactionContainer.setVisibility(GONE);
+        transactionProgress.setVisibility(GONE);
+    }
+
+    private void showTransaction() {
+        transactionContainer.setVisibility(View.VISIBLE);
+        transactionError.setVisibility(GONE);
+        transactionProgress.setVisibility(GONE);
+    }
+
+    private void showTransactionProgress() {
+        transactionProgress.setVisibility(View.VISIBLE);
+        transactionContainer.setVisibility(GONE);
+        transactionError.setVisibility(GONE);
+    }
+
+    private void loadTransactions() {
+        if (pageOffset == 0)
+            showTransactionProgress();
+        isLoading = true;
+        //TODO
+        Transaction.Query query = new Transaction.Query("rishabh", pageOffset + 1, ITEMS_TO_LOAD);
+        VolleyRequestMaker.getTransactions(context, query, new VolleyRequestMaker.TaskFinishListener<List<Transaction.Response>>() {
+            @Override
+            public void onSuccess(List<Transaction.Response> response) {
+                if (pageOffset == 0 && response.size() == 0)
+                    showTransactionError("No transactions found");
+                else {
+                    initList(response);
+                    isLoading = false;
+                    ++pageOffset;
+                    showTransaction();
+                    adapter.setReloadFailed(false);
+                    if (response.size() < ITEMS_TO_LOAD) {
+                        adapter.setMaxLimitReached(true);
+                        recyclerView.removeOnScrollListener(scrollListener);
+                    }
+                }
             }
 
             @Override
             public void onError(String error) {
-                showError(error);
+                if (pageOffset == 0) {
+                    showTransactionError(error);
+                }
+                Log.d("abcd", error);
+                isLoading = false;
+                if (adapter != null)
+                    adapter.setReloadFailed(true);
             }
         });
+    }
+
+    private void initList(List<Transaction.Response> response) {
+        if (adapter == null) {
+            adapter = new TransactionAdapter(context, response, new TransactionAdapter.ReloadListener() {
+                @Override
+                public void onReload() {
+                    loadTransactions();
+                }
+            });
+            recyclerView.setAdapter(adapter);
+        } else adapter.addData(response);
+        adapter.notifyDataSetChanged();
     }
 }
