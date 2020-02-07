@@ -2,6 +2,7 @@ package com.krishibazaar.Utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import com.krishibazaar.Models.LocationDetails;
 import com.krishibazaar.Models.User;
@@ -46,6 +47,7 @@ public class SharedPreferenceManager {
                     preferences.getString(ADDRESS, null),
                     preferences.getInt(PINCODE, -1));
         } catch (IllegalArgumentException e) {
+            Log.d("abcd","exeption thrown and caught");
             return null;
         }
     }

@@ -5,6 +5,8 @@ define('PENDING', 2);
 define('ACCEPTED', 3);
 define('REJECTED', 4);
 define('SOLD', 5);
+define('DELETED', 6);
+
 $json = file_get_contents('php://input');
 $params = json_decode($json,true);
 $params["token"]);

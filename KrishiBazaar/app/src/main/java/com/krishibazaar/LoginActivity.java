@@ -32,7 +32,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_login);
         l1 = findViewById(R.id.login1);
         l2 = findViewById(R.id.login2);
         otpView = findViewById(R.id.otp_view);

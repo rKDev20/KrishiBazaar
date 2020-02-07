@@ -2,7 +2,24 @@
 <resources>
     <color name="colorPrimary">#4caf50</color>
     <color name="colorPrimaryDark">#cccccc</color>
-    <color name="colorAccent">#80e27e</color>
+    <color name="colorAccent">#1B9419</color>
+    <color name="colorSecondary">#80e27e</color>
     <color name="yellow">#ffd132</color>
     <color name="blue">#a86c86</color>
+
+    <color name="owned">#808080</color>
+    <color name="pending">#FFC31E</color>
+    <color name="accepted">#6BCC0D</color>
+    <color name="rejected">#DD2020</color>
+    <color name="sold">#DBDADA</color>
+    <color name="available">#000000</color>
+
+    <array name="status_color">
+        <item >@color/owned</item>
+        <item >@color/available</item>
+        <item >@color/pending</item>
+        <item >@color/accepted</item>
+        <item >@color/rejected</item>
+        <item >@color/sold</item>
+    </array>
 </resources>
