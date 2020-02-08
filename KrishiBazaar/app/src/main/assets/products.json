@@ -1,0 +1,10 @@
+[
+	{
+		"category":"Rice",
+		"subCategory":["Rice Cat 1","Rice Cat 2"]
+	},
+	{
+		"category":"Wheat",
+		"subCategory":["Wheat Cat 1","Wheat Cat 2"]
+	}
+]

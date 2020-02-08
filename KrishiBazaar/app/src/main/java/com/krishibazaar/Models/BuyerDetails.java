@@ -10,7 +10,7 @@ import static com.krishibazaar.Utils.Constants.STATUS;
 import static com.krishibazaar.Utils.Constants.TIMESTAMP;
 import static com.krishibazaar.Utils.Constants.TRANSACTION_ID;
 
-class BuyerDetails {
+public class BuyerDetails {
     private int tranId;
     private String name;
     private float price;

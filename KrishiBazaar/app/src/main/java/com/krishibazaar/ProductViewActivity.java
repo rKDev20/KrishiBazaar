@@ -11,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -18,9 +19,13 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.krishibazaar.Adapters.ProductRequestAdapter;
+import com.krishibazaar.Models.BuyerDetails;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.List;
 
 import static com.krishibazaar.Utils.Constants.PRODUCT_ID;
 
@@ -30,6 +35,9 @@ public class ProductViewActivity extends AppCompatActivity {
     Button button;
     ImageButton call;
     int productId;
+    RecyclerView.LayoutManager layoutManager;
+    List<BuyerDetails> list;
+    ProductRequestAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,9 +107,9 @@ public class ProductViewActivity extends AppCompatActivity {
                                             if (usersPrice != 0)
                                                 makeTransaction(usersPrice);
                                             else
-                                                Toast.makeText(ProductView.this, "You can't buy it for FREE !", Toast.LENGTH_LONG).show();
+                                                Toast.makeText(ProductViewActivity.this, "You can't buy it for FREE !", Toast.LENGTH_LONG).show();
                                         } else
-                                            Toast.makeText(ProductView.this, "Enter your negotiable price !", Toast.LENGTH_LONG).show();
+                                            Toast.makeText(ProductViewActivity.this, "Enter your negotiable price !", Toast.LENGTH_LONG).show();
                                     }
                                 });
                             } else if (status.equals("pending")) {
