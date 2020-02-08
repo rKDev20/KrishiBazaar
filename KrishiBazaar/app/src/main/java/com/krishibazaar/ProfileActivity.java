@@ -24,6 +24,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.krishibazaar.Adapters.TransactionAdapter;
+import com.krishibazaar.Models.NewUser;
 import com.krishibazaar.Models.Transaction;
 import com.krishibazaar.Models.User;
 import com.krishibazaar.Utils.SharedPreferenceManager;
@@ -249,17 +250,18 @@ public class ProfileActivity extends Fragment {
         String addressText = address.getText().toString();
         if (!nameText.isEmpty() && pincodeText.length() == 6 && mobileText.length() == 10 && !addressText.isEmpty()) {
             showLoading();
+            String token="ww";//TODO
             int pin = Integer.valueOf(pincodeText);
             long mob = Long.valueOf(mobileText);
-            final User tmp = new User(nameText, mob, addressText, pin);
+            final NewUser tmp = new NewUser(nameText,token,addressText, pin);
             //TODO
-            VolleyRequestMaker.updateUserDetails(context, "rihsbah", tmp, new VolleyRequestMaker.TaskFinishListener<User>() {
+            VolleyRequestMaker.register(context, tmp, new VolleyRequestMaker.TaskFinishListener<Integer>() {
                 @Override
-                public void onSuccess(User response) {
-                    user = response;
+                public void onSuccess(Integer response) {
+                    user = new User(tmp.getName(),user.getMobile(),tmp.getAddress(),tmp.getPincode());
                     setEdit(false);
                     setUser();
-                    SharedPreferenceManager.setUser(context, response);
+                    SharedPreferenceManager.setUser(context,user);
                     stopLoading();
                 }
 

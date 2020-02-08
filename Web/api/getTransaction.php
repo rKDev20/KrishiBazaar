@@ -13,8 +13,6 @@ $params["token"]);
 $params["pageOffset"]);
 $params["size"]);
 
-
-
 $res = array(
 	'image_url'=>'onion.png',
 	'product_id' => 2432,

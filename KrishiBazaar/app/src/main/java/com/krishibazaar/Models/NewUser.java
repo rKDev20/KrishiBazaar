@@ -31,4 +31,16 @@ public class NewUser {
         this.address = address;
         this.pincode = pincode;
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public int getPincode() {
+        return pincode;
+    }
 }

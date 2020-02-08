@@ -30,6 +30,7 @@ import java.util.List;
 import static com.krishibazaar.Utils.Constants.ADDRESS;
 import static com.krishibazaar.Utils.Constants.CHANGE_TRANSACTION_STATUS_PHP;
 import static com.krishibazaar.Utils.Constants.DELETE_PRODUCT_PHP;
+import static com.krishibazaar.Utils.Constants.FCM;
 import static com.krishibazaar.Utils.Constants.GENERATE_OTP_PHP;
 import static com.krishibazaar.Utils.Constants.GEOCODE_PHP;
 import static com.krishibazaar.Utils.Constants.GET_PRODUCT_DETAILS_PHP;
@@ -182,38 +183,38 @@ public class VolleyRequestMaker {
         }
     }
 
-    public static void updateUserDetails(Context context, String token, final User user, final TaskFinishListener<User> listener) {
-        try {
-            final JSONObject params = user.getJSON();
-            params.put(TOKEN, token);
-            if (queue == null)
-                queue = Volley.newRequestQueue(context);
-            JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, UPDATE_PROFILE_PHP, params,
-                    new Response.Listener<JSONObject>() {
-                        @Override
-                        public void onResponse(JSONObject response) {
-                            try {
-                                Log.d("abcd", response.toString());
-                                if (response.getInt(STATUS) == STATUS_SUCCESS) {
-                                    listener.onSuccess(user);
-                                } else listener.onError("User not found");
-                            } catch (JSONException e) {
-                                listener.onError(e.getMessage());
-                            }
-                        }
-                    },
-                    new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            Log.d("abcd", params.toString());
-                            listener.onError("Network error" + error.networkResponse + error.getMessage());
-                        }
-                    });
-            queue.add(request);
-        } catch (JSONException e) {
-            listener.onError(e.getMessage());
-        }
-    }
+//    public static void updateUserDetails(Context context, String token, final User user, final TaskFinishListener<User> listener) {
+//        try {
+//            final JSONObject params = user.getJSON();
+//            params.put(TOKEN, token);
+//            if (queue == null)
+//                queue = Volley.newRequestQueue(context);
+//            JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, UPDATE_PROFILE_PHP, params,
+//                    new Response.Listener<JSONObject>() {
+//                        @Override
+//                        public void onResponse(JSONObject response) {
+//                            try {
+//                                Log.d("abcd", response.toString());
+//                                if (response.getInt(STATUS) == STATUS_SUCCESS) {
+//                                    listener.onSuccess(user);
+//                                } else listener.onError("User not found");
+//                            } catch (JSONException e) {
+//                                listener.onError(e.getMessage());
+//                            }
+//                        }
+//                    },
+//                    new Response.ErrorListener() {
+//                        @Override
+//                        public void onErrorResponse(VolleyError error) {
+//                            Log.d("abcd", params.toString());
+//                            listener.onError("Network error" + error.networkResponse + error.getMessage());
+//                        }
+//                    });
+//            queue.add(request);
+//        } catch (JSONException e) {
+//            listener.onError(e.getMessage());
+//        }
+//    }
 
     public static void getTransactions(Context context, Transaction.Query query, final TaskFinishListener<List<Transaction.Response>> listener) {
         try {
@@ -289,8 +290,10 @@ public class VolleyRequestMaker {
             JSONObject params = new JSONObject();
             if (queue == null)
                 queue = Volley.newRequestQueue(context);
+            String fcm="ss";//TODO
             params.put(MOBILE, mobile);
             params.put(OTP, otp);
+            params.put(FCM,fcm);
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, VERIFY_OTP_PHP, params,
                     new Response.Listener<JSONObject>() {
                         @Override

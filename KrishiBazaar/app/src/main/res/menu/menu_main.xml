@@ -5,14 +5,14 @@
         <item
             android:id="@+id/sell"
             android:icon="@drawable/ic_sell"
-            android:title="Sell" />
+            android:title="@string/sell" />
         <item
             android:id="@+id/home"
             android:icon="@drawable/ic_home"
-            android:title="Home" />
+            android:title="@string/home" />
         <item
             android:id="@+id/profile"
             android:icon="@drawable/ic_profile"
-            android:title="Profile" />
+            android:title="@string/profile" />
     </group>
 </menu>

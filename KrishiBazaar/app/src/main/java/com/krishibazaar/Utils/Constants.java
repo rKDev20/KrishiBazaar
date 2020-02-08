@@ -85,4 +85,6 @@ public class Constants {
     public static final String TRANSACTION_ID="tran_id";
     public static final String TIMESTAMP="timestamp";
     public static final String SUB_CATEGORY="sub";
+
+    public static final String FCM="fcm";
 }
