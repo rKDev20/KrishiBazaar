@@ -7,10 +7,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Request;
@@ -25,6 +27,7 @@ import com.krishibazaar.Models.BuyerDetails;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.krishibazaar.Utils.Constants.PRODUCT_ID;
@@ -35,7 +38,8 @@ public class ProductViewActivity extends AppCompatActivity {
     Button button;
     ImageButton call;
     int productId;
-    RecyclerView.LayoutManager layoutManager;
+    RecyclerView rv;
+    LinearLayoutManager layoutManager;
     List<BuyerDetails> list;
     ProductRequestAdapter adapter;
 
@@ -50,6 +54,12 @@ public class ProductViewActivity extends AppCompatActivity {
         negPrice.setVisibility(View.INVISIBLE);
         button = findViewById(R.id.actions);
         button.setVisibility(View.INVISIBLE);
+        rv=findViewById(R.id.rv);
+        list=new ArrayList<>();
+        adapter=new ProductRequestAdapter(this,list);
+        layoutManager=new LinearLayoutManager(this);
+        rv.setAdapter(adapter);
+        rv.setLayoutManager(layoutManager);
         productId = getIntent().getIntExtra(PRODUCT_ID, -1);
         if (productId == -1)
             finish();

@@ -40,7 +40,7 @@ public class ProductRequestAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         ((ProductRequestViewHolder) holder).name.setText(list.get(position).getName());
         ((ProductRequestViewHolder) holder).distance.setText(list.get(position).getPincode());
 
-        ((ProductRequestViewHolder) holder).timestamp.setText(String.valueOf(list.get(position).getTimestamp()));
+        ((ProductRequestViewHolder) holder).timestamp.setText(getTime(list.get(position).getTimestamp()));
     }
 
     @Override
