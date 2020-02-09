@@ -122,7 +122,7 @@ class TransactionViewHolder extends RecyclerView.ViewHolder {
         quantity = itemView.findViewById(R.id.quantity);
         price = itemView.findViewById(R.id.price);
         location = itemView.findViewById(R.id.location);
-        status = itemView.findViewById(R.id.status);
+        status = itemView.findViewById(R.id.pro_status);
     }
 }
 

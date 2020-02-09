@@ -7,59 +7,61 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
+import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
 import com.krishibazaar.Adapters.ProductRequestAdapter;
 import com.krishibazaar.Models.BuyerDetails;
+import com.krishibazaar.Models.Product;
+import com.krishibazaar.Models.TransactionDetails;
+import com.krishibazaar.Utils.SharedPreferenceManager;
+import com.krishibazaar.Utils.VolleyRequestMaker;
 
 import org.json.JSONException;
-import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import static com.krishibazaar.Utils.Constants.ACCEPTED;
+import static com.krishibazaar.Utils.Constants.AVAILABLE;
+import static com.krishibazaar.Utils.Constants.OWNED;
+import static com.krishibazaar.Utils.Constants.PENDING;
 import static com.krishibazaar.Utils.Constants.PRODUCT_ID;
+import static com.krishibazaar.Utils.Constants.REJECTED;
+import static com.krishibazaar.Utils.Constants.TOKEN;
 
 public class ProductViewActivity extends AppCompatActivity {
     TextView cat, scat, qty, prc, desc, pin, dis, proStatus;
-    EditText negPrice;
-    Button button;
+    EditText negPrice,buyerpin;
+    Button actions;
     ImageButton call;
+    ImageView productImage;
     int productId;
-    RecyclerView rv;
-    LinearLayoutManager layoutManager;
-    List<BuyerDetails> list;
+    ListView requests;
+    List<BuyerDetails> buyers;
     ProductRequestAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_view);
-        proStatus = findViewById(R.id.status);
+        proStatus = findViewById(R.id.pro_status);
         call = findViewById(R.id.call);
-        call.setVisibility(View.INVISIBLE);
+        call.setVisibility(View.GONE);
+        buyerpin=findViewById(R.id.buyerpc);
+        buyerpin.setVisibility(View.GONE);
         negPrice = findViewById(R.id.neg_price);
-        negPrice.setVisibility(View.INVISIBLE);
-        button = findViewById(R.id.actions);
-        button.setVisibility(View.INVISIBLE);
-        rv=findViewById(R.id.rv);
-        list=new ArrayList<>();
-        adapter=new ProductRequestAdapter(this,list);
-        layoutManager=new LinearLayoutManager(this);
-        rv.setAdapter(adapter);
-        rv.setLayoutManager(layoutManager);
+        negPrice.setVisibility(View.GONE);
+        actions = findViewById(R.id.actions);
+        actions.setVisibility(View.GONE);
+        requests=findViewById(R.id.lv);
+        proStatus.setVisibility(View.GONE);
+        requests.setVisibility(View.GONE);
+        //TODO
         productId = getIntent().getIntExtra(PRODUCT_ID, -1);
         if (productId == -1)
             finish();
@@ -67,151 +69,102 @@ public class ProductViewActivity extends AppCompatActivity {
             productDetails(productId);
     }
 
-    public void productDetails(int productId) {
-        JSONObject params = new JSONObject();
-        try {
-            params.put("productId", productId);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url1, params,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(final JSONObject response) {
-                        try {
-                            String category = response.getJSONObject("result").getString("category");
-                            String subCategory = response.getJSONObject("result").getString("subCategory");
-                            String quantity = response.getJSONObject("result").getString("quantity");
-                            String price = response.getJSONObject("result").getString("price");
-                            String description = response.getJSONObject("result").getString("description");
-                            String pincode = response.getJSONObject("result").getString("pincode");
-                            String distance = response.getJSONObject("result").getString("distance");
-                            String status = response.getJSONObject("result").getString("status");
-                            cat = findViewById(R.id.cat);
-                            scat = findViewById(R.id.scat);
-                            qty = findViewById(R.id.qty);
-                            prc = findViewById(R.id.prc);
-                            desc = findViewById(R.id.desc);
-                            pin = findViewById(R.id.pin);
-                            dis = findViewById(R.id.dis);
-                            cat.setText(cat.getText().toString() + category);
-                            scat.setText(scat.getText().toString() + subCategory);
-                            qty.setText(qty.getText().toString() + quantity + " Kgs");
-                            prc.setText(prc.getText().toString() + "₹" + price + " per Kgs");
-                            desc.setText(desc.getText().toString() + description);
-                            pin.setText(pin.getText().toString() + pincode);
-                            dis.setText(dis.getText().toString() + distance + " KM");
-                            if (status.equals("owned")) {
-                                proStatus.setVisibility(View.VISIBLE);
-                                proStatus.setText("Product is already owned !");
-                            } else if (status.equals("available")) {
-                                negPrice.setVisibility(View.VISIBLE);
-                                button.setText("I am Interested !");
-                                button.setVisibility(View.VISIBLE);
-                                //make transaction
-                                button.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-                                        if (negPrice.getText().toString().length() != 0) {
-                                            int usersPrice = Integer.parseInt(negPrice.getText().toString());
-                                            if (usersPrice != 0)
-                                                makeTransaction(usersPrice);
-                                            else
-                                                Toast.makeText(ProductViewActivity.this, "You can't buy it for FREE !", Toast.LENGTH_LONG).show();
-                                        } else
-                                            Toast.makeText(ProductViewActivity.this, "Enter your negotiable price !", Toast.LENGTH_LONG).show();
-                                    }
-                                });
-                            } else if (status.equals("pending")) {
-                                proStatus.setText("Awaiting Farmer's Approval ! ");
-                                proStatus.setVisibility(View.VISIBLE);
-                            } else if (status.equals("accepted")) {
-                                proStatus.setText("Proposal Accepted ! ");
-                                proStatus.setVisibility(View.VISIBLE);
-                                call.setVisibility(View.VISIBLE);
-                                call.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-                                        String mobileNumber = null;
-                                        try {
-                                            mobileNumber = response.getJSONObject("result").getJSONObject("farmer_detail").getString("mobile");
-                                        } catch (JSONException e) {
-                                            e.printStackTrace();
-                                        }
-                                        Intent makeCall = new Intent(Intent.ACTION_DIAL);
-                                        makeCall.setData(Uri.parse("tel:" + mobileNumber));
-                                        startActivity(makeCall);
-                                    }
-                                });
+    public void productDetails(final int productId)
+    {
+        VolleyRequestMaker.getProductDetails(this,new Product.Query(TOKEN,productId), new VolleyRequestMaker.TaskFinishListener<Product.Response>() {
+            @Override
+            public void onSuccess(final Product.Response response) {
 
-                            } else if (status.equals("rejected")) {
-                                proStatus.setText("Proposal Rejected ! ");
-                                proStatus.setVisibility(View.VISIBLE);
-                            } else if (status.equals("sold")) {
-                                proStatus.setText("Item already sold ! ");
-                                proStatus.setVisibility(View.VISIBLE);
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            Toast.makeText(ProductView.this, "Error !", Toast.LENGTH_LONG).show();
+                int status = response.getStatus();
+                cat = findViewById(R.id.cat);
+                scat = findViewById(R.id.scat);
+                qty = findViewById(R.id.qty);
+                prc = findViewById(R.id.prc);
+                desc = findViewById(R.id.desc);
+                pin = findViewById(R.id.pin);
+                productImage=findViewById(R.id.proImg);
+                dis = findViewById(R.id.dis);
+                cat.setText(cat.getText().toString() + response.getCategory());
+                scat.setText(scat.getText().toString() + response.getName());
+                qty.setText(qty.getText().toString() + response.getQuantity());
+                prc.setText(prc.getText().toString() + response.getPrice());
+                desc.setText(desc.getText().toString() + response.getDescription());
+                pin.setText(pin.getText().toString() + response.getPincode());
+                dis.setText(dis.getText().toString() + response.getDistance());
+                Glide.with(ProductViewActivity.this).load(response.getImageUrl()).into(productImage);
+                if(status==OWNED)
+                {
+                    requests.setVisibility(View.VISIBLE);
+                    adapter=new ProductRequestAdapter(ProductViewActivity.this,buyers);
+                    requests.setAdapter(adapter);
+                }
+                else if(status==AVAILABLE)
+                {
+                    actions.setVisibility(View.VISIBLE);
+                    negPrice.setVisibility(View.VISIBLE);
+                    actions.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            int buyerpincode=new SharedPreferenceManager().getUser(ProductViewActivity.this).getPincode();
+                            buyerpin.setVisibility(View.VISIBLE);
+                            buyerpin.setText(buyerpincode);
+                            makeTransaction(productId,Float.parseFloat(negPrice.getText().toString()),buyerpincode);
                         }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        error.printStackTrace();
-                        Toast.makeText(ProductView.this, "Error !", Toast.LENGTH_LONG).show();
-                    }
-                });
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        requestQueue.add(jsonObjectRequest);
+                    });
+                }
+                else if(status==PENDING)
+                {
+                    proStatus.setVisibility(View.VISIBLE);
+                    proStatus.setText(ProductViewActivity.this.getResources().getStringArray(R.array.status_array)[status]);
+                }
+                else if(status==ACCEPTED)
+                {
+                    proStatus.setVisibility(View.VISIBLE);
+                    proStatus.setText(ProductViewActivity.this.getResources().getStringArray(R.array.status_array)[status]);
+                    call.setVisibility(View.VISIBLE);
+                    call.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent makeCall = new Intent(Intent.ACTION_DIAL);
+                            makeCall.setData(Uri.parse("tel:" + response.getFarmerMobile()));
+                            startActivity(makeCall);
+                        }
+                    });
+                }
+                else
+                {
+                    proStatus.setText(ProductViewActivity.this.getResources().getStringArray(R.array.status_array)[status]);
+                }
+            }
+
+            @Override
+            public void onError(String error) {
+                Toast.makeText(ProductViewActivity.this,error,Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
-    public void makeTransaction(int usersPrice) {
-        JSONObject params = new JSONObject();
-        try {
-            params.put("productId", productId);
-            params.put("negPrice", usersPrice);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url2, params,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        try {
-                            String status = response.getString("status");
-                            if (status.equals("success")) {
-                                negPrice.setVisibility(View.INVISIBLE);
-                                button.setVisibility(View.INVISIBLE);
-                                proStatus.setVisibility(View.VISIBLE);
-                                proStatus.setText(proStatus.getText() + "Proposal Sent !");
-                            } else if (status.equals("product_sold")) {
-                                negPrice.setVisibility(View.INVISIBLE);
-                                button.setVisibility(View.INVISIBLE);
-                                proStatus.setVisibility(View.VISIBLE);
-                                proStatus.setText("Item already sold ! ");
-                                Toast.makeText(ProductView.this, "Hard Luck !", Toast.LENGTH_LONG).show();
-                            } else if (status.equals("invalid_user")) {
-                                negPrice.setVisibility(View.INVISIBLE);
-                                button.setVisibility(View.INVISIBLE);
-                                Toast.makeText(ProductView.this, "Error !", Toast.LENGTH_LONG).show();
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            Toast.makeText(ProductView.this, "Login Error !", Toast.LENGTH_LONG).show();
-                        }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(ProductView.this, "Login Error 7!", Toast.LENGTH_LONG).show();
-                    }
-                });
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        requestQueue.add(jsonObjectRequest);
+    public void makeTransaction(int productId,float negotiablePrice,int pinCode)
+    {
+        VolleyRequestMaker.makeTransaction(this,new TransactionDetails.Query("kiit",productId,negotiablePrice,pinCode), new VolleyRequestMaker.TaskFinishListener<Integer>() {
+            @Override
+            public void onSuccess(Integer response) {
+                proStatus.setVisibility(View.VISIBLE);
+                proStatus.setText("PENDING");
+                negPrice.setVisibility(View.GONE);
+                buyerpin.setVisibility(View.GONE);
+                actions.setClickable(false);
+                actions.setFocusable(false);
+                actions.setText("REQUESTED");
+                actions.setBackground(getResources().getDrawable(R.drawable.button_disable));
+            }
+
+            @Override
+            public void onError(String error) {
+                Toast.makeText(ProductViewActivity.this,error,Toast.LENGTH_LONG).show();
+            }
+        });
     }
+
 }
 

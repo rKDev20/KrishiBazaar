@@ -10,6 +10,7 @@ import java.util.List;
 import static com.krishibazaar.Utils.Constants.ACCEPTED;
 import static com.krishibazaar.Utils.Constants.BASE_ADDRESS;
 import static com.krishibazaar.Utils.Constants.BUYER_DETAILS;
+import static com.krishibazaar.Utils.Constants.CATEGORY;
 import static com.krishibazaar.Utils.Constants.DESCRIPTION;
 import static com.krishibazaar.Utils.Constants.DISTANCE;
 import static com.krishibazaar.Utils.Constants.FARMER_MOBILE;
@@ -40,6 +41,11 @@ public class Product {
             return params;
         }
 
+        public Query(String token, int proId) {
+            this.token = token;
+            this.proId = proId;
+        }
+
         public Query(String token, int proID, Double latitude, Double longitude) {
             this.token = token;
             this.proId = proID;
@@ -56,6 +62,8 @@ public class Product {
         private String description;
         private Float distance;
         private int pincode;
+        //TODO
+        private String category;
         int status;
         long farmerMobile;
         List<BuyerDetails> buyers;
@@ -63,6 +71,8 @@ public class Product {
         public Response(JSONObject object) throws JSONException {
             image_url = object.getString(IMAGE_URL);
             name = object.getString(NAME);
+            //TODO
+            category=object.getString(CATEGORY);
             quantity = (float) object.getDouble(QUANTITY);
             price = (float) object.getDouble(PRICE);
             description = object.getString(DESCRIPTION);
@@ -112,6 +122,8 @@ public class Product {
         public int getStatus() {
             return status;
         }
+
+        public String getCategory(){  return  category; }
 
         public long getFarmerMobile() {
             return farmerMobile;

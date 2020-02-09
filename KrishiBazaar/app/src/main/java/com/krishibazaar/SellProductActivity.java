@@ -15,7 +15,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import com.android.volley.Request;
@@ -24,6 +23,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.krishibazaar.Models.SellProduct;
+import com.krishibazaar.Utils.VolleyRequestMaker;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -36,10 +37,11 @@ import java.util.ArrayList;
 
 public class SellProductActivity extends Fragment {
     private Spinner catSpinner, scatSpinner;
-    private EditText quantity, price, pinCode, description;
+    private EditText quantity, price, pinCode, description, name;
     private Button button;
     private TextView statusText;
     private Context context;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -51,9 +53,12 @@ public class SellProductActivity extends Fragment {
     private void initViews(View view) {
         quantity = view.findViewById(R.id.qty);
         price = view.findViewById(R.id.prc);
+        catSpinner = view.findViewById(R.id.cat);
         pinCode = view.findViewById(R.id.pin);
+        scatSpinner = view.findViewById(R.id.subcat);
         button = view.findViewById(R.id.otpbutton);
-        statusText = view.findViewById(R.id.status);
+        name = view.findViewById(R.id.name);
+        statusText = view.findViewById(R.id.pro_status);
         description = view.findViewById(R.id.desc);
         statusText.setVisibility(View.INVISIBLE);
     }
@@ -65,55 +70,84 @@ public class SellProductActivity extends Fragment {
 
         getCategoryToSpinner();
         getSubCategoryToSpinner();
-
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (quantity.getText().toString().length() != 0 &&
-                        price.getText().toString().length() != 0 &&
-                        pinCode.getText().toString().length() == 6) {
-                    JSONObject params = new JSONObject();
-                    try {
-                        params.put("category", catSpinner.getSelectedItem().toString());
-                        params.put("subCategory", scatSpinner.getSelectedItem().toString());
-                        params.put("quantity", quantity.getText().toString());
-                        params.put("price", price.getText().toString());
-                        params.put("pinCode", pinCode.getText().toString());
-                        params.put("description", description.getText().toString());
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, params,
-                            new Response.Listener<JSONObject>() {
-                                @Override
-                                public void onResponse(JSONObject response) {
-                                    try {
-                                        String status = response.getString("status");
-                                        if (status.equals("invalid_user"))
-                                            Toast.makeText(context, "Error !", Toast.LENGTH_LONG).show();
-                                        else {
-                                            button.setVisibility(View.INVISIBLE);
-                                            statusText.setVisibility(View.VISIBLE);
-                                            statusText.setText("Product On Sale(PId:" + status + ")");
-                                        }
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                        Toast.makeText(context, "Error !", Toast.LENGTH_LONG).show();
-                                    }
-                                }
-                            },
-                            new Response.ErrorListener() {
-                                @Override
-                                public void onErrorResponse(VolleyError error) {
-                                    Toast.makeText(context, "Error !", Toast.LENGTH_LONG).show();
-                                }
-                            });
-                    RequestQueue requestQueue = Volley.newRequestQueue(SellProducts.this);
-                    requestQueue.add(jsonObjectRequest);
-                } else
-                    Toast.makeText(SellProducts.this, "Enter All Values !", Toast.LENGTH_LONG).show();
+                if (quantity.getText().toString().length() != 0 && price.getText().toString().length() != 0 && pinCode.getText().toString().length() == 6) {
+                    SellProduct query = new SellProduct("kiit",
+                            Integer.parseInt(catSpinner.getSelectedItem().toString()),
+                            Integer.parseInt(scatSpinner.getSelectedItem().toString()),
+                            name.getText().toString(),
+                            Float.parseFloat(quantity.getText().toString()),
+                            Float.parseFloat(price.getText().toString()),
+                            description.getText().toString(),
+                            Integer.parseInt(pinCode.getText().toString()));
+                    VolleyRequestMaker.sellProduct(context, query, new VolleyRequestMaker.TaskFinishListener<Integer>() {
+                        @Override
+                        public void onSuccess(Integer response) {
+                            button.setVisibility(View.INVISIBLE);
+                            statusText.setVisibility(View.VISIBLE);
+                            statusText.setText("Product On Sale");
+
+                        }
+
+                        @Override
+                        public void onError(String error) {
+
+                        }
+                    });
+                }
+                else
+                    Toast.makeText(context, "Enter All Values !", Toast.LENGTH_LONG).show();
             }
         });
+//        button.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                if (quantity.getText().toString().length() != 0 &&
+//                        price.getText().toString().length() != 0 &&
+//                        pinCode.getText().toString().length() == 6) {
+//                    JSONObject params = new JSONObject();
+//                    try {
+//                        params.put("category", catSpinner.getSelectedItem().toString());
+//                        params.put("subCategory", scatSpinner.getSelectedItem().toString());
+//                        params.put("quantity", quantity.getText().toString());
+//                        params.put("price", price.getText().toString());
+//                        params.put("pinCode", pinCode.getText().toString());
+//                        params.put("description", description.getText().toString());
+//                    } catch (JSONException e) {
+//                        e.printStackTrace();
+//                    }
+//                    JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, params,
+//                            new Response.Listener<JSONObject>() {
+//                                @Override
+//                                public void onResponse(JSONObject response) {
+//                                    try {
+//                                        String status = response.getString("status");
+//                                        if (status.equals("invalid_user"))
+//                                            Toast.makeText(context, "Error !", Toast.LENGTH_LONG).show();
+//                                        else {
+//                                            button.setVisibility(View.INVISIBLE);
+//                                            statusText.setVisibility(View.VISIBLE);
+//                                            statusText.setText("Product On Sale(PId:" + status + ")");
+//                                        }
+//                                    } catch (JSONException e) {
+//                                        e.printStackTrace();
+//                                        Toast.makeText(context, "Error !", Toast.LENGTH_LONG).show();
+//                                    }
+//                                }
+//                            },
+//                            new Response.ErrorListener() {
+//                                @Override
+//                                public void onErrorResponse(VolleyError error) {
+//                                    Toast.makeText(context, "Error !", Toast.LENGTH_LONG).show();
+//                                }
+//                            });
+//                    RequestQueue requestQueue = Volley.newRequestQueue(SellProducts.this);
+//                    requestQueue.add(jsonObjectRequest);
+//                }
+//            }
+//        });
     }
 
     public String readJSONFromAsset() {
@@ -165,8 +199,7 @@ public class SellProductActivity extends Fragment {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        catSpinner = view.findViewById(R.id.cat);
-        ArrayAdapter<String> catAdapter = new ArrayAdapter<>(SellProductsActivity.this,
+        ArrayAdapter<String> catAdapter = new ArrayAdapter<>(context,
                 android.R.layout.simple_list_item_1, category);
         catAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         catSpinner.setAdapter(catAdapter);
@@ -179,7 +212,7 @@ public class SellProductActivity extends Fragment {
                 String selectedCat = catSpinner.getSelectedItem().toString();
                 ArrayList<String> subCategory = getCategoryArray(selectedCat);
                 scatSpinner = view.findViewById(R.id.subcat);
-                ArrayAdapter<String> scatAdapter = new ArrayAdapter<>(SellProductsActivity.this,
+                ArrayAdapter<String> scatAdapter = new ArrayAdapter<>(context,
                         android.R.layout.simple_list_item_1, subCategory);
                 scatAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 scatSpinner.setAdapter(scatAdapter);
@@ -192,8 +225,7 @@ public class SellProductActivity extends Fragment {
         });
         String selectedCat = catSpinner.getSelectedItem().toString();
         ArrayList<String> subCategory = getCategoryArray(selectedCat);
-        scatSpinner = view.findViewById(R.id.subcat);
-        ArrayAdapter<String> scatAdapter = new ArrayAdapter<>(SellProductsActivity.this,
+        ArrayAdapter<String> scatAdapter = new ArrayAdapter<>(context,
                 android.R.layout.simple_list_item_1, subCategory);
         scatAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         scatSpinner.setAdapter(scatAdapter);

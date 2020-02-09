@@ -36,5 +36,6 @@
         <item >ACCEPTED</item>
         <item >REJECTED</item>
         <item >SOLD</item>
+        <item >DELETED</item>
     </string-array>
 </resources>

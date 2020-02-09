@@ -20,9 +20,9 @@ public class SellProduct {
     private float quantity;
     private float price;
     private String description;
-    private float pincode;
+    private int pincode;
 
-    public SellProduct(String token, long category,long subCategory, String name, float quantity, float price, String description, float pincode) {
+    public SellProduct(String token, long category,long subCategory, String name, float quantity, float price, String description, int pincode) {
         this.token = token;
         this.category = category;
         this.subCategory=subCategory;

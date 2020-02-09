@@ -85,7 +85,7 @@ public class ProfileActivity extends Fragment {
     private void initViews(View view) {
         mobile = view.findViewById(R.id.mobile);
         address = view.findViewById(R.id.address);
-        pincode = view.findViewById(R.id.pincode);
+        pincode = view.findViewById(R.id.buyerpc);
         name = view.findViewById(R.id.name);
         edit = view.findViewById(R.id.edit);
         error = view.findViewById(R.id.errorBox);

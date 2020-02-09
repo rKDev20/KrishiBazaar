@@ -224,7 +224,7 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/addressLabel"
-                        app:layout_constraintTop_toBottomOf="@+id/pincode" />
+                        app:layout_constraintTop_toBottomOf="@+id/buyerpc" />
 
                     <TextView
                         android:id="@+id/pincodeLabel"
@@ -239,13 +239,13 @@
                         android:textColor="#808080"
                         android:textStyle="bold"
                         app:drawableTint="#808080"
-                        app:layout_constraintBottom_toBottomOf="@id/pincode"
+                        app:layout_constraintBottom_toBottomOf="@id/buyerpc"
                         app:layout_constraintEnd_toEndOf="@+id/addressLabel"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="@id/pincode" />
+                        app:layout_constraintTop_toTopOf="@id/buyerpc" />
 
                     <EditText
-                        android:id="@+id/pincode"
+                        android:id="@+id/buyerpc"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
