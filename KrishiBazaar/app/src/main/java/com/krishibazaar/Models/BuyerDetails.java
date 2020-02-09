@@ -3,6 +3,7 @@ package com.krishibazaar.Models;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import static com.krishibazaar.Utils.Constants.DISTANCE;
 import static com.krishibazaar.Utils.Constants.NAME;
 import static com.krishibazaar.Utils.Constants.PINCODE;
 import static com.krishibazaar.Utils.Constants.PRICE;
@@ -14,7 +15,7 @@ public class BuyerDetails {
     private int tranId;
     private String name;
     private float price;
-    private int pincode;
+    private float distance;
     private long timestamp;
     private int status;
 
@@ -23,7 +24,7 @@ public class BuyerDetails {
         name = object.getString(NAME);
         price = (float) object.getDouble(PRICE);
         timestamp = object.getLong(TIMESTAMP);
-        pincode = object.getInt(PINCODE);
+        distance = object.getInt(DISTANCE);
         status = object.getInt(STATUS);
     }
 
@@ -39,8 +40,8 @@ public class BuyerDetails {
         return price;
     }
 
-    public int getPincode() {
-        return pincode;
+    public float getDistance() {
+        return distance;
     }
 
     public long getTimestamp() {
