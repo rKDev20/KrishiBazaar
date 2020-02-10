@@ -19,10 +19,12 @@ import static com.krishibazaar.Utils.Constants.LATITUDE;
 import static com.krishibazaar.Utils.Constants.LONGITUDE;
 import static com.krishibazaar.Utils.Constants.NAME;
 import static com.krishibazaar.Utils.Constants.OWNED;
+import static com.krishibazaar.Utils.Constants.PINCODE;
 import static com.krishibazaar.Utils.Constants.PRICE;
 import static com.krishibazaar.Utils.Constants.PRODUCT_ID;
 import static com.krishibazaar.Utils.Constants.QUANTITY;
 import static com.krishibazaar.Utils.Constants.STATUS;
+import static com.krishibazaar.Utils.Constants.SUB_CATEGORY;
 import static com.krishibazaar.Utils.Constants.TOKEN;
 
 public class Product {
@@ -62,8 +64,12 @@ public class Product {
         private String description;
         private Float distance;
         private int pincode;
+        private double latitude;
+        private double longitude;
+
         //TODO
         private String category;
+        private String subCategory;
         int status;
         long farmerMobile;
         List<BuyerDetails> buyers;
@@ -71,8 +77,13 @@ public class Product {
         public Response(JSONObject object) throws JSONException {
             image_url = object.getString(IMAGE_URL);
             name = object.getString(NAME);
-            //TODO
-            category=object.getString(CATEGORY);
+            if (object.has(CATEGORY))
+                category = object.getString(CATEGORY);
+            if (object.has(SUB_CATEGORY))
+                subCategory= object.getString(SUB_CATEGORY);
+            pincode=object.getInt(PINCODE);
+            latitude=object.getDouble(LATITUDE);
+            longitude=object.getDouble(LONGITUDE);
             quantity = (float) object.getDouble(QUANTITY);
             price = (float) object.getDouble(PRICE);
             description = object.getString(DESCRIPTION);
@@ -85,7 +96,7 @@ public class Product {
             if (status == OWNED) {
                 buyers = new ArrayList<>();
                 JSONArray array = object.getJSONArray(BUYER_DETAILS);
-                for (int i=0;i<array.length();i++) {
+                for (int i = 0; i < array.length(); i++) {
                     buyers.add(new BuyerDetails(array.getJSONObject(i)));
                 }
             } else buyers = null;
@@ -123,10 +134,24 @@ public class Product {
             return status;
         }
 
-        public String getCategory(){  return  category; }
+        public String getCategory() {
+            return category;
+        }
 
         public long getFarmerMobile() {
             return farmerMobile;
+        }
+
+        public String getSubCategory() {
+            return subCategory;
+        }
+
+        public double getLatitude() {
+            return latitude;
+        }
+
+        public double getLongitude() {
+            return longitude;
         }
     }
 }
