@@ -43,9 +43,9 @@ $query="DELETE FROM otpverification WHERE mobile = '".$mobile."' AND otp = ".$ot
 mysqli_query($conn,$query);
 success($status,$token);
 function success($status,$token){
-	$result=array(
+	$result=array("success"=>array(
 		'status' => $status,
-		'token' => $token);
+		'token' => $token));
 	echo json_encode($result);
 	die();	
 }
