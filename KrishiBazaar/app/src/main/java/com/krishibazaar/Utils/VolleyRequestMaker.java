@@ -55,7 +55,6 @@ import static com.krishibazaar.Utils.Constants.STATUS_SUCCESS_NEW;
 import static com.krishibazaar.Utils.Constants.SUCCESS;
 import static com.krishibazaar.Utils.Constants.TOKEN;
 import static com.krishibazaar.Utils.Constants.TRANSACTION_ID;
-import static com.krishibazaar.Utils.Constants.UPDATE_PROFILE_PHP;
 import static com.krishibazaar.Utils.Constants.VERIFY_OTP_PHP;
 
 public class VolleyRequestMaker {
@@ -290,15 +289,16 @@ public class VolleyRequestMaker {
             JSONObject params = new JSONObject();
             if (queue == null)
                 queue = Volley.newRequestQueue(context);
-            String fcm="ss";//TODO
+            String fcm = "ss";//TODO
             params.put(MOBILE, mobile);
             params.put(OTP, otp);
-            params.put(FCM,fcm);
+            params.put(FCM, fcm);
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, VERIFY_OTP_PHP, params,
                     new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(JSONObject response) {
                             try {
+                                response = response.getJSONObject(SUCCESS);
                                 int status = response.getInt(STATUS);
                                 String token = response.getString(TOKEN);
                                 if (status == STATUS_SUCCESS_NEW || status == STATUS_SUCCESS_EXIST) {
@@ -396,7 +396,7 @@ public class VolleyRequestMaker {
                         @Override
                         public void onResponse(JSONObject response) {
                             try {
-                                if (response.getInt(STATUS)==STATUS_SUCCESS)
+                                if (response.getInt(STATUS) == STATUS_SUCCESS)
                                     listener.onSuccess(0);
                                 else listener.onError(context.getString(R.string.error_unknown));
                             } catch (JSONException e) {
@@ -427,9 +427,9 @@ public class VolleyRequestMaker {
                         public void onResponse(JSONObject response) {
                             try {
                                 int status = response.getInt(STATUS);
-                                if (status == STATUS_SUCCESS)
+                                if (status != STATUS_ERROR)
                                     listener.onSuccess(status);
-                                else if (status == STATUS_ERROR)
+                                else
                                     listener.onError(context.getString(R.string.error_network));
                             } catch (JSONException e) {
                                 listener.onError(context.getString(R.string.error_unknown));

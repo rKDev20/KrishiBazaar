@@ -59,8 +59,8 @@ public class Constants {
     public static final int PENDING = 2;
     public static final int ACCEPTED = 3;
     public static final int REJECTED = 4;
-    public static final int SOLD = 5;
-    public static final int DELETED = 6;
+    public static final int SOLD = 5;//show buyer that product is no more active
+    public static final int DELETED = 6;//show seller that product is no more active
 
 
 

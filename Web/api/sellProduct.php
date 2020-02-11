@@ -21,11 +21,11 @@ mysqli_query($conn,$query);
 if(mysqli_error($conn))
 	error();
 if (mysqli_affected_rows($conn)==1)
-	success();
+	success(mysql_insert_id($conn));
 else error();
 
-function success(){
-	echo json_encode(array('status' => 1));
+function success($product_id){
+	echo json_encode(array('status' => $product_id));
 }
 function error(){
 	echo json_encode(array("status"=>0));

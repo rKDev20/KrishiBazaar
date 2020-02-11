@@ -41,10 +41,9 @@ public class MainActivity extends LocationManagerActivity implements BottomNavig
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         if (navigation.getSelectedItemId() != menuItem.getItemId()) {
             menuItem.setChecked(true);
-            Log.d("abcd", navigation.getSelectedItemId() + "-" + menuItem.getItemId());
             switch (menuItem.getItemId()) {
                 case R.id.sell:
-                    //loadFragment(SELL);
+                    loadFragment(SELL);
                     break;
                 case R.id.home:
                     loadFragment(HOME);
@@ -105,9 +104,9 @@ public class MainActivity extends LocationManagerActivity implements BottomNavig
                 if (profile == null)
                     profile = new ProfileActivity();
                 return profile;
-            case SELL://TODO
+            case SELL:
                 if (sell == null)
-                    sell = new HomeActivity();
+                    sell = new SellProductActivity();
                 return sell;
             default:
                 return null;

@@ -11,7 +11,7 @@ $mobile=$params["mobile"];
 if (!checkMobile($mobile))
 	error();
 $otp= rand(100000,999999);
-$otpMessage="Welcome to KrishiBazaar! Your OTP is $otp. Do not share it with anyone.";
+$otpMessage="Welcome to KrishiBazaar!%0a Your OTP is $otp. Do not share it with anyone.";
 $query="SELECT clock FROM otpverification WHERE mobile = ".$mobile.";";
 $result = mysqli_query($conn,$query);
 if(mysqli_num_rows($result)==0)
