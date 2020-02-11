@@ -15,6 +15,11 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.krishibazaar.Adapters.ProductRequestAdapter;
 import com.krishibazaar.Models.BuyerDetails;
 import com.krishibazaar.Models.Product;
@@ -41,6 +46,7 @@ public class ProductViewActivity extends AppCompatActivity {
     ImageButton call;
     ImageView productImage;
     int productId;
+    GoogleMap map;
     ListView requests;
     List<BuyerDetails> buyers;
     ProductRequestAdapter adapter;
@@ -61,12 +67,21 @@ public class ProductViewActivity extends AppCompatActivity {
         requests=findViewById(R.id.lv);
         proStatus.setVisibility(View.GONE);
         requests.setVisibility(View.GONE);
+        SupportMapFragment supportMapFragment= (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.google_map);
+        supportMapFragment.getMapAsync((OnMapReadyCallback) this);
         //TODO
         productId = getIntent().getIntExtra(PRODUCT_ID, -1);
         if (productId == -1)
             finish();
         else
             productDetails(productId);
+    }
+
+    public void onMapReady(GoogleMap googleMap)
+    {
+        map=googleMap;
+        MarkerOptions markerOptions=new MarkerOptions();
+        markerOptions.position(new LatLng());
     }
 
     public void productDetails(final int productId)

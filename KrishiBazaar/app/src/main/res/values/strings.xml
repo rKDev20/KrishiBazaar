@@ -10,7 +10,7 @@
     <string name="error_unknown">Some error occurred</string>
     <string name="error_network">Network error.</string>
 
-
+    <string name="map_key" translatable="false">AIzaSyAVVoTZvbLrMvUcpeEb9SahW3toJDnxzvI</string>
     <string name="error_nothing_found">No products found</string>
     <string name="click_to_update_location">Click here to update location</string>
     <string name="profile">Profile</string>
