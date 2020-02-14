@@ -1,5 +1,6 @@
 package com.krishibazaar;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -27,8 +28,9 @@ public class MainActivity extends LocationManagerActivity implements BottomNavig
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        initViews();
-        loadFragment(HOME);
+        startActivity(new Intent(this,ProductViewActivity.class));
+        //initViews();
+        //loadFragment(HOME);
     }
 
     private void initViews() {
