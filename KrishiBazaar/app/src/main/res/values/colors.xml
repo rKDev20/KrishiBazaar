@@ -14,6 +14,7 @@
     <color name="sold">#DBDADA</color>
     <color name="available">#000000</color>
 
+    <color name="light_grey">#B6B6B6</color>
     <array name="status_color">
         <item >@color/owned</item>
         <item >@color/available</item>

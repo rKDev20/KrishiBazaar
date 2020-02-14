@@ -19,8 +19,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.bumptech.glide.Glide;
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.krishibazaar.Adapters.ProductRequestAdapter;
@@ -30,16 +28,12 @@ import com.krishibazaar.Models.TransactionDetails;
 import com.krishibazaar.Utils.SharedPreferenceManager;
 import com.krishibazaar.Utils.VolleyRequestMaker;
 
-import org.json.JSONException;
-
 import java.util.List;
 
 import static com.krishibazaar.Utils.Constants.ACCEPTED;
 import static com.krishibazaar.Utils.Constants.AVAILABLE;
 import static com.krishibazaar.Utils.Constants.OWNED;
 import static com.krishibazaar.Utils.Constants.PENDING;
-import static com.krishibazaar.Utils.Constants.PRODUCT_ID;
-import static com.krishibazaar.Utils.Constants.REJECTED;
 import static com.krishibazaar.Utils.Constants.TOKEN;
 
 public class ProductViewActivity extends AppCompatActivity {
@@ -73,6 +67,9 @@ public class ProductViewActivity extends AppCompatActivity {
 //        proStatus.setVisibility(View.GONE);
 //        requests.setVisibility(View.GONE);
         ((ShimmerFrameLayout)findViewById(R.id.shimmer_view_container)).startShimmer();
+        ((ShimmerFrameLayout)findViewById(R.id.shimmer_view_container2)).startShimmer();
+        ((ShimmerFrameLayout)findViewById(R.id.shimmer_view_container3)).startShimmer();
+
         //SupportMapFragment supportMapFragment= (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.google_map);
 //        supportMapFragment.getMapAsync((OnMapReadyCallback) this);
         //TODO

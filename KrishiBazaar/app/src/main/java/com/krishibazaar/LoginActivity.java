@@ -126,8 +126,8 @@ public class LoginActivity extends AppCompatActivity {
                     intent.putExtra(TOKEN, response.getToken());
                     startActivity(intent);
                 } else if (response.getStatus() == STATUS_SUCCESS_EXIST) {
-                    Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
                     SharedPreferenceManager.setToken(LoginActivity.this, response.getToken());
+                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     finish();
                     startActivity(intent);
                 }

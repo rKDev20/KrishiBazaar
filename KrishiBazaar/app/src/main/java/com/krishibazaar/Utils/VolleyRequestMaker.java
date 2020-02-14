@@ -241,7 +241,7 @@ public class VolleyRequestMaker {
                     }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    Log.d("abcd", error.networkResponse.toString());
+                    Log.d("abcd",error.getClass().getName());
                     listener.onError(context.getString(R.string.error_network));
                 }
             });
