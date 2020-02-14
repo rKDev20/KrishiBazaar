@@ -45,6 +45,7 @@
         </activity>
         <activity android:name=".LoginActivity" />
         <activity android:name=".RegisterActivity" />
+        <activity android:name=".ProductViewActivity" />
     </application>
 
 </manifest>
