@@ -27,22 +27,23 @@
         android:layout_marginBottom="8dp"
         android:ellipsize="end"
         android:maxLines="1"
-        android:paddingStart="5dp"
-        android:paddingTop="2dp"
-        android:paddingBottom="5dp"
+        android:paddingStart="10dp"
+        android:paddingTop="3dp"
+        android:paddingEnd="10dp"
+        android:paddingBottom="3dp"
         android:textColor="@android:color/white"
         android:textSize="14sp"
-        app:layout_constraintBottom_toBottomOf="@+id/quantity"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/quantity"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/name"
-        app:layout_constraintTop_toTopOf="@+id/quantity" />
+        app:layout_constraintTop_toBottomOf="@+id/quantity" />
 
     <TextView
         android:id="@+id/price"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:layout_marginEnd="28dp"
+        android:layout_marginEnd="16dp"
         android:layout_marginBottom="8dp"
         android:background="@drawable/round_price"
         android:elevation="2dp"
@@ -63,13 +64,12 @@
         android:id="@+id/location"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:drawableStart="@drawable/ic_pin"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="5dp"
+        android:drawableStart="@drawable/ic_pin_small"
         android:gravity="center_vertical"
-        android:padding="2dp"
         android:textColor="@android:color/darker_gray"
-        android:textSize="12sp"
+        android:textSize="13sp"
         app:drawableTint="@android:color/darker_gray"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -78,11 +78,12 @@
         android:id="@+id/quantity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
-        android:padding="10dp"
+        android:layout_marginStart="4dp"
+        android:drawableStart="@drawable/ic_quantity"
+        android:drawablePadding="3dp"
+        android:padding="2dp"
         android:textColor="@android:color/black"
-        app:layout_constraintEnd_toStartOf="@id/price"
+        app:layout_constraintStart_toStartOf="@id/name"
         app:layout_constraintTop_toBottomOf="@+id/name" />
 
     <View
@@ -95,5 +96,19 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/timestamp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:drawableStart="@drawable/ic_time"
+        android:drawablePadding="3dp"
+        android:padding="2dp"
+        android:textStyle="italic"
+        app:drawableTint="#808080"
+        app:layout_constraintBottom_toBottomOf="@id/quantity"
+        app:layout_constraintStart_toEndOf="@id/quantity"
+        app:layout_constraintTop_toTopOf="@+id/quantity" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -2,7 +2,6 @@ package com.krishibazaar;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
@@ -11,6 +10,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.krishibazaar.Utils.LocationManagerActivity;
+import com.krishibazaar.Utils.SharedPreferenceManager;
 import com.krishibazaar.Utils.VolleyRequestMaker;
 
 public class MainActivity extends LocationManagerActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
@@ -28,9 +28,14 @@ public class MainActivity extends LocationManagerActivity implements BottomNavig
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        startActivity(new Intent(this,ProductViewActivity.class));
-        //initViews();
-        //loadFragment(HOME);
+        String token = SharedPreferenceManager.getToken(this);
+//        if (token == null)
+//            startActivity(new Intent(this, LoginActivity.class));
+//        else {
+//            initViews();
+//            loadFragment(HOME);
+//        }
+        startActivity(new Intent(this, ProductViewActivity.class));
     }
 
     private void initViews() {

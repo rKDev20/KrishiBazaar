@@ -67,7 +67,6 @@ public class Product {
         private double latitude;
         private double longitude;
 
-        //TODO
         private String category;
         private String subCategory;
         int status;

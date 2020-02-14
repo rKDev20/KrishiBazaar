@@ -3,6 +3,7 @@ package com.krishibazaar;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -92,6 +93,7 @@ public class LoginActivity extends AppCompatActivity {
         sendOtp.setClickable(false);
         mob.setFocusable(false);
         sendOtp.setBackground(getResources().getDrawable(R.drawable.button_disable));
+        Log.d("volley","clicked");
         VolleyRequestMaker.sendOtp(this, mobileNumber, new VolleyRequestMaker.TaskFinishListener<Boolean>() {
             @Override
             public void onSuccess(Boolean response) {
@@ -126,6 +128,7 @@ public class LoginActivity extends AppCompatActivity {
                 } else if (response.getStatus() == STATUS_SUCCESS_EXIST) {
                     Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
                     SharedPreferenceManager.setToken(LoginActivity.this, response.getToken());
+                    finish();
                     startActivity(intent);
                 }
             }

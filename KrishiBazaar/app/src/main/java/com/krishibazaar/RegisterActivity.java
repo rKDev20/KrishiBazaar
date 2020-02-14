@@ -45,7 +45,7 @@ public class RegisterActivity extends AppCompatActivity {
                             @Override
                             public void onSuccess(Integer response) {
                                 SharedPreferenceManager.setToken(RegisterActivity.this, token);
-                                Intent intent = new Intent(RegisterActivity.this, HomeActivity.class);
+                                Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
                                 startActivity(intent);
                             }
 

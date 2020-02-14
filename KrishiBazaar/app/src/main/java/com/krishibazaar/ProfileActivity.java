@@ -187,8 +187,8 @@ public class ProfileActivity extends Fragment {
     }
 
     private void fetchProfile() {
-        //TODO
-        VolleyRequestMaker.getUserDetails(context, "rishabh", new VolleyRequestMaker.TaskFinishListener<User>() {
+        String token=SharedPreferenceManager.getToken(context);
+        VolleyRequestMaker.getUserDetails(context, token, new VolleyRequestMaker.TaskFinishListener<User>() {
             @Override
             public void onSuccess(User response) {
                 user = response;
@@ -250,11 +250,9 @@ public class ProfileActivity extends Fragment {
         String addressText = address.getText().toString();
         if (!nameText.isEmpty() && pincodeText.length() == 6 && mobileText.length() == 10 && !addressText.isEmpty()) {
             showLoading();
-            String token="ww";//TODO
+            String token=SharedPreferenceManager.getToken(context);
             int pin = Integer.valueOf(pincodeText);
-            long mob = Long.valueOf(mobileText);
             final NewUser tmp = new NewUser(nameText,token,addressText, pin);
-            //TODO
             VolleyRequestMaker.register(context, tmp, new VolleyRequestMaker.TaskFinishListener<Integer>() {
                 @Override
                 public void onSuccess(Integer response) {
@@ -325,8 +323,8 @@ public class ProfileActivity extends Fragment {
         if (pageOffset == 0)
             showTransactionProgress();
         isLoading = true;
-        //TODO
-        Transaction.Query query = new Transaction.Query("rishabh", pageOffset + 1, ITEMS_TO_LOAD);
+        String token=SharedPreferenceManager.getToken(context);
+        Transaction.Query query = new Transaction.Query(token, pageOffset + 1, ITEMS_TO_LOAD);
         VolleyRequestMaker.getTransactions(context, query, new VolleyRequestMaker.TaskFinishListener<List<Transaction.Response>>() {
             @Override
             public void onSuccess(List<Transaction.Response> response) {
