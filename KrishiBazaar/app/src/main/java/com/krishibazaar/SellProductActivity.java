@@ -101,53 +101,6 @@ public class SellProductActivity extends Fragment {
                     Toast.makeText(context, "Enter All Values !", Toast.LENGTH_LONG).show();
             }
         });
-//        button.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                if (quantity.getText().toString().length() != 0 &&
-//                        price.getText().toString().length() != 0 &&
-//                        pinCode.getText().toString().length() == 6) {
-//                    JSONObject params = new JSONObject();
-//                    try {
-//                        params.put("category", catSpinner.getSelectedItem().toString());
-//                        params.put("subCategory", scatSpinner.getSelectedItem().toString());
-//                        params.put("quantity", quantity.getText().toString());
-//                        params.put("price", price.getText().toString());
-//                        params.put("pinCode", pinCode.getText().toString());
-//                        params.put("description", description.getText().toString());
-//                    } catch (JSONException e) {
-//                        e.printStackTrace();
-//                    }
-//                    JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, params,
-//                            new Response.Listener<JSONObject>() {
-//                                @Override
-//                                public void onResponse(JSONObject response) {
-//                                    try {
-//                                        String status = response.getString("status");
-//                                        if (status.equals("invalid_user"))
-//                                            Toast.makeText(context, "Error !", Toast.LENGTH_LONG).show();
-//                                        else {
-//                                            button.setVisibility(View.INVISIBLE);
-//                                            statusText.setVisibility(View.VISIBLE);
-//                                            statusText.setText("Product On Sale(PId:" + status + ")");
-//                                        }
-//                                    } catch (JSONException e) {
-//                                        e.printStackTrace();
-//                                        Toast.makeText(context, "Error !", Toast.LENGTH_LONG).show();
-//                                    }
-//                                }
-//                            },
-//                            new Response.ErrorListener() {
-//                                @Override
-//                                public void onErrorResponse(VolleyError error) {
-//                                    Toast.makeText(context, "Error !", Toast.LENGTH_LONG).show();
-//                                }
-//                            });
-//                    RequestQueue requestQueue = Volley.newRequestQueue(SellProducts.this);
-//                    requestQueue.add(jsonObjectRequest);
-//                }
-//            }
-//        });
     }
 
     public String readJSONFromAsset() {

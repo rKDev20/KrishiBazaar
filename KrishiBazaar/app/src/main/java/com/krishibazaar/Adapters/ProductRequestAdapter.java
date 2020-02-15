@@ -70,9 +70,20 @@ public class ProductRequestAdapter extends BaseAdapter
             @Override
             public void onClick(View view) {
                 int status;
-                if (view.getId()==R.id.accept)
-                    status=ACCEPTED;
-                else status=REJECTED;
+                if (view.getId()==R.id.accept) {
+                    status = ACCEPTED;
+                    accept.setVisibility(View.GONE);
+                    reject.setVisibility(View.GONE);
+                    actionStatus.setText(view.getResources().getStringArray(R.array.status_array)[3]);
+                    actionStatus.setBackgroundColor(view.getResources().getColor(R.color.accepted));
+                }
+                else{
+                    status=REJECTED;
+                    accept.setVisibility(View.GONE);
+                    reject.setVisibility(View.GONE);
+                    actionStatus.setText(view.getResources().getStringArray(R.array.status_array)[4]);
+                    actionStatus.setBackgroundColor(view.getResources().getColor(R.color.rejected));
+                }
                 actionMade(view,i,status);
             }
         } ;
@@ -95,7 +106,7 @@ public class ProductRequestAdapter extends BaseAdapter
             return diff/216000+" days ago";
     }
 
-    public void actionMade(View view, int i, final int status)
+    public void actionMade(final View view, int i, final int status)
     {
         //TODO
         VolleyRequestMaker.changeTransaction(context, "sss", list.get(i).getTranId(), status, new VolleyRequestMaker.TaskFinishListener<Integer>() {
@@ -106,14 +117,17 @@ public class ProductRequestAdapter extends BaseAdapter
                     actionStatus.setVisibility(View.VISIBLE);
                     accept.setVisibility(View.GONE);
                     reject.setVisibility(View.GONE);
-                    actionStatus.setText("REQUEST ACCEPTED");
+                    actionStatus.setText(view.getResources().getStringArray(R.array.status_array)[3]);
+                    actionStatus.setBackgroundColor(view.getResources().getColor(R.color.accepted));
+
                 }
                 else
                 {
                     actionStatus.setVisibility(View.VISIBLE);
                     accept.setVisibility(View.GONE);
                     reject.setVisibility(View.GONE);
-                    actionStatus.setText("REQUEST REJECTED");
+                    actionStatus.setText(view.getResources().getStringArray(R.array.status_array)[4]);
+                    actionStatus.setBackgroundColor(view.getResources().getColor(R.color.rejected));
                 }
             }
 
@@ -123,50 +137,4 @@ public class ProductRequestAdapter extends BaseAdapter
             }
         });
     }
-
-
 }
-//    Context context;
-//
-//    public ProductRequestAdapter(Context context, List<BuyerDetails> list) {
-//        super();
-//        this.context = context;
-//        this.list = list;
-//    }
-//
-//    List<BuyerDetails> list;
-//    @NonNull
-//    @Override
-//    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-//        return new TransactionViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_product_requests,parent,false));
-//    }
-//
-//    @Override
-//    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-//        ProductRequestViewHolder viewHolder =(ProductRequestViewHolder) holder;
-//        ((ProductRequestViewHolder) holder).price.setText(String.valueOf(list.get(position).getPrice()));
-//        ((ProductRequestViewHolder) holder).name.setText(list.get(position).getName());
-//        ((ProductRequestViewHolder) holder).distance.setText(list.get(position).getPincode());
-//        ((ProductRequestViewHolder) holder).timestamp.setText(getTime(list.get(position).getTimestamp()));
-//    }
-//
-//    @Override
-//    public int getItemCount() {
-//        return list.size();
-//    }
-//
-//    public class ProductRequestViewHolder extends RecyclerView.ViewHolder
-//    {
-//        TextView price,name,distance,timestamp;
-//        Button accept,reject;
-//        public ProductRequestViewHolder(@NonNull View itemView) {
-//            super(itemView);
-//            price=itemView.findViewById(R.id.price);
-//            name=itemView.findViewById(R.id.name);
-//            distance=itemView.findViewById(R.id.dis);
-//            timestamp=itemView.findViewById(R.id.ts);
-//            accept=itemView.findViewById(R.id.accept);
-//            reject=itemView.findViewById(R.id.reject);
-//        }
-//    }
-
