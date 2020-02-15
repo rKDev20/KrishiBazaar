@@ -102,7 +102,7 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                         }
                     })
                     .into(viewHolder.image);
-            viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+            viewHolder.container.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     clickListener.onClick(response.getProductId());
@@ -166,7 +166,6 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 }
 
 class SearchViewHolder extends RecyclerView.ViewHolder {
-    ConstraintLayout itemView;
 
     TextView name;
     TextView description;
@@ -179,7 +178,6 @@ class SearchViewHolder extends RecyclerView.ViewHolder {
 
     SearchViewHolder(@NonNull View itemView) {
         super(itemView);
-        this.itemView = (ConstraintLayout) itemView;
         wave = itemView.findViewById(R.id.wave);
         container = itemView.findViewById(R.id.container);
         image = itemView.findViewById(R.id.image);

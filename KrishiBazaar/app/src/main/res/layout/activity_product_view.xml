@@ -41,10 +41,10 @@
                         android:layout_marginStart="10dp"
                         android:layout_marginTop="20dp"
                         android:layout_marginEnd="10dp"
-                        android:src="@drawable/default_picture"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:srcCompat="@drawable/default_picture" />
 
                     <TextView
                         android:id="@+id/cat"
@@ -306,29 +306,41 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_margin="10dp"
-                        android:hint="Your Price ?"
-                        android:inputType="number"
-                        android:padding="5dp"
-                        android:textSize="20sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/pro_status"
                         app:mtf_image="@drawable/ic_rupee"
-                        app:mtf_openKeyboardOnFocus="true" />
+                        app:mtf_openKeyboardOnFocus="true">
+
+                        <EditText
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:hint="Your Price ?"
+                            android:inputType="number"
+                            android:padding="5dp"
+                            android:textSize="20sp" />
+
+                    </com.github.florent37.materialtextfield.MaterialTextField>
 
                     <com.github.florent37.materialtextfield.MaterialTextField
                         android:id="@+id/buyerpc"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_margin="10dp"
-                        android:inputType="number"
-                        android:padding="5dp"
-                        android:textSize="20sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/neg_price"
                         app:mtf_image="@drawable/ic_postal"
-                        app:mtf_openKeyboardOnFocus="true" />
+                        app:mtf_openKeyboardOnFocus="true">
+
+                        <EditText
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:hint="Pincode"
+                            android:inputType="number"
+                            android:padding="5dp"
+                            android:textSize="20sp" />
+                    </com.github.florent37.materialtextfield.MaterialTextField>
 
                     <Button
                         android:id="@+id/call"
@@ -383,7 +395,7 @@
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="100dp">
+                    android:layout_height="wrap_content">
 
                     <TextView
                         android:id="@+id/lvLabel"
@@ -425,5 +437,5 @@
         layout="@layout/container_error_page"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 </androidx.constraintlayout.widget.ConstraintLayout>

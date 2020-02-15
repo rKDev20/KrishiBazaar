@@ -3,9 +3,9 @@ package com.krishibazaar;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ScrollView;
@@ -13,10 +13,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
-import com.bumptech.glide.Glide;
 import com.facebook.shimmer.ShimmerFrameLayout;
+import com.github.florent37.materialtextfield.MaterialTextField;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -37,11 +38,12 @@ import static com.krishibazaar.Utils.Constants.OWNED;
 import static com.krishibazaar.Utils.Constants.PENDING;
 import static com.krishibazaar.Utils.Constants.PRODUCT_ID;
 
-public class ProductViewActivity extends AppCompatActivity {
+public class ProductViewActivity extends AppCompatActivity implements OnMapReadyCallback {
     TextView cat, scat, qty, prc, desc, pin, dis, proStatus, name;
-    EditText negPrice, buyerpin;
+    MaterialTextField negPrice, buyerpin;
     Button actions;
     Button call;
+    CardView reqcard;
     ImageView productImage;
     int productId;
     GoogleMap map;
@@ -61,9 +63,10 @@ public class ProductViewActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_view);
         productId = getIntent().getIntExtra(PRODUCT_ID, -1);
-        if (productId == -1)
+        if (productId == -1) {
             finish();
-        else {
+            Log.d("part2", "error");
+        } else {
             proStatus = findViewById(R.id.pro_status);
             call = findViewById(R.id.call);
             call.setVisibility(View.GONE);
@@ -75,8 +78,9 @@ public class ProductViewActivity extends AppCompatActivity {
             actions.setVisibility(View.GONE);
             requests = findViewById(R.id.lv);
             proStatus.setVisibility(View.GONE);
-            requests.setVisibility(View.GONE);
             container = findViewById(R.id.container);
+            reqcard = findViewById(R.id.req_card);
+            reqcard.setVisibility(View.GONE);
             shimmer = findViewById(R.id.shimmer);
             errorBox = findViewById(R.id.errorBox);
             shimmer1 = findViewById(R.id.shimmer_view_container);
@@ -91,7 +95,7 @@ public class ProductViewActivity extends AppCompatActivity {
             });
             errorText = findViewById(R.id.errorText);
             SupportMapFragment supportMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.google_map);
-            supportMapFragment.getMapAsync((OnMapReadyCallback) this);
+            supportMapFragment.getMapAsync(this);
             productDetails(productId);
         }
     }
@@ -126,6 +130,8 @@ public class ProductViewActivity extends AppCompatActivity {
         stopLoading();
     }
 
+
+    @Override
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
         MarkerOptions markerOptions = new MarkerOptions();
@@ -139,11 +145,12 @@ public class ProductViewActivity extends AppCompatActivity {
         VolleyRequestMaker.getProductDetails(this, new Product.Query(token, productId), new VolleyRequestMaker.TaskFinishListener<Product.Response>() {
             @Override
             public void onSuccess(final Product.Response response) {
+                buyers=response.getBuyers();
                 int status = response.getStatus();
                 cat = findViewById(R.id.cat);
                 scat = findViewById(R.id.scat);
                 qty = findViewById(R.id.qty);
-                prc = findViewById(R.id.prc);
+                prc = findViewById(R.id.price);
                 desc = findViewById(R.id.desc);
                 pin = findViewById(R.id.pin);
                 productImage = findViewById(R.id.proImg);
@@ -156,26 +163,30 @@ public class ProductViewActivity extends AppCompatActivity {
                 qty.setText(response.getQuantity());
                 prc.setText(response.getPrice(false));
                 desc.setText(response.getDescription());
-                pin.setText(response.getPincode());
+                pin.setText(String.valueOf(response.getPincode()));
                 dis.setText(response.getDistance());
                 name.setText(response.getName());
                 lat = response.getLatitude();
                 lon = response.getLongitude();
-                Glide.with(ProductViewActivity.this).load(response.getImageUrl()).into(productImage);
+               // Glide.with(ProductViewActivity.this).load(response.getImageUrl()).into(productImage);
+                Log.d("part2", status + "ymkbmc");
+
                 if (status == OWNED) {
-                    requests.setVisibility(View.VISIBLE);
-                    adapter = new ProductRequestAdapter(ProductViewActivity.this, buyers);
-                    requests.setAdapter(adapter);
+                    if (buyers != null) {
+                        reqcard.setVisibility(View.VISIBLE);
+                        adapter = new ProductRequestAdapter(ProductViewActivity.this, buyers);
+                        requests.setAdapter(adapter);
+                    }
                 } else if (status == AVAILABLE) {
                     actions.setVisibility(View.VISIBLE);
                     negPrice.setVisibility(View.VISIBLE);
+                    final int buyerpincode = SharedPreferenceManager.getUser(ProductViewActivity.this).getPincode();
+                    buyerpin.setVisibility(View.VISIBLE);
+                    buyerpin.getEditText().setText(String.valueOf(buyerpincode));
                     actions.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            int buyerpincode = SharedPreferenceManager.getUser(ProductViewActivity.this).getPincode();
-                            buyerpin.setVisibility(View.VISIBLE);
-                            buyerpin.setText(buyerpincode);
-                            makeTransaction(productId, Float.parseFloat(negPrice.getText().toString()), buyerpincode);
+                            makeTransaction(productId, Float.parseFloat(negPrice.getEditText().getText().toString()), buyerpincode);
                         }
                     });
                 } else if (status == PENDING) {

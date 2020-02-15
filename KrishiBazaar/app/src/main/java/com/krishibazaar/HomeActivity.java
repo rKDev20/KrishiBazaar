@@ -252,7 +252,7 @@ public class HomeActivity extends Fragment {
 
     private void openProductView(long productId) {
         Intent intent = new Intent(context, ProductViewActivity.class);
-        intent.putExtra(PRODUCT_ID, productId);
+        intent.putExtra(PRODUCT_ID, (int)productId);
         startActivity(intent);
     }
 

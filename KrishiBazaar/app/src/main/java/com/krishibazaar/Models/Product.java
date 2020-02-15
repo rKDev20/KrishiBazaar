@@ -158,5 +158,9 @@ public class Product {
         public double getLongitude() {
             return longitude;
         }
+
+        public List<BuyerDetails> getBuyers() {
+            return buyers;
+        }
     }
 }
