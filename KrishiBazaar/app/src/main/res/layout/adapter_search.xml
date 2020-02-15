@@ -12,13 +12,14 @@
         android:layout_marginStart="10dp"
         android:layout_marginTop="5dp"
         android:layout_marginEnd="10dp"
+        android:clickable="true"
         app:cardCornerRadius="5dp"
-        app:strokeWidth="1dp"
-        app:strokeColor="@color/colorAccent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:strokeColor="@color/colorAccent"
+        app:strokeWidth="1dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -80,9 +81,9 @@
                     android:layout_height="0dp"
                     android:layout_marginEnd="28dp"
                     android:background="@drawable/round_price"
+                    android:elevation="2dp"
                     android:gravity="center_vertical"
                     android:padding="10dp"
-                    android:elevation="2dp"
                     android:text="$200"
                     android:textColor="@android:color/black"
                     android:textSize="16sp"

@@ -3,8 +3,8 @@ package com.krishibazaar.Utils;
 public class Constants {
     public static final String BASE_ADDRESS = "http://192.168.137.1/KrishiBazaar/api/";
     public static final String GEOCODE_PHP = BASE_ADDRESS + "geocode.php";
-//    public static final String SEARCH_PHP = BASE_ADDRESS + "search.php";
-    public static final String SEARCH_PHP = "http://192.168.137.1/KrishiBazaar/search.php";
+    public static final String SEARCH_PHP = BASE_ADDRESS + "search.php";
+//    public static final String SEARCH_PHP = "http://192.168.137.1/KrishiBazaar/search.php";
     public static final String GET_PROFILE_PHP = BASE_ADDRESS + "profile.php";
     public static final String GET_TRANSACTION_PHP = BASE_ADDRESS + "getTransaction.php";
     public static final String GENERATE_OTP_PHP = BASE_ADDRESS + "generateOtp.php";

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white"
@@ -16,10 +15,10 @@
         android:layout_marginEnd="10dp"
         android:drawableStart="@drawable/ic_location"
         android:drawablePadding="10dp"
+        android:ellipsize="end"
         android:foreground="?attr/selectableItemBackground"
         android:hint="@string/click_to_update_location"
         android:maxLines="1"
-        android:ellipsize="end"
 
         android:padding="10dp"
         android:textColor="@android:color/black"
@@ -35,8 +34,8 @@
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:background="@drawable/search_box"
-        android:orientation="horizontal"
         android:elevation="5dp"
+        android:orientation="horizontal"
         app:layout_constraintTop_toBottomOf="@id/location">
 
         <EditText
@@ -55,22 +54,23 @@
             android:layout_marginEnd="10dp"
             android:background="@android:color/transparent"
             android:foreground="?actionBarItemBackground"
-            app:srcCompat="@drawable/ic_search"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_search" />
 
         <ProgressBar
             android:id="@+id/progressBar"
             style="?android:attr/progressBarStyle"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_margin="2dp"
+            android:layout_marginEnd="10dp"
             android:indeterminate="true"
             android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/searchButton"
+            app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="@id/searchButton" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.recyclerview.widget.RecyclerView
@@ -85,46 +85,32 @@
 
     </androidx.recyclerview.widget.RecyclerView>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/errorContainer"
+
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/shimmer_view_container"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/recyclerView"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/recyclerView">
+        app:layout_constraintStart_toStartOf="@+id/recyclerView"
+        app:layout_constraintTop_toTopOf="@+id/recyclerView"
+        app:shimmer_duration="1500">
 
-        <TextView
-            android:id="@+id/errorText"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/loadingContainer"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="10dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_gravity="center_vertical"
+            android:orientation="vertical" />
+    </com.facebook.shimmer.ShimmerFrameLayout>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/loadingContainer"
+    <include
+        layout="@layout/container_error_page"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/recyclerView"
         app:layout_constraintStart_toStartOf="@+id/recyclerView"
-        app:layout_constraintTop_toTopOf="@+id/recyclerView">
-
-        <ProgressBar
-            android:id="@+id/progressLoading"
-            style="?android:attr/progressBarStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:indeterminate="true"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
+        app:layout_constraintTop_toTopOf="@+id/recyclerView" />
 </androidx.constraintlayout.widget.ConstraintLayout>

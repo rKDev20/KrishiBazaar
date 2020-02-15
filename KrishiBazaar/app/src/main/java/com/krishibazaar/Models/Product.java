@@ -79,10 +79,10 @@ public class Product {
             if (object.has(CATEGORY))
                 category = object.getString(CATEGORY);
             if (object.has(SUB_CATEGORY))
-                subCategory= object.getString(SUB_CATEGORY);
-            pincode=object.getInt(PINCODE);
-            latitude=object.getDouble(LATITUDE);
-            longitude=object.getDouble(LONGITUDE);
+                subCategory = object.getString(SUB_CATEGORY);
+            pincode = object.getInt(PINCODE);
+            latitude = object.getDouble(LATITUDE);
+            longitude = object.getDouble(LONGITUDE);
             quantity = (float) object.getDouble(QUANTITY);
             price = (float) object.getDouble(PRICE);
             description = object.getString(DESCRIPTION);
@@ -115,6 +115,12 @@ public class Product {
 
         public String getPrice() {
             return "₹" + price;
+        }
+
+        public String getPrice(boolean symbol) {
+            if (symbol)
+                return "₹" + price;
+            else return String.valueOf(price);
         }
 
         public String getDescription() {

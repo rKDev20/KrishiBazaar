@@ -39,15 +39,17 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     private List<Search.Response> data;
     private boolean isMaxLimitReached;
     private boolean isReloadFailed;
-    private ReloadListener listener;
+    private ReloadListener reloadListener;
+    private OnClickListener clickListener;
     private Context context;
 
-    public SearchAdapter(ReloadListener listener, Context context) {
+    public SearchAdapter(Context context, ReloadListener reloadListener, OnClickListener clickListener) {
         this.data = new ArrayList<>();
         this.context = context;
         isMaxLimitReached = false;
         isReloadFailed = false;
-        this.listener = listener;
+        this.reloadListener = reloadListener;
+        this.clickListener=clickListener;
     }
 
     public void addData(List<Search.Response> data) {
@@ -76,7 +78,8 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             final SearchViewHolder viewHolder = (SearchViewHolder) holder;
             Glide.with(context).clear(viewHolder.image);
             viewHolder.image.setImageResource(R.drawable.image);
-            Glide.with(context).load(data.get(position)
+            final Search.Response response=data.get(position);
+            Glide.with(context).load(response
                     .getImageUrl())
                     .listener(new RequestListener<Drawable>() {
                         @Override
@@ -99,11 +102,17 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                         }
                     })
                     .into(viewHolder.image);
-            viewHolder.name.setText(data.get(position).getName());
-            viewHolder.description.setText(data.get(position).getDescription());
-            viewHolder.quantity.setText(data.get(position).getQuantity());
-            viewHolder.price.setText(data.get(position).getPrice());
-            viewHolder.location.setText(data.get(position).getDistance());
+            viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    clickListener.onClick(response.getProductId());
+                }
+            });
+            viewHolder.name.setText(response.getName());
+            viewHolder.description.setText(response.getDescription());
+            viewHolder.quantity.setText(response.getQuantity());
+            viewHolder.price.setText(response.getPrice());
+            viewHolder.location.setText(response.getDistance());
         } else {
             LoadingViewHolder viewHolder = (LoadingViewHolder) holder;
             Log.d("abcd", "here");
@@ -112,7 +121,7 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                     @Override
                     public void onClick(View view) {
                         isReloadFailed = false;
-                        listener.onReload();
+                        reloadListener.onReload();
                         notifyItemChanged(position);
                     }
                 });
@@ -150,9 +159,15 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     public interface ReloadListener {
         void onReload();
     }
+
+    public interface OnClickListener {
+        void onClick(long productId);
+    }
 }
 
 class SearchViewHolder extends RecyclerView.ViewHolder {
+    ConstraintLayout itemView;
+
     TextView name;
     TextView description;
     TextView quantity;
@@ -164,6 +179,7 @@ class SearchViewHolder extends RecyclerView.ViewHolder {
 
     SearchViewHolder(@NonNull View itemView) {
         super(itemView);
+        this.itemView = (ConstraintLayout) itemView;
         wave = itemView.findViewById(R.id.wave);
         container = itemView.findViewById(R.id.container);
         image = itemView.findViewById(R.id.image);
