@@ -16,8 +16,8 @@ import com.krishibazaar.Utils.VolleyRequestMaker;
 public class MainActivity extends LocationManagerActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
 
     public final static String HOME = "home";
-    public final static String PROFILE = "profile";
     public final static String SELL = "sell";
+    public final static String PROFILE = "profile";
 
     private Fragment home;
     private Fragment profile;

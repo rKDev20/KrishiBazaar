@@ -1,6 +1,7 @@
 package com.krishibazaar;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,7 +40,6 @@ public class SellProductActivity extends Fragment {
     private Spinner catSpinner, scatSpinner;
     private EditText quantity, price, pinCode, description, name;
     private Button button;
-    private TextView statusText;
     private Context context;
 
     @Nullable
@@ -52,15 +52,13 @@ public class SellProductActivity extends Fragment {
 
     private void initViews(View view) {
         quantity = view.findViewById(R.id.qty);
-        price = view.findViewById(R.id.prc);
+        price = view.findViewById(R.id.price);
         catSpinner = view.findViewById(R.id.cat);
         pinCode = view.findViewById(R.id.pin);
         scatSpinner = view.findViewById(R.id.subcat);
         button = view.findViewById(R.id.otpbutton);
         name = view.findViewById(R.id.name);
-        statusText = view.findViewById(R.id.pro_status);
         description = view.findViewById(R.id.desc);
-        statusText.setVisibility(View.INVISIBLE);
     }
 
     @Override
@@ -75,6 +73,7 @@ public class SellProductActivity extends Fragment {
             public void onClick(View view) {
                 if (quantity.getText().toString().length() != 0 && price.getText().toString().length() != 0 && pinCode.getText().toString().length() == 6) {
                     SellProduct query = new SellProduct("kiit",
+                            //TODO categories are passed as an integer
                             Integer.parseInt(catSpinner.getSelectedItem().toString()),
                             Integer.parseInt(scatSpinner.getSelectedItem().toString()),
                             name.getText().toString(),
@@ -85,10 +84,10 @@ public class SellProductActivity extends Fragment {
                     VolleyRequestMaker.sellProduct(context, query, new VolleyRequestMaker.TaskFinishListener<Integer>() {
                         @Override
                         public void onSuccess(Integer response) {
-                            button.setVisibility(View.INVISIBLE);
-                            statusText.setVisibility(View.VISIBLE);
-                            statusText.setText("Product On Sale");
-
+                            Toast.makeText(context,"Product On Sale !",Toast.LENGTH_LONG).show();
+                            Intent intent=new Intent(context,ProductViewActivity.class);
+                            intent.putExtra("productID",response);
+                            startActivity(intent);
                         }
 
                         @Override
