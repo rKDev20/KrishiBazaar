@@ -333,32 +333,57 @@
             app:layout_constraintVertical_bias="0">
 
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/errorContainer"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
+                <ImageView
+                    android:id="@+id/imageView"
+                    android:layout_width="206dp"
+                    android:layout_height="206dp"
+                    app:layout_constraintBottom_toTopOf="@+id/transactionErrorText"
+                    android:layout_marginTop="10dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_chainStyle="packed"
+                    app:layout_constraintWidth_percent="0.5"
+                    app:srcCompat="@drawable/error" />
+
                 <TextView
                     android:id="@+id/transactionErrorText"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="20dp"
-                    android:padding="7dp"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:padding="10dp"
+                    android:text="Some Error Ocurred"
+                    android:textColor="@android:color/black"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toTopOf="@+id/transactionErrorRetry"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/imageView"
+                    app:layout_constraintVertical_chainStyle="packed" />
 
                 <Button
                     android:id="@+id/transactionErrorRetry"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="20dp"
                     android:background="@drawable/login_button_background"
-                    android:paddingStart="20dp"
-                    android:paddingEnd="20dp"
-                    android:text="@string/refresh"
+                    android:paddingStart="25dp"
+                    android:paddingEnd="25dp"
+                    android:text="@string/retry"
                     android:textColor="@android:color/white"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="10dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/transactionErrorText" />
+                    app:layout_constraintTop_toBottomOf="@+id/transactionErrorText"
+                    app:layout_constraintVertical_chainStyle="packed" />
+
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>
 

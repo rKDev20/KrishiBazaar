@@ -4,19 +4,14 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.TextView;
-
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.krishibazaar.Models.BuyerDetails;
 import com.krishibazaar.R;
 import com.krishibazaar.Utils.VolleyRequestMaker;
 
-import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 
@@ -62,7 +57,10 @@ public class ProductRequestAdapter extends BaseAdapter
         name=view.findViewById(R.id.name);
         timestamp=view.findViewById(R.id.ts);
         distance=view.findViewById(R.id.dis);
-        price.setText(String.valueOf(list.get(i).getPrice()));
+        if(list.get(i).getPrice()!=null)
+            price.setText(String.valueOf(list.get(i).getPrice()));
+        else
+            price.setText("None");
         name.setText(list.get(i).getName());
         distance.setText(String.valueOf(list.get(i).getDistance()));
         timestamp.setText(getTime(list.get(i).getTimestamp()));

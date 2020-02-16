@@ -330,7 +330,7 @@ public class VolleyRequestMaker {
 
     public static void getProductDetails(final Context context, Product.Query query, final TaskFinishListener<Product.Response> listener) {
         try {
-            JSONObject params = query.getJSON();
+            final JSONObject params = query.getJSON();
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, GET_PRODUCT_DETAILS_PHP, params,
                     new Response.Listener<JSONObject>() {
                         @Override
@@ -346,6 +346,7 @@ public class VolleyRequestMaker {
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
+                            Log.d("part2",error.getClass().getName());
                             listener.onError(context.getString(R.string.error_network));
                         }
                     });

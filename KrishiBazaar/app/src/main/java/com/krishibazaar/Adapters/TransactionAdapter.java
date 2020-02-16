@@ -8,12 +8,11 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.krishibazaar.Models.Transaction;
 import com.krishibazaar.R;
-
-import org.w3c.dom.Text;
 
 import java.util.List;
 
@@ -24,16 +23,18 @@ public class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     private List<Transaction.Response> data;
     private boolean isMaxLimitReached;
     private boolean isReloadFailed;
-    private ReloadListener listener;
+    private ReloadListener reloadListener;
+    private OnClickListener clickListener;
 
     private String[] statusText;
     private int[] statusColor;
 
-    public TransactionAdapter(Context context, List<Transaction.Response> data, ReloadListener listener) {
+    public TransactionAdapter(Context context, List<Transaction.Response> data, ReloadListener reloadListener, OnClickListener clickListener) {
         this.data = data;
         isMaxLimitReached = false;
         isReloadFailed = false;
-        this.listener = listener;
+        this.reloadListener = reloadListener;
+        this.clickListener = clickListener;
         statusColor = context.getResources().getIntArray(R.array.status_color);
         statusText = context.getResources().getStringArray(R.array.status_array);
     }
@@ -56,13 +57,19 @@ public class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, final int position) {
         if (holder instanceof TransactionViewHolder) {
             TransactionViewHolder viewHolder = (TransactionViewHolder) holder;
-            Transaction.Response response = data.get(position);
+            final Transaction.Response response = data.get(position);
             viewHolder.name.setText(response.getName());
             viewHolder.quantity.setText(response.getQuantity());
             viewHolder.price.setText(response.getPrice());
             viewHolder.status.setText(statusText[response.getStatus()]);
             viewHolder.status.setBackgroundColor(statusColor[response.getStatus()]);
             viewHolder.timestamp.setText(response.getTime());
+            viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    clickListener.onClick(response.getProductId());
+                }
+            });
             if (response.getDistance() != null) {
                 viewHolder.location.setVisibility(View.VISIBLE);
                 viewHolder.location.setText(response.getDistance());
@@ -77,7 +84,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                     public void onClick(View view) {
                         isReloadFailed = false;
                         notifyItemChanged(position);
-                        listener.onReload();
+                        reloadListener.onReload();
                     }
                 });
             else viewHolder.setProgressBar();
@@ -114,22 +121,29 @@ public class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     public interface ReloadListener {
         void onReload();
     }
+
+    public interface OnClickListener {
+        void onClick(long productId);
+    }
 }
 
 class TransactionViewHolder extends RecyclerView.ViewHolder {
+    ConstraintLayout itemView;
     TextView name;
     TextView quantity;
     TextView price;
     TextView location;
     TextView status;
     TextView timestamp;
+
     TransactionViewHolder(@NonNull View itemView) {
         super(itemView);
+        this.itemView = (ConstraintLayout) itemView;
         name = itemView.findViewById(R.id.name);
         quantity = itemView.findViewById(R.id.quantity);
         price = itemView.findViewById(R.id.price);
         location = itemView.findViewById(R.id.location);
-        timestamp=itemView.findViewById(R.id.timestamp);
+        timestamp = itemView.findViewById(R.id.timestamp);
         status = itemView.findViewById(R.id.pro_status);
     }
 }

@@ -1,6 +1,7 @@
 package com.krishibazaar;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
@@ -33,6 +34,7 @@ import com.krishibazaar.Utils.VolleyRequestMaker;
 import java.util.List;
 
 import static android.view.View.GONE;
+import static com.krishibazaar.Utils.Constants.PRODUCT_ID;
 
 public class ProfileActivity extends Fragment {
     private EditText mobile;
@@ -76,7 +78,7 @@ public class ProfileActivity extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        Log.d("abcd","here mf");
+        Log.d("abcd", "here mf");
         context = getContext();
         initUser();
         initTransactions();
@@ -187,7 +189,7 @@ public class ProfileActivity extends Fragment {
     }
 
     private void fetchProfile() {
-        String token=SharedPreferenceManager.getToken(context);
+        String token = SharedPreferenceManager.getToken(context);
         VolleyRequestMaker.getUserDetails(context, token, new VolleyRequestMaker.TaskFinishListener<User>() {
             @Override
             public void onSuccess(User response) {
@@ -250,16 +252,16 @@ public class ProfileActivity extends Fragment {
         String addressText = address.getText().toString();
         if (!nameText.isEmpty() && pincodeText.length() == 6 && mobileText.length() == 10 && !addressText.isEmpty()) {
             showLoading();
-            String token=SharedPreferenceManager.getToken(context);
+            String token = SharedPreferenceManager.getToken(context);
             int pin = Integer.valueOf(pincodeText);
-            final NewUser tmp = new NewUser(nameText,token,addressText, pin);
+            final NewUser tmp = new NewUser(nameText, token, addressText, pin);
             VolleyRequestMaker.register(context, tmp, new VolleyRequestMaker.TaskFinishListener<Integer>() {
                 @Override
                 public void onSuccess(Integer response) {
-                    user = new User(tmp.getName(),user.getMobile(),tmp.getAddress(),tmp.getPincode());
+                    user = new User(tmp.getName(), user.getMobile(), tmp.getAddress(), tmp.getPincode());
                     setEdit(false);
                     setUser();
-                    SharedPreferenceManager.setUser(context,user);
+                    SharedPreferenceManager.setUser(context, user);
                     stopLoading();
                 }
 
@@ -323,7 +325,7 @@ public class ProfileActivity extends Fragment {
         if (pageOffset == 0)
             showTransactionProgress();
         isLoading = true;
-        String token=SharedPreferenceManager.getToken(context);
+        String token = SharedPreferenceManager.getToken(context);
         Transaction.Query query = new Transaction.Query(token, pageOffset + 1, ITEMS_TO_LOAD);
         VolleyRequestMaker.getTransactions(context, query, new VolleyRequestMaker.TaskFinishListener<List<Transaction.Response>>() {
             @Override
@@ -363,9 +365,20 @@ public class ProfileActivity extends Fragment {
                 public void onReload() {
                     loadTransactions();
                 }
+            }, new TransactionAdapter.OnClickListener() {
+                @Override
+                public void onClick(long productId) {
+                    openProductView(productId);
+                }
             });
             recyclerView.setAdapter(adapter);
         } else adapter.addData(response);
         adapter.notifyDataSetChanged();
+    }
+
+    private void openProductView(long productId) {
+        Intent intent = new Intent(context, ProductViewActivity.class);
+        intent.putExtra(PRODUCT_ID, (int)productId);
+        startActivity(intent);
     }
 }
