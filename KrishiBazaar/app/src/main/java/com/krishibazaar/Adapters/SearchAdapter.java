@@ -182,7 +182,7 @@ class SearchViewHolder extends RecyclerView.ViewHolder {
         container = itemView.findViewById(R.id.container);
         image = itemView.findViewById(R.id.image);
         name = itemView.findViewById(R.id.name);
-        description = itemView.findViewById(R.id.pro_status);
+        description = itemView.findViewById(R.id.description);
         quantity = itemView.findViewById(R.id.quantity);
         price = itemView.findViewById(R.id.price);
         location = itemView.findViewById(R.id.location);

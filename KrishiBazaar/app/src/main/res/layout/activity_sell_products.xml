@@ -1,183 +1,172 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/sell_card"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginStart="20dp"
-    android:layout_marginTop="20dp"
-    android:layout_marginEnd="20dp"
-    app:cardCornerRadius="8dp"
-    app:contentPaddingBottom="20dp"
-    app:contentPaddingTop="20dp"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="parent"
-    app:layout_constraintTop_toTopOf="parent"
-    tools:context=".SellProductActivity">
+    android:background="@color/colorSecondary">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.cardview.widget.CardView
+        android:id="@+id/sell_card"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="10dp"
+        app:cardCornerRadius="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:context=".SellProductActivity">
 
-        <Spinner
-            android:id="@+id/cat"
-            android:layout_width="0dp"
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="50dp"
-            android:layout_marginTop="30dp"
-            android:layout_marginEnd="50dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:padding="5dp">
 
-        <Spinner
-            android:id="@+id/subcat"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="50dp"
-            android:layout_marginTop="40dp"
-            android:layout_marginEnd="50dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cat" />
+            <com.github.florent37.materialtextfield.MaterialTextField
+                android:id="@+id/name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:mtf_image="@drawable/ic_basket"
+                app:mtf_labelColor="@color/colorSecondary"
+                app:mtf_openKeyboardOnFocus="true">
 
-        <com.github.florent37.materialtextfield.MaterialTextField
-            android:id="@+id/qty"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/price"
-            app:mtf_image="@drawable/ic_quantity"
-            app:mtf_openKeyboardOnFocus="true">
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Name"
+                    android:inputType="textPersonName"
+                    android:padding="5dp" />
+            </com.github.florent37.materialtextfield.MaterialTextField>
 
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:hint="Quantity"
-                android:inputType="numberDecimal"
-                android:padding="5dp" />
-        </com.github.florent37.materialtextfield.MaterialTextField>
+            <Button
+                android:id="@+id/cat"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="Select category"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/name" />
 
-        <com.github.florent37.materialtextfield.MaterialTextField
-            android:id="@+id/name"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/subcat"
-            app:mtf_image="@drawable/ic_basket"
-            app:mtf_openKeyboardOnFocus="true">
+            <Button
+                android:id="@+id/subcat"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="Select sub-category"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cat" />
 
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:hint="Name "
-                android:inputType="textPersonName"
-                android:padding="5dp" />
+            <com.github.florent37.materialtextfield.MaterialTextField
+                android:id="@+id/price"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/subcat"
+                app:mtf_image="@drawable/ic_rupee"
+                app:mtf_labelColor="@color/colorSecondary"
+                app:mtf_openKeyboardOnFocus="true">
 
-        </com.github.florent37.materialtextfield.MaterialTextField>
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Price"
+                    android:inputType="number"
+                    android:padding="5dp" />
 
-        <com.github.florent37.materialtextfield.MaterialTextField
-            android:id="@+id/price"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/name"
-            app:mtf_image="@drawable/ic_rupee"
-            app:mtf_openKeyboardOnFocus="true">
+            </com.github.florent37.materialtextfield.MaterialTextField>
 
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:hint="Price"
-                android:inputType="number"
-                android:padding="5dp" />
+            <com.github.florent37.materialtextfield.MaterialTextField
+                android:id="@+id/qty"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/price"
+                app:mtf_image="@drawable/ic_quantity"
+                app:mtf_labelColor="@color/colorSecondary"
+                app:mtf_openKeyboardOnFocus="true">
 
-        </com.github.florent37.materialtextfield.MaterialTextField>
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Quantity"
+                    android:inputType="numberDecimal"
+                    android:padding="5dp"
+                    android:textColorHint="@android:color/black" />
+            </com.github.florent37.materialtextfield.MaterialTextField>
 
-        <com.github.florent37.materialtextfield.MaterialTextField
-            android:id="@+id/pin"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/qty"
-            app:mtf_image="@drawable/ic_postal"
-            app:mtf_openKeyboardOnFocus="true">
+            <com.github.florent37.materialtextfield.MaterialTextField
+                android:id="@+id/pin"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/qty"
+                app:mtf_image="@drawable/ic_postal"
+                app:mtf_labelColor="@color/colorSecondary"
+                app:mtf_openKeyboardOnFocus="true">
 
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:hint="PIN Code"
-                android:inputType="number"
-                android:maxLength="6"
-                android:padding="5dp" />
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="PIN Code"
+                    android:inputType="number"
+                    android:maxLength="6"
+                    android:padding="5dp" />
 
-        </com.github.florent37.materialtextfield.MaterialTextField>
+            </com.github.florent37.materialtextfield.MaterialTextField>
 
-        <com.github.florent37.materialtextfield.MaterialTextField
-            android:id="@+id/desc"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/pin"
-            app:mtf_image="@drawable/description"
-            app:mtf_openKeyboardOnFocus="true">
+            <com.github.florent37.materialtextfield.MaterialTextField
+                android:id="@+id/desc"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/pin"
+                app:mtf_image="@drawable/description"
+                app:mtf_labelColor="@color/colorSecondary"
+                app:mtf_openKeyboardOnFocus="true"
+                app:mtf_cardColor="@color/colorSecondary">
 
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="start|top"
-                android:hint="Description "
-                android:inputType="textMultiLine"
-                android:padding="5dp" />
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="start|top"
+                    android:hint="Description "
+                    android:inputType="textMultiLine"
+                    android:padding="5dp" />
 
-        </com.github.florent37.materialtextfield.MaterialTextField>
-
-
-        <Button
-            android:id="@+id/otpbutton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:background="@drawable/login_button_background"
-            android:text="@string/sell"
-            android:textColor="@android:color/white"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/desc" />
-
-        <TextView
-            android:id="@+id/textView8"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Category"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/cat"
-            app:layout_constraintStart_toStartOf="@+id/cat" />
-
-        <TextView
-            android:id="@+id/textView11"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Sub Category"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/subcat"
-            app:layout_constraintStart_toStartOf="@+id/subcat" />
+            </com.github.florent37.materialtextfield.MaterialTextField>
 
 
+            <Button
+                android:id="@+id/otpbutton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:background="@drawable/login_button_background"
+                android:text="@string/sell"
+                android:textColor="@android:color/white"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/desc" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-</androidx.cardview.widget.CardView>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+</ScrollView>

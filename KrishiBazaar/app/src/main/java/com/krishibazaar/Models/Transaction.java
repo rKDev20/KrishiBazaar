@@ -52,11 +52,11 @@ public class Transaction {
             name = object.getString(NAME);
             quantity = (float) object.getDouble(QUANTITY);
             price = (float) object.getDouble(PRICE);
+            timestamp = object.getLong(TIMESTAMP);
+            status = object.getInt(STATUS);
             if (object.has(DISTANCE))
                 distance = (float) object.getDouble(DISTANCE);
             else distance = null;
-            timestamp = object.getLong(TIMESTAMP);
-            status = object.getInt(STATUS);
         }
 
         public String getTime() {
