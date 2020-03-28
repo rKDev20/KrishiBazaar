@@ -1,72 +1,79 @@
 package com.krishibazaar.Popups;
 
 import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 
-public class SpinnerChooser {
-    public static void popup(Context context, boolean isCategory, int category, ItemSelectedListener listener) {
+import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentManager;
+import androidx.recyclerview.widget.RecyclerView;
+import com.krishibazaar.R;
+import java.util.ArrayList;
 
+public class SpinnerChooser extends RecyclerView.Adapter<SpinnerChooser.ItemViewHolder> {
+    ArrayList<String> itemList;
+    ItemSelectedListener listener;
+    boolean hasSubCategory;
+
+    public SpinnerChooser(ArrayList<String> itemList,ItemSelectedListener listener,boolean hasSubCategory) {
+        this.itemList = itemList;
+        this.listener=listener;
+        this.hasSubCategory=hasSubCategory;
+    }
+
+    public static void popup(Context context, boolean isCategory, int category, FragmentManager manager, ItemSelectedListener listener)
+    {
+        BottomSheetDialog dialog=new BottomSheetDialog(isCategory,context,category,listener);
+        dialog.show(manager,"BottomSheet");
     }
 
     public interface ItemSelectedListener {
         void onItemSelected(int i, String text, boolean hasSubcategory);
     }
 
+    @NonNull
+    @Override
+    public ItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
+    {
+        LayoutInflater inflater=LayoutInflater.from(parent.getContext());
+        View view=inflater.inflate(R.layout.adapter_item_list,parent,false);
+        return new ItemViewHolder(view);
+    }
 
-//    public String readJSONFromAsset() {
-//        String json = null;
-//        try {
-//            InputStream is = context.getAssets().open("products.json");
-//            int size = is.available();
-//            byte[] buffer = new byte[size];
-//            is.read(buffer);
-//            is.close();
-//            json = new String(buffer, StandardCharsets.UTF_8);
-//        } catch (IOException ex) {
-//            ex.printStackTrace();
-//            return null;
-//        }
-//        return json;
-//    }
-//
-//    public ArrayList<String> getCategoryArray(String selectedCat) {
-//        ArrayList<String> subCategory = new ArrayList<>();
-//        JSONArray arr = null;
-//        try {
-//            JSONArray jsonArray = new JSONArray(readJSONFromAsset());
-//            for (int i = 0; i < jsonArray.length(); i++) {
-//                JSONObject jsonObject = jsonArray.getJSONObject(i);
-//                if (jsonObject.getString("category").equals(selectedCat)) {
-//                    arr = jsonObject.getJSONArray("subCategory");
-//                    for (int j = 0; j < arr.length(); j++) {
-//                        String js = arr.getString(j);
-//                        subCategory.add(js);
-//                    }
-//                    break;
-//                }
-//            }
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        }
-//        return subCategory;
-//    }
-//
-//    public void getCategoryToSpinner() {
-//        ArrayList<String> category = new ArrayList<>();
-//        try {
-//            JSONArray jsonArray = new JSONArray(readJSONFromAsset());
-//            for (int i = 0; i < jsonArray.length(); i++) {
-//                JSONObject jsonObject = jsonArray.getJSONObject(i);
-//                category.add(jsonObject.getString("category"));
-//            }
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        }
-//        ArrayAdapter<String> catAdapter = new ArrayAdapter<>(context,
-//                android.R.layout.simple_list_item_1, category);
-//        catAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//        catSpinner.setAdapter(catAdapter);
-//    }
-//
+    @Override
+    public void onBindViewHolder(@NonNull ItemViewHolder holder, int position)
+    {
+        holder.itemName.setText(itemList.get(position));
+        holder.bind(position,listener);
+    }
+
+    @Override
+    public int getItemCount() {
+        if(itemList==null)
+            return 0;
+        return itemList.size();
+    }
+
+    public class ItemViewHolder extends RecyclerView.ViewHolder
+    {
+        TextView itemName;
+        public ItemViewHolder(@NonNull View itemView) {
+            super(itemView);
+            itemName=itemView.findViewById(R.id.item_name);
+        }
+        public void bind(final int position, final ItemSelectedListener listener)
+        {
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    listener.onItemSelected(position,itemList.get(position),hasSubCategory);
+                }
+            });
+        }
+    }
+
 //    public void getSubCategoryToSpinner() {
 //        catSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 //            @Override
