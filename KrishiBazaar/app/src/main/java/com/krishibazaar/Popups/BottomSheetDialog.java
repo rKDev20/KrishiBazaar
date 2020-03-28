@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.krishibazaar.R;
+import com.krishibazaar.Utils.AssetsHandler;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -43,24 +44,21 @@ public class BottomSheetDialog extends BottomSheetDialogFragment{
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view= inflater.inflate(R.layout.bottom_sheet,container,false);
         recyclerView=view.findViewById(R.id.recyclerView);
-        String JSONFromAssets=readJSONFromAsset(context);
-        ArrayList<String> categoryList=getcategoryArray(JSONFromAssets);
-        ArrayList<String> subCategoryList=null;
+        ArrayList<String> categoryList=new AssetsHandler(context).getcategoryArray();
+        recyclerView.setLayoutManager(new LinearLayoutManager(context));
         if(isCategory)
-        {
-            recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            subCategoryList=getSubcategoryArray(JSONFromAssets,categoryList.get(category));
-            if(subCategoryList==null)
-                recyclerView.setAdapter(new SpinnerChooser(categoryList,listener,false));
-            else
-                recyclerView.setAdapter(new SpinnerChooser(categoryList,listener,true));
-        }
+            recyclerView.setAdapter(new SpinnerChooser(categoryList,listener,context));
         else
         {
-            recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            subCategoryList=getSubcategoryArray(JSONFromAssets,categoryList.get(category));
-            recyclerView.setAdapter(new SpinnerChooser(subCategoryList,listener,false));
+            ArrayList<String> subCategoryList=new AssetsHandler(context).getSubcategoryArray(categoryList.get(category));
+            recyclerView.setAdapter(new SpinnerChooser(subCategoryList,listener,context));
         }
+        recyclerView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dismiss();
+            }
+        });
         return view;
     }
 
