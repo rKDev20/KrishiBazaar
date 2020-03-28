@@ -80,14 +80,14 @@ public class SellProductActivity extends Fragment {
         catSpinner.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SpinnerChooser.popup(context, true, 0,getFragmentManager(), categoryListener);
+                new SpinnerChooser().popup(context, true, 0,getFragmentManager(), categoryListener);
             }
         });
         scatSpinner.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (category != -1)
-                    SpinnerChooser.popup(context, false, category,getFragmentManager(), subCategoryListener);
+                    new SpinnerChooser().popup(context, false, category,getFragmentManager(), subCategoryListener);
             }
         });
         button.setOnClickListener(new View.OnClickListener() {
