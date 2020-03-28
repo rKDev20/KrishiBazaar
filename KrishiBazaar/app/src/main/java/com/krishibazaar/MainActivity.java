@@ -10,6 +10,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.krishibazaar.Utils.LocationManagerActivity;
+import com.krishibazaar.Utils.SharedPreferenceManager;
 import com.krishibazaar.Utils.VolleyRequestMaker;
 
 public class MainActivity extends LocationManagerActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
@@ -27,8 +28,8 @@ public class MainActivity extends LocationManagerActivity implements BottomNavig
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-//        String token = SharedPreferenceManager.getToken(this);
-        String token="34736842368r32y83286483264";
+        //String token = SharedPreferenceManager.getToken(this);
+        String token="123456789098765432123456789";
         if (token == null)
             startActivity(new Intent(this, LoginActivity.class));
         else {
