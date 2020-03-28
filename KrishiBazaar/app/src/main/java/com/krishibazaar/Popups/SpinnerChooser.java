@@ -10,7 +10,6 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.krishibazaar.R;
 import com.krishibazaar.Utils.AssetsHandler;
 
@@ -20,28 +19,27 @@ public class SpinnerChooser extends RecyclerView.Adapter<SpinnerChooser.ItemView
     ArrayList<String> itemList;
     ItemSelectedListener listener;
     Context context;
-    BottomSheetDialogFragment fragment;
+    BottomSheetDialog dialog;
 
-    public SpinnerChooser() {}
+    public SpinnerChooser() {
+    }
 
     public SpinnerChooser(ArrayList<String> itemList, ItemSelectedListener listener, Context context) {
         this.itemList = itemList;
-        this.listener=listener;
-        this.context=context;
+        this.listener = listener;
+        this.context = context;
     }
 
-    public void popup(final Context context, boolean isCategory, int category, FragmentManager manager, final ItemSelectedListener listener)
-    {
-        ItemSelectedListener l=new ItemSelectedListener() {
+    public void popup(final Context context, boolean isCategory, int category, FragmentManager manager, final ItemSelectedListener listener) {
+        ItemSelectedListener l = new ItemSelectedListener() {
             @Override
             public void onItemSelected(int i, String text, boolean hasSubcategory) {
-                listener.onItemSelected(i,text,hasSubcategory);
-                fragment=new BottomSheetDialogFragment();
-                fragment.dismiss();
+                listener.onItemSelected(i, text, hasSubcategory);
+                dialog.dismiss();
             }
         };
-        BottomSheetDialog dialog=new BottomSheetDialog(isCategory,context,category,l);
-        dialog.show(manager,"BottomSheet");
+        dialog = new BottomSheetDialog(isCategory, context, category, l);
+        dialog.show(manager, "BottomSheet");
     }
 
     public interface ItemSelectedListener {
@@ -50,41 +48,39 @@ public class SpinnerChooser extends RecyclerView.Adapter<SpinnerChooser.ItemView
 
     @NonNull
     @Override
-    public ItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
-    {
-        LayoutInflater inflater=LayoutInflater.from(parent.getContext());
-        View view=inflater.inflate(R.layout.adapter_item_list,parent,false);
+    public ItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+        View view = inflater.inflate(R.layout.adapter_item_list, parent, false);
         return new ItemViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ItemViewHolder holder, int position)
-    {
+    public void onBindViewHolder(@NonNull ItemViewHolder holder, int position) {
         holder.itemName.setText(itemList.get(position));
-        holder.bind(position,listener);
+        holder.bind(position, listener);
     }
 
     @Override
     public int getItemCount() {
-        if(itemList==null)
+        if (itemList == null)
             return 0;
         return itemList.size();
     }
 
-    public class ItemViewHolder extends RecyclerView.ViewHolder
-    {
+    public class ItemViewHolder extends RecyclerView.ViewHolder {
         TextView itemName;
+
         public ItemViewHolder(@NonNull View itemView) {
             super(itemView);
-            itemName=itemView.findViewById(R.id.item_name);
+            itemName = itemView.findViewById(R.id.item_name);
         }
-        public void bind(final int position, final ItemSelectedListener listener)
-        {
+
+        public void bind(final int position, final ItemSelectedListener listener) {
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Boolean hasSubCategory=new AssetsHandler(context).hasSubCategory(itemList.get(position));
-                    listener.onItemSelected(position,itemList.get(position),hasSubCategory);
+                    Boolean hasSubCategory = new AssetsHandler(context).hasSubCategory(itemList.get(position));
+                    listener.onItemSelected(position, itemList.get(position), hasSubCategory);
                     //DialogFragment dialog= Dialog.OnClickListener()
                 }
             });
