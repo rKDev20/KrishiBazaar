@@ -10,12 +10,16 @@
         android:text="Choose the item :"
         android:textAlignment="center"
         android:textSize="24sp" />
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/search_item"
+        android:hint="Search item..."/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/recyclerView"
-        />
+        android:id="@+id/recyclerView" />
 
 
 </LinearLayout>

@@ -51,7 +51,7 @@ public class SellProductActivity extends Fragment {
         categoryListener = new SpinnerChooser.ItemSelectedListener() {
             @Override
             public void onItemSelected(int i, String text, boolean hasSubcategory) {
-                catSpinner.setText(text);
+                catSpinner.setText("Category : "+text);
                 category = i;
                 if (!hasSubcategory) {
                     scatSpinner.setVisibility(GONE);
@@ -66,7 +66,7 @@ public class SellProductActivity extends Fragment {
         subCategoryListener = new SpinnerChooser.ItemSelectedListener() {
             @Override
             public void onItemSelected(int i, String text, boolean ignore) {
-                scatSpinner.setText(text);
+                scatSpinner.setText("SubCategory : "+text);
                 subCategory = i;
             }
         };

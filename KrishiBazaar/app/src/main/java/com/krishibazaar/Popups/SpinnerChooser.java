@@ -81,34 +81,12 @@ public class SpinnerChooser extends RecyclerView.Adapter<SpinnerChooser.ItemView
                 public void onClick(View view) {
                     Boolean hasSubCategory = new AssetsHandler(context).hasSubCategory(itemList.get(position));
                     listener.onItemSelected(position, itemList.get(position), hasSubCategory);
-                    //DialogFragment dialog= Dialog.OnClickListener()
                 }
             });
         }
     }
-
-//    public void getSubCategoryToSpinner() {
-//        catSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//            @Override
-//            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-//                String selectedCat = catSpinner.getSelectedItem().toString();
-//                ArrayList<String> subCategory = getCategoryArray(selectedCat);
-//                ArrayAdapter<String> scatAdapter = new ArrayAdapter<>(context,
-//                        android.R.layout.simple_list_item_1, subCategory);
-//                scatAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//                scatSpinner.setAdapter(scatAdapter);
-//            }
-//
-//            @Override
-//            public void onNothingSelected(AdapterView<?> adapterView) {
-//
-//            }
-//        });
-//        String selectedCat = catSpinner.getSelectedItem().toString();
-//        ArrayList<String> subCategory = getCategoryArray(selectedCat);
-//        ArrayAdapter<String> scatAdapter = new ArrayAdapter<>(context,
-//                android.R.layout.simple_list_item_1, subCategory);
-//        scatAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//        scatSpinner.setAdapter(scatAdapter);
-//    }
+    public void filterList(ArrayList<String> filterdNames) {
+        this.itemList = filterdNames;
+        notifyDataSetChanged();
+    }
 }

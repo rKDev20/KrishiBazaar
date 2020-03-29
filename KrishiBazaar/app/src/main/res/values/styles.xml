@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar.Bridge">
@@ -29,5 +29,4 @@
         <item name="android:scaleX">0.6</item>
         <item name="android:scaleY">0.6</item>
     </style>
-
 </resources>

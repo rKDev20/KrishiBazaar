@@ -1,57 +1,64 @@
 package com.krishibazaar.Popups;
-
 import android.content.Context;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Spinner;
+import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.krishibazaar.R;
 import com.krishibazaar.Utils.AssetsHandler;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
-public class BottomSheetDialog extends BottomSheetDialogFragment{
+public class BottomSheetDialog extends BottomSheetDialogFragment {
     private SpinnerChooser.ItemSelectedListener listener;
     RecyclerView recyclerView;
     boolean isCategory;
     Context context;
     int category;
+    SpinnerChooser chooser;
+    ArrayList<String> itemList;
 
-    public BottomSheetDialog(boolean isCategory, Context context, int category,SpinnerChooser.ItemSelectedListener listener) {
+    public BottomSheetDialog(boolean isCategory, Context context, int category, SpinnerChooser.ItemSelectedListener listener) {
         this.isCategory = isCategory;
         this.context = context;
         this.category = category;
-        this.listener=listener;
+        this.listener = listener;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setStyle(DialogFragment.STYLE_NORMAL, R.style.BottomSheeetDialogStyle);
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view= inflater.inflate(R.layout.bottom_sheet,container,false);
-        recyclerView=view.findViewById(R.id.recyclerView);
-        ArrayList<String> categoryList=new AssetsHandler(context).getcategoryArray();
+        View view = inflater.inflate(R.layout.bottom_sheet, container, false);
+        recyclerView = view.findViewById(R.id.recyclerView);
+        ArrayList<String> categoryList = new AssetsHandler(context).getcategoryArray();
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
-        if(isCategory)
-            recyclerView.setAdapter(new SpinnerChooser(categoryList,listener,context));
+        if (isCategory)
+        {
+            itemList=categoryList;
+            chooser = new SpinnerChooser(itemList, listener, context);
+            recyclerView.setAdapter(chooser);
+        }
         else
         {
-            ArrayList<String> subCategoryList=new AssetsHandler(context).getSubcategoryArray(categoryList.get(category));
-            recyclerView.setAdapter(new SpinnerChooser(subCategoryList,listener,context));
+            itemList= new AssetsHandler(context).getSubcategoryArray(categoryList.get(category));
+            chooser = new SpinnerChooser(itemList, listener, context);
+            recyclerView.setAdapter(chooser);
         }
         recyclerView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,10 +66,26 @@ public class BottomSheetDialog extends BottomSheetDialogFragment{
                 dismiss();
             }
         });
+        EditText searchItem = view.findViewById(R.id.search_item);
+        searchItem.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable)
+            {
+                filter(editable.toString());
+            }
+        });
         return view;
     }
 
-//    @Override
+    //    @Override
 //    public void onAttach(@NonNull Context context) {
 //        super.onAttach(context);
 //        try {
@@ -73,58 +96,12 @@ public class BottomSheetDialog extends BottomSheetDialogFragment{
 //            throw new ClassCastException(context.toString()+"must implement BottomSheetListener");
 //        }
 //    }
-
-    public static String readJSONFromAsset(Context context) {
-        String json = null;
-        try {
-            InputStream is = context.getAssets().open("products.json");
-            int size = is.available();
-            byte[] buffer = new byte[size];
-            is.read(buffer);
-            is.close();
-            json = new String(buffer, StandardCharsets.UTF_8);
-        } catch (IOException ex) {
-            ex.printStackTrace();
-            return null;
-        }
-        return json;
-    }
-
-    public static ArrayList<String> getSubcategoryArray(String JSONFromAsset,String selectedCat) {
-        ArrayList<String> subCategory = new ArrayList<>();
-        JSONArray arr = null;
-        try {
-            JSONArray jsonArray = new JSONArray(JSONFromAsset);
-            for (int i = 0; i < jsonArray.length(); i++) {
-                JSONObject jsonObject = jsonArray.getJSONObject(i);
-                if (jsonObject.getString("category").equals(selectedCat)) {
-                    if(!jsonObject.has("subCategory"))
-                        return null;
-                    arr = jsonObject.getJSONArray("subCategory");
-                    for (int j = 0; j < arr.length(); j++) {
-                        String js = arr.getString(j);
-                        subCategory.add(js);
-                    }
-                    break;
-                }
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return subCategory;
-    }
-
-    public static ArrayList<String> getcategoryArray(String JSONFromAsset) {
-        ArrayList<String> category = new ArrayList<>();
-        try {
-            JSONArray jsonArray = new JSONArray(JSONFromAsset);
-            for (int i = 0; i < jsonArray.length(); i++) {
-                JSONObject jsonObject = jsonArray.getJSONObject(i);
-                category.add(jsonObject.getString("category"));
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return category;
+    private void filter(String text)
+    {
+        ArrayList<String> filteredNames = new ArrayList<>();
+        for (String s : itemList)
+            if (s.toLowerCase().startsWith(text.toLowerCase()))
+                filteredNames.add(s);
+        chooser.filterList(filteredNames);
     }
 }
