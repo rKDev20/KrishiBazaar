@@ -16,7 +16,7 @@ import com.krishibazaar.Utils.AssetsHandler;
 import java.util.ArrayList;
 
 public class SpinnerChooser extends RecyclerView.Adapter<SpinnerChooser.ItemViewHolder> {
-    ArrayList<String> itemList;
+    ArrayList<String> itemList,temp;
     ItemSelectedListener listener;
     Context context;
     BottomSheetDialog dialog;
@@ -26,6 +26,7 @@ public class SpinnerChooser extends RecyclerView.Adapter<SpinnerChooser.ItemView
 
     public SpinnerChooser(ArrayList<String> itemList, ItemSelectedListener listener, Context context) {
         this.itemList = itemList;
+        this.temp=itemList;
         this.listener = listener;
         this.context = context;
     }
@@ -80,13 +81,14 @@ public class SpinnerChooser extends RecyclerView.Adapter<SpinnerChooser.ItemView
                 @Override
                 public void onClick(View view) {
                     Boolean hasSubCategory = new AssetsHandler(context).hasSubCategory(itemList.get(position));
-                    listener.onItemSelected(position, itemList.get(position), hasSubCategory);
+                    listener.onItemSelected(temp.indexOf(itemList.get(position)), itemList.get(position), hasSubCategory);
                 }
             });
         }
     }
-    public void filterList(ArrayList<String> filterdNames) {
-        this.itemList = filterdNames;
+    public void filterList(ArrayList<String> filteredNames,ArrayList<String> tempList) {
+        itemList = filteredNames;
+        temp=tempList;
         notifyDataSetChanged();
     }
 }

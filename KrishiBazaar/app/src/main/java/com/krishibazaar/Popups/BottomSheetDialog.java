@@ -46,6 +46,7 @@ public class BottomSheetDialog extends BottomSheetDialogFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.bottom_sheet, container, false);
         recyclerView = view.findViewById(R.id.recyclerView);
+        EditText searchItem = view.findViewById(R.id.search_item);
         ArrayList<String> categoryList = new AssetsHandler(context).getcategoryArray();
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         if (isCategory)
@@ -56,6 +57,7 @@ public class BottomSheetDialog extends BottomSheetDialogFragment {
         }
         else
         {
+            searchItem.setVisibility(view.GONE);
             itemList= new AssetsHandler(context).getSubcategoryArray(categoryList.get(category));
             chooser = new SpinnerChooser(itemList, listener, context);
             recyclerView.setAdapter(chooser);
@@ -66,7 +68,6 @@ public class BottomSheetDialog extends BottomSheetDialogFragment {
                 dismiss();
             }
         });
-        EditText searchItem = view.findViewById(R.id.search_item);
         searchItem.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -102,6 +103,6 @@ public class BottomSheetDialog extends BottomSheetDialogFragment {
         for (String s : itemList)
             if (s.toLowerCase().startsWith(text.toLowerCase()))
                 filteredNames.add(s);
-        chooser.filterList(filteredNames);
+        chooser.filterList(filteredNames,itemList);
     }
 }
