@@ -24,6 +24,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.facebook.shimmer.ShimmerFrameLayout;
+import com.github.ybq.android.spinkit.sprite.Sprite;
+import com.github.ybq.android.spinkit.style.Wave;
 import com.krishibazaar.Adapters.SearchAdapter;
 import com.krishibazaar.Models.LocationDetails;
 import com.krishibazaar.Models.Search;
@@ -123,6 +125,7 @@ public class HomeActivity extends Fragment {
         recyclerView = view.findViewById(R.id.recyclerView);
         errorText = view.findViewById(R.id.errorText);
         errorBox = view.findViewById(R.id.errorContainer);
+
         loadingBox = view.findViewById(R.id.loadingContainer);
         shimmerFrameLayout = view.findViewById(R.id.shimmer_view_container);
         retry = view.findViewById(R.id.retry);

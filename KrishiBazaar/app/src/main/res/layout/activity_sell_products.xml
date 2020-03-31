@@ -27,145 +27,188 @@
             android:layout_height="wrap_content"
             android:padding="5dp">
 
-            <com.github.florent37.materialtextfield.MaterialTextField
-                android:id="@+id/name"
+            <libs.mjn.fieldset.FieldSetView
                 android:layout_width="0dp"
+                android:id="@+id/fieldName"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:mtf_image="@drawable/ic_basket"
-                app:mtf_labelColor="@color/colorSecondary"
-                app:mtf_openKeyboardOnFocus="true">
-
+                app:fsv_legend="Name"
+                app:fsv_legendPosition="left"
+                app:fsv_legendSize="16sp">
                 <EditText
+                    android:id="@+id/name"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:hint="Name"
                     android:inputType="textPersonName"
-                    android:padding="5dp" />
-            </com.github.florent37.materialtextfield.MaterialTextField>
-
+                    android:background="@null"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:drawableLeft="@drawable/ic_basket"
+                    android:drawablePadding="5dp"
+                    android:hint="Enter name of your product."
+                    android:paddingStart="15dp"
+                    android:paddingEnd="15dp"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"/>
+            </libs.mjn.fieldset.FieldSetView>
             <Button
                 android:id="@+id/cat"
                 android:layout_width="0dp"
+                android:background="@drawable/category_input"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:text="Select category"
+                android:text="Select the Category of your product."
+                android:textAllCaps="false"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/name" />
+                app:layout_constraintTop_toBottomOf="@id/fieldName" />
 
             <Button
                 android:id="@+id/subcat"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:background="@drawable/category_input"
+                android:textAllCaps="false"
                 android:layout_marginTop="20dp"
-                android:text="Select sub-category"
+                android:text="Select the Subcategory of your product."
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/cat" />
 
-            <com.github.florent37.materialtextfield.MaterialTextField
-                android:id="@+id/price"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/subcat"
-                app:mtf_image="@drawable/ic_rupee"
-                app:mtf_labelColor="@color/colorSecondary"
-                app:mtf_openKeyboardOnFocus="true">
-
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:hint="Price"
-                    android:inputType="number"
-                    android:padding="5dp" />
-
-            </com.github.florent37.materialtextfield.MaterialTextField>
-
-            <com.github.florent37.materialtextfield.MaterialTextField
-                android:id="@+id/qty"
+            <libs.mjn.fieldset.FieldSetView
+                android:id="@+id/fieldPrice"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/price"
-                app:mtf_image="@drawable/ic_quantity"
-                app:mtf_labelColor="@color/colorSecondary"
-                app:mtf_openKeyboardOnFocus="true">
+                app:fsv_legend="Price"
+                app:fsv_legendSize="16sp"
+                app:fsv_legendPosition="left"
+                app:layout_constraintTop_toBottomOf="@+id/subcat">
 
                 <EditText
                     android:layout_width="match_parent"
+                    android:id="@+id/price"
                     android:layout_height="match_parent"
-                    android:hint="Quantity"
+                    android:hint="Enter price of your product."
+                    android:background="@null"
+                    android:ellipsize="end"
+                    android:drawableLeft="@drawable/rupee"
+                    android:drawablePadding="5dp"
+                    android:maxLines="1"
+                    android:paddingStart="15dp"
+                    android:paddingEnd="15dp"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:inputType="number" />
+
+            </libs.mjn.fieldset.FieldSetView>
+
+            <libs.mjn.fieldset.FieldSetView
+                android:id="@+id/fieldQty"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/fieldPrice"
+                app:fsv_legend="Quantity"
+                app:fsv_legendSize="16sp"
+                app:fsv_legendPosition="left">
+
+                <EditText
+                    android:id="@+id/qty"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Enter the total weight of your product."
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:background="@null"
+                    android:drawableLeft="@drawable/ic_quantity"
+                    android:drawablePadding="5dp"
                     android:inputType="numberDecimal"
-                    android:padding="5dp"
-                    android:textColorHint="@android:color/black" />
-            </com.github.florent37.materialtextfield.MaterialTextField>
+                    android:paddingStart="15dp"
+                    android:paddingEnd="15dp"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp" />
+            </libs.mjn.fieldset.FieldSetView>
 
-            <com.github.florent37.materialtextfield.MaterialTextField
-                android:id="@+id/pin"
+            <libs.mjn.fieldset.FieldSetView
+                android:id="@+id/fieldPin"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/qty"
-                app:mtf_image="@drawable/ic_postal"
-                app:mtf_labelColor="@color/colorSecondary"
-                app:mtf_openKeyboardOnFocus="true">
+                app:layout_constraintTop_toBottomOf="@+id/fieldQty"
+                app:fsv_legend="PIN Code"
+                app:fsv_legendSize="16sp"
+                app:fsv_legendPosition="left">
 
                 <EditText
+                    android:id="@+id/pin"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:hint="PIN Code"
+                    android:hint="Enter the PIN Code of your area."
                     android:inputType="number"
+                    android:maxLines="1"
+                    android:background="@null"
+                    android:paddingStart="15dp"
+                    android:drawableLeft="@drawable/ic_postal"
+                    android:drawablePadding="5dp"
+                    android:paddingEnd="15dp"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
                     android:maxLength="6"
                     android:padding="5dp" />
 
-            </com.github.florent37.materialtextfield.MaterialTextField>
+            </libs.mjn.fieldset.FieldSetView>
 
-            <com.github.florent37.materialtextfield.MaterialTextField
-                android:id="@+id/desc"
+            <libs.mjn.fieldset.FieldSetView
+                android:id="@+id/fieldDesc"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/pin"
-                app:mtf_image="@drawable/description"
-                app:mtf_labelColor="@color/colorSecondary"
-                app:mtf_openKeyboardOnFocus="true">
-<!--                app:mtf_cardColor="@color/colorSecondary">-->
+                app:layout_constraintTop_toBottomOf="@+id/fieldPin"
+                app:fsv_legend="Description"
+                app:fsv_legendSize="16sp"
+                app:fsv_legendPosition="left">
 
                 <EditText
+                    android:id="@+id/desc"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="start|top"
-                    android:hint="Description "
+                    android:hint="A short description of your product."
+                    android:maxLength="30"
+                    android:drawableLeft="@drawable/description"
+                    android:drawablePadding="5dp"
+                    android:paddingStart="15dp"
+                    android:paddingEnd="15dp"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:background="@null"
                     android:inputType="textMultiLine"
                     android:padding="5dp" />
 
-            </com.github.florent37.materialtextfield.MaterialTextField>
+            </libs.mjn.fieldset.FieldSetView>
 
 
-            <Button
+            <include
                 android:id="@+id/otpbutton"
                 android:layout_width="wrap_content"
+                layout="@layout/custom_hybrid_button"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
-                android:background="@drawable/login_button_background"
-                android:text="@string/sell"
-                android:textColor="@android:color/white"
-                android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/desc" />
+                app:layout_constraintTop_toBottomOf="@+id/fieldDesc" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>

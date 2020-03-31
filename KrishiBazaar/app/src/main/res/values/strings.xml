@@ -28,12 +28,12 @@
     <string name="close">CLOSE</string>
 
     <string-array name="status_array">
-        <item >OWNED</item>
-        <item >AVAILABLE</item>
-        <item >PENDING</item>
-        <item >ACCEPTED</item>
-        <item >REJECTED</item>
-        <item >SOLD</item>
-        <item >DELETED</item>
+        <item>OWNED</item>
+        <item>AVAILABLE</item>
+        <item>PENDING</item>
+        <item>ACCEPTED</item>
+        <item>REJECTED</item>
+        <item>SOLD</item>
+        <item>DELETED</item>
     </string-array>
 </resources>

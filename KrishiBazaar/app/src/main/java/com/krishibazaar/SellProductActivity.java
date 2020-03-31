@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -16,20 +17,24 @@ import androidx.fragment.app.Fragment;
 import com.github.florent37.materialtextfield.MaterialTextField;
 import com.krishibazaar.Models.SellProduct;
 import com.krishibazaar.Popups.SpinnerChooser;
+import com.krishibazaar.Utils.CustomButtonManager;
 import com.krishibazaar.Utils.SharedPreferenceManager;
 import com.krishibazaar.Utils.VolleyRequestMaker;
+
+import libs.mjn.fieldset.FieldSetView;
 
 import static android.view.View.GONE;
 
 public class SellProductActivity extends Fragment {
     private Button catSpinner, scatSpinner;
-    private MaterialTextField quantity, price, pinCode, description, name;
-    private Button button;
+    private EditText quantity, price, pinCode, description,name;
+    View sellButton;
     private Context context;
     private SpinnerChooser.ItemSelectedListener categoryListener;
     private SpinnerChooser.ItemSelectedListener subCategoryListener;
     private int category = -1;
     private int subCategory = -1;
+    private CustomButtonManager customSellButton;
 
     @Nullable
     @Override
@@ -45,7 +50,9 @@ public class SellProductActivity extends Fragment {
         catSpinner = view.findViewById(R.id.cat);
         pinCode = view.findViewById(R.id.pin);
         scatSpinner = view.findViewById(R.id.subcat);
-        button = view.findViewById(R.id.otpbutton);
+        sellButton = view.findViewById(R.id.otpbutton);
+        customSellButton=new CustomButtonManager(sellButton);
+        customSellButton.setButtonText("Sell");
         name = view.findViewById(R.id.name);
         description = view.findViewById(R.id.desc);
         categoryListener = new SpinnerChooser.ItemSelectedListener() {
@@ -90,27 +97,34 @@ public class SellProductActivity extends Fragment {
                     new SpinnerChooser().popup(context, false, category,getFragmentManager(), subCategoryListener);
             }
         });
-        button.setOnClickListener(new View.OnClickListener() {
+        sellButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                if (quantity.getEditText().getText().toString().trim().length() != 0 &&
-                        price.getEditText().getText().toString().trim().length() != 0 &&
-                        pinCode.getEditText().getText().toString().length() == 6 &&
+            public void onClick(View view)
+            {
+                if (quantity.getText().toString().trim().length() != 0 &&
+                        price.getText().toString().trim().length() != 0 &&
+                        pinCode.getText().toString().length() == 6 &&
                         category != -1 &&
                         subCategory != -1 &&
-                        description.getEditText().getText().toString().trim().length() != 0) {
+                        description.getText().toString().trim().length() != 0) {
                     String token = SharedPreferenceManager.getToken(context);
                     SellProduct query = new SellProduct(token,
                             category,
                             subCategory,
-                            name.getEditText().getText().toString(),
-                            Float.parseFloat(quantity.getEditText().getText().toString()),
-                            Float.parseFloat(price.getEditText().getText().toString()),
-                            description.getEditText().getText().toString(),
-                            Integer.parseInt(pinCode.getEditText().getText().toString()));
+                            name.getText().toString(),
+                            Float.parseFloat(quantity.getText().toString()),
+                            Float.parseFloat(price.getText().toString()),
+                            description.getText().toString(),
+                            Integer.parseInt(pinCode.getText().toString()));
+                   customSellButton.setButtonText("Listing Your Product");
+                   customSellButton.startProgressBar();
+                   sellButton.setClickable(false);
+                   sellButton.setFocusable(false);
                     VolleyRequestMaker.sellProduct(context, query, new VolleyRequestMaker.TaskFinishListener<Integer>() {
                         @Override
                         public void onSuccess(Integer response) {
+                            customSellButton.stopProgressBar();
+                            customSellButton.setButtonText("Listed");
                             Toast.makeText(context, "Product On Sale !", Toast.LENGTH_LONG).show();
                             Intent intent = new Intent(context, ProductViewActivity.class);
                             intent.putExtra("productID", response);
@@ -119,10 +133,14 @@ public class SellProductActivity extends Fragment {
 
                         @Override
                         public void onError(String error) {
-
+                            sellButton.setClickable(true);
+                            sellButton.setFocusable(true);
+                            customSellButton.setButtonText("Try Again");
+                            customSellButton.stopProgressBar();
                         }
                     });
-                } else
+                }
+                else
                     Toast.makeText(context, "Enter All Values !", Toast.LENGTH_LONG).show();
             }
         });

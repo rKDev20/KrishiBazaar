@@ -86,17 +86,6 @@ public class BottomSheetDialog extends BottomSheetDialogFragment {
         return view;
     }
 
-    //    @Override
-//    public void onAttach(@NonNull Context context) {
-//        super.onAttach(context);
-//        try {
-//            listener=(SpinnerChooser.ItemSelectedListener) context;
-//        }
-//        catch(ClassCastException e)
-//        {
-//            throw new ClassCastException(context.toString()+"must implement BottomSheetListener");
-//        }
-//    }
     private void filter(String text)
     {
         ArrayList<String> filteredNames = new ArrayList<>();

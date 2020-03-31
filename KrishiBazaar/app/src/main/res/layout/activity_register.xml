@@ -5,16 +5,40 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/drawing3"
-    tools:context=".Register">
+    tools:context=".RegisterActivity">
 
-    <EditText
+<!--    <EditText-->
+<!--        android:id="@+id/name"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_alignParentEnd="true"-->
+<!--        android:layout_alignParentBottom="true"-->
+<!--        android:layout_marginBottom="40dp"-->
+<!--        android:background="@drawable/login_mobile_edittext"-->
+<!--        android:ems="10"-->
+<!--        android:inputType="textPersonName"-->
+<!--        android:padding="10dp"-->
+<!--        android:textAlignment="center"-->
+<!--        android:textSize="20sp"-->
+<!--        app:layout_constraintBottom_toTopOf="@+id/address"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintHorizontal_bias="0.497"-->
+<!--        app:layout_constraintStart_toStartOf="parent" />-->
+    <libs.mjn.fieldset.FieldSetView
         android:id="@+id/name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="40dp"
-        android:background="@drawable/login_mobile_edittext"
+        app:fsv_borderAlpha="0.75"
+        app:fsv_borderColor="#C2185B"
+        app:fsv_borderRadius="12dp"
+        app:fsv_borderWidth="3dp"
+        app:fsv_legend="Gender"
+        app:fsv_legendColor="#C2185B"
+        app:fsv_legendPosition="center"
+        app:fsv_legendSize="16sp"
         android:ems="10"
         android:inputType="textPersonName"
         android:padding="10dp"
