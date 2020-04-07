@@ -72,13 +72,13 @@
             app:layout_constraintBottom_toTopOf="@+id/constraintLayout"
             app:layout_constraintStart_toStartOf="@+id/constraintLayout" />
 
-        <include
+        <com.krishibazaar.Utils.LoadingButton
             android:id="@+id/otpbutton"
-            layout="@layout/custom_hybrid_button"
+            android:paddingVertical="7dp"
+            android:paddingHorizontal="15dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
+            app:name="Request OTP"
             android:layout_marginBottom="72dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -112,13 +112,15 @@
             app:lineColor="@android:color/transparent"
             app:viewType="line" />
 
-        <include
+        <com.krishibazaar.Utils.LoadingButton
             android:id="@+id/loginbutton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            layout="@layout/custom_hybrid_button"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
+            android:paddingHorizontal="15dp"
+            android:paddingVertical="7dp"
+            app:name="Login"
             android:layout_marginBottom="72dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

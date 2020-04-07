@@ -11,22 +11,20 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
-public class AssetsHandler
-{
-    static String JSONFromAssets;
+public class AssetsHandler {
+    private static String JSONFromAssets;
 
     public AssetsHandler(Context context) {
-        this.JSONFromAssets = readJSONFromAsset(context);
+        JSONFromAssets = readJSONFromAsset(context);
     }
 
-    public static boolean hasSubCategory(String category)
-    {
+    public boolean hasSubCategory(String category) {
         try {
             JSONArray jsonArray = new JSONArray(JSONFromAssets);
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                 if (jsonObject.getString("category").equals(category)) {
-                    if(jsonObject.has("subCategory"))
+                    if (jsonObject.has("subCategory"))
                         return true;
                 }
             }
@@ -35,7 +33,8 @@ public class AssetsHandler
         }
         return false;
     }
-    public static ArrayList<String> getSubcategoryArray(String selectedCat) {
+
+    public ArrayList<String> getSubcategoryArray(String selectedCat) {
         ArrayList<String> subCategory = new ArrayList<>();
         JSONArray arr = null;
         try {
@@ -43,7 +42,7 @@ public class AssetsHandler
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                 if (jsonObject.getString("category").equals(selectedCat)) {
-                    if(!jsonObject.has("subCategory"))
+                    if (!jsonObject.has("subCategory"))
                         return null;
                     arr = jsonObject.getJSONArray("subCategory");
                     for (int j = 0; j < arr.length(); j++) {
@@ -58,7 +57,8 @@ public class AssetsHandler
         }
         return subCategory;
     }
-    public static ArrayList<String> getcategoryArray() {
+
+    public ArrayList<String> getCategoryArray() {
         ArrayList<String> category = new ArrayList<>();
         try {
             JSONArray jsonArray = new JSONArray(JSONFromAssets);
@@ -73,9 +73,9 @@ public class AssetsHandler
     }
 
     private String readJSONFromAsset(Context context) {
-        String json = null;
+        String json;
         try {
-            InputStream is = context.getAssets().open("products.json");
+            InputStream is = context.getAssets().open("categories.json");
             int size = is.available();
             byte[] buffer = new byte[size];
             is.read(buffer);

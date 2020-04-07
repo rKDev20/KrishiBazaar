@@ -1,4 +1,5 @@
 package com.krishibazaar.Popups;
+
 import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
@@ -7,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,20 +17,21 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+import com.krishibazaar.Adapters.SpinnerChooserAdapter;
 import com.krishibazaar.R;
 import com.krishibazaar.Utils.AssetsHandler;
+
 import java.util.ArrayList;
 
 public class BottomSheetDialog extends BottomSheetDialogFragment {
     private SpinnerChooser.ItemSelectedListener listener;
-    RecyclerView recyclerView;
-    boolean isCategory;
-    Context context;
-    int category;
-    SpinnerChooser chooser;
-    ArrayList<String> itemList;
+    private boolean isCategory;
+    private Context context;
+    private int category;
+    private SpinnerChooserAdapter chooser;
+    private ArrayList<String> itemList;
 
-    public BottomSheetDialog(boolean isCategory, Context context, int category, SpinnerChooser.ItemSelectedListener listener) {
+    BottomSheetDialog(boolean isCategory, Context context, int category, SpinnerChooser.ItemSelectedListener listener) {
         this.isCategory = isCategory;
         this.context = context;
         this.category = category;
@@ -44,22 +47,19 @@ public class BottomSheetDialog extends BottomSheetDialogFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.bottom_sheet, container, false);
-        recyclerView = view.findViewById(R.id.recyclerView);
+        View view = inflater.inflate(R.layout.popup_category_chooser, container, false);
+        initHeader(view);
+        RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
         EditText searchItem = view.findViewById(R.id.search_item);
-        ArrayList<String> categoryList = new AssetsHandler(context).getcategoryArray();
+        ArrayList<String> categoryList = new AssetsHandler(context).getCategoryArray();
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
-        if (isCategory)
-        {
-            itemList=categoryList;
-            chooser = new SpinnerChooser(itemList, listener, context);
+        if (isCategory) {
+            itemList = categoryList;
+            chooser = new SpinnerChooserAdapter(itemList, listener, context);
             recyclerView.setAdapter(chooser);
-        }
-        else
-        {
-            searchItem.setVisibility(view.GONE);
-            itemList= new AssetsHandler(context).getSubcategoryArray(categoryList.get(category));
-            chooser = new SpinnerChooser(itemList, listener, context);
+        } else {
+            itemList = new AssetsHandler(context).getSubcategoryArray(categoryList.get(category));
+            chooser = new SpinnerChooserAdapter(itemList, listener, context);
             recyclerView.setAdapter(chooser);
         }
         recyclerView.setOnClickListener(new View.OnClickListener() {
@@ -78,20 +78,25 @@ public class BottomSheetDialog extends BottomSheetDialogFragment {
             }
 
             @Override
-            public void afterTextChanged(Editable editable)
-            {
+            public void afterTextChanged(Editable editable) {
                 filter(editable.toString());
             }
         });
         return view;
     }
 
-    private void filter(String text)
-    {
+    private void initHeader(View view) {
+        if (isCategory)
+            ((TextView) view.findViewById(R.id.textView8)).setText("Select category");
+        else
+            ((TextView) view.findViewById(R.id.textView8)).setText("Select sub-category");
+    }
+
+    private void filter(String text) {
         ArrayList<String> filteredNames = new ArrayList<>();
         for (String s : itemList)
             if (s.toLowerCase().startsWith(text.toLowerCase()))
                 filteredNames.add(s);
-        chooser.filterList(filteredNames,itemList);
+        chooser.filterList(filteredNames, itemList);
     }
 }

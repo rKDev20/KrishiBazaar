@@ -22,10 +22,10 @@ public class SellProduct {
     private String description;
     private int pincode;
 
-    public SellProduct(String token, long category,long subCategory, String name, float quantity, float price, String description, int pincode) {
+    public SellProduct(String token, long category, long subCategory, String name, float quantity, float price, String description, int pincode) {
         this.token = token;
         this.category = category;
-        this.subCategory=subCategory;
+        this.subCategory = subCategory;
         this.name = name;
         this.quantity = quantity;
         this.price = price;
@@ -33,16 +33,16 @@ public class SellProduct {
         this.pincode = pincode;
     }
 
-    public JSONObject getJSON()throws JSONException{
-        JSONObject params=new JSONObject();
-        params.put(TOKEN,token);
-        params.put(CATEGORY,category);
-        params.put(SUB_CATEGORY,subCategory);
-        params.put(NAME,name);
-        params.put(QUANTITY,quantity);
-        params.put(PRICE,price);
-        params.put(DESCRIPTION,description);
-        params.put(PINCODE,pincode);
+    public JSONObject getJSON() throws JSONException {
+        JSONObject params = new JSONObject();
+        params.put(TOKEN, token);
+        params.put(CATEGORY, category);
+        params.put(SUB_CATEGORY, subCategory);
+        params.put(NAME, name);
+        params.put(QUANTITY, quantity);
+        params.put(PRICE, price);
+        params.put(DESCRIPTION, description);
+        params.put(PINCODE, pincode);
         return params;
     }
 }

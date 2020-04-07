@@ -3,213 +3,269 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:padding="10dp"
-    android:background="@color/colorSecondary">
+    android:layout_height="match_parent"
+    android:background="@android:color/white">
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/sell_card"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="10dp"
-        app:cardCornerRadius="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:context=".SellProductActivity">
+        android:background="@drawable/ic_sell_product_background">
 
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/label"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="5dp">
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="16dp"
+            android:background="@android:color/transparent"
+            android:padding="7dp"
+            android:text="Sell a product"
+            android:textColor="@android:color/white"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <libs.mjn.fieldset.FieldSetView
-                android:layout_width="0dp"
-                android:id="@+id/fieldName"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:fsv_legend="Name"
-                app:fsv_legendPosition="left"
-                app:fsv_legendSize="16sp">
-                <EditText
-                    android:id="@+id/name"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:inputType="textPersonName"
-                    android:background="@null"
-                    android:ellipsize="end"
-                    android:maxLines="1"
-                    android:drawableLeft="@drawable/ic_basket"
-                    android:drawablePadding="5dp"
-                    android:hint="Enter name of your product."
-                    android:paddingStart="15dp"
-                    android:paddingEnd="15dp"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp"/>
-            </libs.mjn.fieldset.FieldSetView>
-            <Button
-                android:id="@+id/cat"
-                android:layout_width="0dp"
-                android:background="@drawable/category_input"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:text="Select the Category of your product."
-                android:textAllCaps="false"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/fieldName" />
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="5dp"
+            app:cardCornerRadius="5dp"
+            app:cardUseCompatPadding="true"
+            app:layout_constraintTop_toBottomOf="@id/label">
 
-            <Button
-                android:id="@+id/subcat"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:background="@drawable/category_input"
-                android:textAllCaps="false"
-                android:layout_marginTop="20dp"
-                android:text="Select the Subcategory of your product."
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cat" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="10dp">
 
-            <libs.mjn.fieldset.FieldSetView
-                android:id="@+id/fieldPrice"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:fsv_legend="Price"
-                app:fsv_legendSize="16sp"
-                app:fsv_legendPosition="left"
-                app:layout_constraintTop_toBottomOf="@+id/subcat">
+                <libs.mjn.fieldset.FieldSetView
+                    android:id="@+id/fieldName"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    app:fsv_borderColor="@color/colorSecondary"
+                    app:fsv_borderRadius="10dp"
+                    app:fsv_borderWidth="2dp"
+                    app:fsv_legend="Name"
+                    app:fsv_legendColor="@color/colorPrimary"
+                    app:fsv_legendPosition="left"
+                    app:fsv_legendSize="16sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
 
-                <EditText
-                    android:layout_width="match_parent"
-                    android:id="@+id/price"
-                    android:layout_height="match_parent"
-                    android:hint="Enter price of your product."
-                    android:background="@null"
-                    android:ellipsize="end"
-                    android:drawableLeft="@drawable/rupee"
-                    android:drawablePadding="5dp"
-                    android:maxLines="1"
-                    android:paddingStart="15dp"
-                    android:paddingEnd="15dp"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp"
-                    android:inputType="number" />
+                    <EditText
+                        android:id="@+id/name"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@null"
+                        android:drawableStart="@drawable/ic_basket"
+                        android:drawablePadding="5dp"
+                        android:ellipsize="end"
+                        android:hint="Enter name of your product."
+                        android:inputType="textPersonName"
+                        android:maxLines="1"
+                        android:paddingStart="15dp"
+                        android:paddingTop="5dp"
+                        android:paddingEnd="15dp"
+                        android:paddingBottom="5dp" />
+                </libs.mjn.fieldset.FieldSetView>
 
-            </libs.mjn.fieldset.FieldSetView>
+                <libs.mjn.fieldset.FieldSetView
+                    android:id="@+id/fieldCat"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    app:fsv_borderColor="@color/colorSecondary"
+                    app:fsv_borderRadius="10dp"
+                    app:fsv_borderWidth="2dp"
+                    app:fsv_legend="Category"
+                    app:fsv_legendColor="@color/colorPrimary"
+                    app:fsv_legendPosition="left"
+                    app:fsv_legendSize="16sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/fieldName">
 
-            <libs.mjn.fieldset.FieldSetView
-                android:id="@+id/fieldQty"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/fieldPrice"
-                app:fsv_legend="Quantity"
-                app:fsv_legendSize="16sp"
-                app:fsv_legendPosition="left">
+                    <TextView
+                        android:id="@+id/cat"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="---SELECT---"
+                        android:paddingStart="15dp"
+                        android:paddingTop="5dp"
+                        android:paddingEnd="15dp"
+                        android:paddingBottom="5dp" />
+                </libs.mjn.fieldset.FieldSetView>
 
-                <EditText
-                    android:id="@+id/qty"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:hint="Enter the total weight of your product."
-                    android:ellipsize="end"
-                    android:maxLines="1"
-                    android:background="@null"
-                    android:drawableLeft="@drawable/ic_quantity"
-                    android:drawablePadding="5dp"
-                    android:inputType="numberDecimal"
-                    android:paddingStart="15dp"
-                    android:paddingEnd="15dp"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp" />
-            </libs.mjn.fieldset.FieldSetView>
+                <libs.mjn.fieldset.FieldSetView
+                    android:id="@+id/fieldSubCat"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    app:fsv_borderColor="@color/colorSecondary"
+                    app:fsv_borderRadius="10dp"
+                    app:fsv_borderWidth="2dp"
+                    app:fsv_legend="Sub category"
+                    app:fsv_legendColor="@color/colorPrimary"
+                    app:fsv_legendPosition="left"
+                    app:fsv_legendSize="16sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/fieldCat">
 
-            <libs.mjn.fieldset.FieldSetView
-                android:id="@+id/fieldPin"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/fieldQty"
-                app:fsv_legend="PIN Code"
-                app:fsv_legendSize="16sp"
-                app:fsv_legendPosition="left">
+                    <TextView
+                        android:id="@+id/subcat"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="---SELECT---"
+                        android:paddingHorizontal="15dp"
+                        android:paddingVertical="5dp" />
+                </libs.mjn.fieldset.FieldSetView>
 
-                <EditText
-                    android:id="@+id/pin"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:hint="Enter the PIN Code of your area."
-                    android:inputType="number"
-                    android:maxLines="1"
-                    android:background="@null"
-                    android:paddingStart="15dp"
-                    android:drawableLeft="@drawable/ic_postal"
-                    android:drawablePadding="5dp"
-                    android:paddingEnd="15dp"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp"
-                    android:maxLength="6"
-                    android:padding="5dp" />
+                <libs.mjn.fieldset.FieldSetView
+                    android:id="@+id/fieldPrice"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    app:fsv_borderColor="@color/colorSecondary"
+                    app:fsv_borderRadius="10dp"
+                    app:fsv_borderWidth="2dp"
+                    app:fsv_legend="Price"
+                    app:fsv_legendColor="@color/colorPrimary"
+                    app:fsv_legendPosition="left"
+                    app:fsv_legendSize="16sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/fieldSubCat">
 
-            </libs.mjn.fieldset.FieldSetView>
+                    <EditText
+                        android:id="@+id/price"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@null"
+                        android:drawableStart="@drawable/ic_rupee"
+                        android:drawablePadding="5dp"
+                        android:ellipsize="end"
+                        android:hint="Enter price of your product."
+                        android:inputType="number"
+                        android:maxLines="1"
+                        android:paddingHorizontal="15dp"
+                        android:paddingVertical="5dp" />
+                </libs.mjn.fieldset.FieldSetView>
 
-            <libs.mjn.fieldset.FieldSetView
-                android:id="@+id/fieldDesc"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/fieldPin"
-                app:fsv_legend="Description"
-                app:fsv_legendSize="16sp"
-                app:fsv_legendPosition="left">
+                <libs.mjn.fieldset.FieldSetView
+                    android:id="@+id/fieldQty"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    app:fsv_borderColor="@color/colorSecondary"
+                    app:fsv_borderRadius="10dp"
+                    app:fsv_borderWidth="2dp"
+                    app:fsv_legend="Quantity"
+                    app:fsv_legendColor="@color/colorPrimary"
+                    app:fsv_legendPosition="left"
+                    app:fsv_legendSize="16sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/fieldPrice">
 
-                <EditText
-                    android:id="@+id/desc"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="start|top"
-                    android:hint="A short description of your product."
-                    android:maxLength="30"
-                    android:drawableLeft="@drawable/description"
-                    android:drawablePadding="5dp"
-                    android:paddingStart="15dp"
-                    android:paddingEnd="15dp"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp"
-                    android:background="@null"
-                    android:inputType="textMultiLine"
-                    android:padding="5dp" />
+                    <EditText
+                        android:id="@+id/qty"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@null"
+                        android:drawableStart="@drawable/ic_quantity"
+                        android:drawablePadding="5dp"
+                        android:ellipsize="end"
+                        android:hint="Enter the total weight of your product."
+                        android:inputType="numberDecimal"
+                        android:maxLines="1"
+                        android:paddingHorizontal="15dp"
+                        android:paddingVertical="5dp" />
+                </libs.mjn.fieldset.FieldSetView>
 
-            </libs.mjn.fieldset.FieldSetView>
+                <libs.mjn.fieldset.FieldSetView
+                    android:id="@+id/fieldPin"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    app:fsv_borderColor="@color/colorSecondary"
 
+                    app:fsv_borderRadius="10dp"
+                    app:fsv_borderWidth="2dp"
+                    app:fsv_legend="PIN Code"
+                    app:fsv_legendColor="@color/colorPrimary"
+                    app:fsv_legendPosition="left"
+                    app:fsv_legendSize="16sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/fieldQty">
 
-            <include
-                android:id="@+id/otpbutton"
-                android:layout_width="wrap_content"
-                layout="@layout/custom_hybrid_button"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/fieldDesc" />
+                    <EditText
+                        android:id="@+id/pin"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@null"
+                        android:drawableStart="@drawable/ic_postal"
+                        android:drawablePadding="5dp"
+                        android:hint="Enter the PIN Code of your area."
+                        android:inputType="number"
+                        android:maxLength="6"
+                        android:maxLines="1"
+                        android:paddingHorizontal="15dp"
+                        android:paddingVertical="5dp"
+                        tools:ignore="TextFields" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.cardview.widget.CardView>
+                </libs.mjn.fieldset.FieldSetView>
+
+                <libs.mjn.fieldset.FieldSetView
+                    android:id="@+id/fieldDesc"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="20dp"
+                    app:fsv_borderColor="@color/colorSecondary"
+                    app:fsv_borderRadius="10dp"
+                    app:fsv_borderWidth="2dp"
+                    app:fsv_legend="Description"
+                    app:fsv_legendColor="@color/colorPrimary"
+                    app:fsv_legendPosition="left"
+                    app:fsv_legendSize="16sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/fieldPin">
+
+                    <EditText
+                        android:id="@+id/desc"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@null"
+                        android:drawableStart="@drawable/description"
+                        android:drawablePadding="5dp"
+                        android:hint="A short description of your product."
+                        android:inputType="textMultiLine"
+                        android:maxLength="30"
+                        android:paddingHorizontal="15dp"
+                        android:paddingVertical="5dp" />
+
+                </libs.mjn.fieldset.FieldSetView>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
+        <com.krishibazaar.Utils.LoadingButton
+            android:id="@+id/otpbutton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="15dp"
+            android:paddingHorizontal="20dp"
+            android:paddingVertical="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cardView"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:name="Sell" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

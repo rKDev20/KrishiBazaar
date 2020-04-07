@@ -13,7 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.krishibazaar.Models.Authentication;
-import com.krishibazaar.Utils.CustomButtonManager;
+import com.krishibazaar.Utils.LoadingButton;
 import com.krishibazaar.Utils.SharedPreferenceManager;
 import com.krishibazaar.Utils.VolleyRequestMaker;
 import com.mukesh.OnOtpCompletionListener;
@@ -27,9 +27,8 @@ public class LoginActivity extends AppCompatActivity {
     EditText mob;
     ConstraintLayout l1, l2;
     OtpView otpView;
-    View sendOtp, loginButton;
+    LoadingButton sendOtp, loginButton;
     long mobileNumber;
-    CustomButtonManager customSendOTP,customLoginButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,11 +41,7 @@ public class LoginActivity extends AppCompatActivity {
         l2.setVisibility(View.INVISIBLE);
         mob = findViewById(R.id.num);
         sendOtp = findViewById(R.id.otpbutton);
-        customSendOTP=new CustomButtonManager(sendOtp);
-        customSendOTP.setButtonText("Request OTP");
         loginButton = findViewById(R.id.loginbutton);
-        customLoginButton=new CustomButtonManager(loginButton);
-        customLoginButton.setButtonText("Login");
         sendOtp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -72,7 +67,7 @@ public class LoginActivity extends AppCompatActivity {
                 manager.hideSoftInputFromWindow(view.getWindowToken(), 0);
                 loginButton.setClickable(true);
                 loginButton.setFocusable(true);
-                //loginButton.setBackground(getResources().getDrawable(R.drawable.login_button_background));
+                loginButton.setBackground(getResources().getDrawable(R.drawable.login_button_background));
                 loginButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -97,9 +92,9 @@ public class LoginActivity extends AppCompatActivity {
     public void generateOTP(long mobileNumber) {
         sendOtp.setClickable(false);
         mob.setFocusable(false);
-        //sendOtp.setBackground(getResources().getDrawable(R.drawable.button_disable));
-        customSendOTP.setButtonText("Requesting");
-        customSendOTP.startProgressBar();
+//        sendOtp.setBackground(getResources().getDrawable(R.drawable.button_disable));
+        sendOtp.setButtonText("Requesting");
+        sendOtp.startProgressBar();
         Log.d("volley","clicked");
 //        Sprite wave=new Wave();
 //        loading.setIndeterminateDrawable(wave);
@@ -107,12 +102,12 @@ public class LoginActivity extends AppCompatActivity {
         VolleyRequestMaker.sendOtp(this, mobileNumber, new VolleyRequestMaker.TaskFinishListener<Boolean>() {
             @Override
             public void onSuccess(Boolean response) {
-                customSendOTP.stopProgressBar();
+                sendOtp.stopProgressBar();
                 l1.setVisibility(View.GONE);
                 l2.setVisibility(View.VISIBLE);
                 loginButton.setClickable(false);
                 loginButton.setFocusable(false);
-                //loginButton.setBackground(getResources().getDrawable(R.drawable.button_disable));
+//                loginButton.setBackground(getResources().getDrawable(R.drawable.button_disable));
             }
 
             @Override
@@ -120,9 +115,9 @@ public class LoginActivity extends AppCompatActivity {
                 Toast.makeText(LoginActivity.this, error, Toast.LENGTH_LONG).show();
                 sendOtp.setClickable(true);
                 mob.setFocusable(true);
-                customSendOTP.setButtonText("Request Again");
-                customSendOTP.stopProgressBar();
-                //sendOtp.setBackground(getResources().getDrawable(R.drawable.login_button_background));
+                sendOtp.setButtonText("Request Again");
+                sendOtp.stopProgressBar();
+                sendOtp.setBackground(getResources().getDrawable(R.drawable.login_button_background));
             }
         });
     }
@@ -130,8 +125,8 @@ public class LoginActivity extends AppCompatActivity {
     public void verifyOTP(long mobileNumber, int otpPassword) {
         loginButton.setClickable(false);
         loginButton.setFocusable(false);
-        customLoginButton.setButtonText("Logging In");
-        customLoginButton.startProgressBar();
+        loginButton.setButtonText("Logging In");
+        loginButton.startProgressBar();
         //loginButton.setBackground(getResources().getDrawable(R.drawable.button_disable));
         VolleyRequestMaker.verifyOtp(this, mobileNumber, otpPassword, new VolleyRequestMaker.TaskFinishListener<Authentication>() {
             @Override
@@ -153,8 +148,8 @@ public class LoginActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), error, Toast.LENGTH_SHORT).show();
                 loginButton.setClickable(true);
                 loginButton.setFocusable(true);
-                customLoginButton.stopProgressBar();
-                customLoginButton.setButtonText("Retry");
+                loginButton.stopProgressBar();
+                loginButton.setButtonText("Retry");
                 //loginButton.setBackground(getResources().getDrawable(R.drawable.login_button_background));
             }
         });

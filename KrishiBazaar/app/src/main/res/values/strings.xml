@@ -26,6 +26,7 @@
     <string name="choose_location">Choose Location</string>
     <string name="get_current_location">Get current location</string>
     <string name="close">CLOSE</string>
+    <string name="invalid_pincode">Please enter valid pincode</string>
 
     <string-array name="status_array">
         <item>OWNED</item>

@@ -16,13 +16,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import com.bumptech.glide.Glide;
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.github.florent37.materialtextfield.MaterialTextField;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.krishibazaar.Adapters.ProductRequestAdapter;
 import com.krishibazaar.Models.BuyerDetails;
 import com.krishibazaar.Models.Product;
@@ -134,9 +137,6 @@ public class ProductViewActivity extends AppCompatActivity implements OnMapReady
     @Override
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
-        MarkerOptions markerOptions = new MarkerOptions();
-        markerOptions.position(new LatLng(lat, lon));
-        markerOptions.title("Product Location");
     }
 
     public void productDetails(final int productId) {
@@ -145,7 +145,7 @@ public class ProductViewActivity extends AppCompatActivity implements OnMapReady
         VolleyRequestMaker.getProductDetails(this, new Product.Query(token, productId), new VolleyRequestMaker.TaskFinishListener<Product.Response>() {
             @Override
             public void onSuccess(final Product.Response response) {
-                buyers=response.getBuyers();
+                buyers = response.getBuyers();
                 int status = response.getStatus();
                 cat = findViewById(R.id.cat);
                 scat = findViewById(R.id.scat);
@@ -168,9 +168,11 @@ public class ProductViewActivity extends AppCompatActivity implements OnMapReady
                 name.setText(response.getName());
                 lat = response.getLatitude();
                 lon = response.getLongitude();
-               // Glide.with(ProductViewActivity.this).load(response.getImageUrl()).into(productImage);
-                Log.d("part2", status + "ymkbmc");
-
+                Glide.with(ProductViewActivity.this)
+                        .load(response.getImageUrl())
+                        .error(R.drawable.default_picture)
+                        .into(productImage);
+                updateMap(response.getLatitude(), response.getLongitude());
                 if (status == OWNED) {
                     if (buyers != null) {
                         reqcard.setVisibility(View.VISIBLE);
@@ -238,5 +240,15 @@ public class ProductViewActivity extends AppCompatActivity implements OnMapReady
         });
     }
 
+    private void updateMap(double lat, double lon) {
+        if (map != null){
+            CameraPosition camPos = new CameraPosition.Builder()
+                    .target(new LatLng(lat, lon))
+                    .zoom(50)
+                    .build();
+            CameraUpdate camUpd3 = CameraUpdateFactory.newCameraPosition(camPos);
+            map.animateCamera(camUpd3);
+        }
+    }
 }
 

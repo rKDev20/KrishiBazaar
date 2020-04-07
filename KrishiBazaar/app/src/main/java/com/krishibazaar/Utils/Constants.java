@@ -1,7 +1,7 @@
 package com.krishibazaar.Utils;
 
 public class Constants {
-    public static final String BASE_ADDRESS = "http://192.168.137.1/KrishiBazaar/api/";
+    public static final String BASE_ADDRESS = "http://192.168.100.8/KrishiBazaar/api/";
     public static final String GEOCODE_PHP = BASE_ADDRESS + "geocode.php";
     public static final String SEARCH_PHP = BASE_ADDRESS + "search.php";
 //    public static final String SEARCH_PHP = "http://192.168.137.1/KrishiBazaar/search.php";
@@ -87,4 +87,5 @@ public class Constants {
     public static final String SUB_CATEGORY="sub";
 
     public static final String FCM="fcm";
+
 }

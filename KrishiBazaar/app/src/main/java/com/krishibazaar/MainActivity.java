@@ -1,8 +1,11 @@
 package com.krishibazaar;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.Window;
+import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -82,6 +85,10 @@ public class MainActivity extends LocationManagerActivity implements BottomNavig
     }
 
     private void loadFragment(String frag) {
+        if (frag.equals(HOME))
+            updateStatusBarColor(R.color.colorPrimaryDark);
+        else
+            updateStatusBarColor(R.color.colorSecondary);
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
 
         Fragment curFrag = getSupportFragmentManager().getPrimaryNavigationFragment();
@@ -96,7 +103,6 @@ public class MainActivity extends LocationManagerActivity implements BottomNavig
         } else {
             fragmentTransaction.show(fragment);
         }
-
         fragmentTransaction.setPrimaryNavigationFragment(fragment);
         fragmentTransaction.setReorderingAllowed(true);
         fragmentTransaction.commitNowAllowingStateLoss();
@@ -118,6 +124,14 @@ public class MainActivity extends LocationManagerActivity implements BottomNavig
                 return sell;
             default:
                 return null;
+        }
+    }
+
+    private void updateStatusBarColor(int id) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.setStatusBarColor(getResources().getColor(id));
         }
     }
 }

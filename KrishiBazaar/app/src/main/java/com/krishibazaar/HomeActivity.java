@@ -24,8 +24,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.facebook.shimmer.ShimmerFrameLayout;
-import com.github.ybq.android.spinkit.sprite.Sprite;
-import com.github.ybq.android.spinkit.style.Wave;
 import com.krishibazaar.Adapters.SearchAdapter;
 import com.krishibazaar.Models.LocationDetails;
 import com.krishibazaar.Models.Search;

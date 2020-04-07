@@ -6,18 +6,18 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.github.florent37.materialtextfield.MaterialTextField;
 import com.krishibazaar.Models.SellProduct;
 import com.krishibazaar.Popups.SpinnerChooser;
-import com.krishibazaar.Utils.CustomButtonManager;
+import com.krishibazaar.Utils.Constants;
+import com.krishibazaar.Utils.LoadingButton;
 import com.krishibazaar.Utils.SharedPreferenceManager;
 import com.krishibazaar.Utils.VolleyRequestMaker;
 
@@ -26,15 +26,15 @@ import libs.mjn.fieldset.FieldSetView;
 import static android.view.View.GONE;
 
 public class SellProductActivity extends Fragment {
-    private Button catSpinner, scatSpinner;
-    private EditText quantity, price, pinCode, description,name;
-    View sellButton;
+    private FieldSetView scatField;
+    private TextView catSpinner, scatSpinner;
+    private EditText quantity, price, pinCode, description, name;
     private Context context;
     private SpinnerChooser.ItemSelectedListener categoryListener;
     private SpinnerChooser.ItemSelectedListener subCategoryListener;
     private int category = -1;
     private int subCategory = -1;
-    private CustomButtonManager customSellButton;
+    private LoadingButton sellButton;
 
     @Nullable
     @Override
@@ -51,21 +51,21 @@ public class SellProductActivity extends Fragment {
         pinCode = view.findViewById(R.id.pin);
         scatSpinner = view.findViewById(R.id.subcat);
         sellButton = view.findViewById(R.id.otpbutton);
-        customSellButton=new CustomButtonManager(sellButton);
-        customSellButton.setButtonText("Sell");
+        sellButton.setButtonText("Sell");
         name = view.findViewById(R.id.name);
+        scatField = view.findViewById(R.id.fieldSubCat);
         description = view.findViewById(R.id.desc);
         categoryListener = new SpinnerChooser.ItemSelectedListener() {
             @Override
             public void onItemSelected(int i, String text, boolean hasSubcategory) {
-                catSpinner.setText("Category : "+text);
+                catSpinner.setText(text);
                 category = i;
-                if (!hasSubcategory) {
-                    scatSpinner.setVisibility(GONE);
+                if (hasSubcategory) {
+                    scatField.setVisibility(View.VISIBLE);
+                    scatSpinner.setText("---SELECT---");
                     subCategory = 0;
                 } else {
-                    scatSpinner.setVisibility(View.VISIBLE);
-                    scatSpinner.setText("Select subcategory");
+                    scatField.setVisibility(GONE);
                     subCategory = -1;
                 }
             }
@@ -73,7 +73,7 @@ public class SellProductActivity extends Fragment {
         subCategoryListener = new SpinnerChooser.ItemSelectedListener() {
             @Override
             public void onItemSelected(int i, String text, boolean ignore) {
-                scatSpinner.setText("SubCategory : "+text);
+                scatSpinner.setText(text);
                 subCategory = i;
             }
         };
@@ -87,25 +87,25 @@ public class SellProductActivity extends Fragment {
         catSpinner.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new SpinnerChooser().popup(context, true, 0,getFragmentManager(), categoryListener);
+                new SpinnerChooser().popup(context, true, 0, getFragmentManager(), categoryListener);
             }
         });
         scatSpinner.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (category != -1)
-                    new SpinnerChooser().popup(context, false, category,getFragmentManager(), subCategoryListener);
+                    new SpinnerChooser().popup(context, false, category, getFragmentManager(), subCategoryListener);
+                else
+                    Toast.makeText(context, "Please select category", Toast.LENGTH_SHORT).show();
             }
         });
         sellButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view)
-            {
+            public void onClick(View view) {
                 if (quantity.getText().toString().trim().length() != 0 &&
                         price.getText().toString().trim().length() != 0 &&
                         pinCode.getText().toString().length() == 6 &&
                         category != -1 &&
-                        subCategory != -1 &&
                         description.getText().toString().trim().length() != 0) {
                     String token = SharedPreferenceManager.getToken(context);
                     SellProduct query = new SellProduct(token,
@@ -116,18 +116,18 @@ public class SellProductActivity extends Fragment {
                             Float.parseFloat(price.getText().toString()),
                             description.getText().toString(),
                             Integer.parseInt(pinCode.getText().toString()));
-                   customSellButton.setButtonText("Listing Your Product");
-                   customSellButton.startProgressBar();
-                   sellButton.setClickable(false);
-                   sellButton.setFocusable(false);
+                    sellButton.setButtonText("Listing Your Product");
+                    sellButton.startProgressBar();
+                    sellButton.setClickable(false);
+                    sellButton.setFocusable(false);
                     VolleyRequestMaker.sellProduct(context, query, new VolleyRequestMaker.TaskFinishListener<Integer>() {
                         @Override
                         public void onSuccess(Integer response) {
-                            customSellButton.stopProgressBar();
-                            customSellButton.setButtonText("Listed");
+                            sellButton.stopProgressBar();
+                            sellButton.setButtonText("Listed");
                             Toast.makeText(context, "Product On Sale !", Toast.LENGTH_LONG).show();
                             Intent intent = new Intent(context, ProductViewActivity.class);
-                            intent.putExtra("productID", response);
+                            intent.putExtra(Constants.PRODUCT_ID, response);
                             startActivity(intent);
                         }
 
@@ -135,12 +135,12 @@ public class SellProductActivity extends Fragment {
                         public void onError(String error) {
                             sellButton.setClickable(true);
                             sellButton.setFocusable(true);
-                            customSellButton.setButtonText("Try Again");
-                            customSellButton.stopProgressBar();
+                            sellButton.setButtonText("Try Again");
+                            sellButton.stopProgressBar();
+                            Toast.makeText(context, error, Toast.LENGTH_SHORT).show();
                         }
                     });
-                }
-                else
+                } else
                     Toast.makeText(context, "Enter All Values !", Toast.LENGTH_LONG).show();
             }
         });

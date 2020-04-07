@@ -241,7 +241,7 @@ public class VolleyRequestMaker {
                     }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    Log.d("abcd",error.getClass().getName());
+                    Log.d("abcd", error.getClass().getName());
                     listener.onError(context.getString(R.string.error_network));
                 }
             });
@@ -346,7 +346,7 @@ public class VolleyRequestMaker {
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            Log.d("part2",error.getClass().getName());
+                            Log.d("part2", error.getClass().getName());
                             listener.onError(context.getString(R.string.error_network));
                         }
                     });
@@ -387,17 +387,23 @@ public class VolleyRequestMaker {
     public static void sellProduct(final Context context, SellProduct query, final TaskFinishListener<Integer> listener) {
         try {
             JSONObject params = query.getJSON();
+            Log.d("abcd", params.toString());
+            final int WRONG_PARAMS = -1;
+            final int WRONG_PINCODE = -2;
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, SELL_PRODUCT_PHP, params,
                     new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(JSONObject response) {
+                            Log.d("abcd", response.toString());
                             try {
                                 int status = response.getInt(STATUS);
-                                if (status != STATUS_ERROR)
+                                if (status > 0)
                                     listener.onSuccess(status);
-                                else
-                                    listener.onError(context.getString(R.string.error_network));
+                                else if(status==WRONG_PARAMS)
+                                    listener.onError(context.getString(R.string.error_unknown));
+                                else listener.onError(context.getString(R.string.invalid_pincode));
                             } catch (JSONException e) {
+                                Log.d("abcd", "", e);
                                 listener.onError(context.getString(R.string.error_unknown));
                             }
                         }
@@ -405,11 +411,13 @@ public class VolleyRequestMaker {
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
+                            Log.d("abcd", error.getClass().toString());
                             listener.onError(context.getString(R.string.error_network));
                         }
                     });
             addQueue(context, jsonObjectRequest);
         } catch (JSONException e) {
+            Log.d("abcd", "", e);
             listener.onError(context.getString(R.string.error_unknown));
         }
     }
