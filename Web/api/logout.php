@@ -1,6 +1,6 @@
 <?php
 //DONE
-include '../db.php';
+include_once '../util/db.php';
 $json = file_get_contents('php://input');
 $params = json_decode($json,true);
 $params["token"];

@@ -1,6 +1,6 @@
 <?php
 //DONE
-include '../db.php';
+include_once '../util/db.php';
 define('WRONG_PARAMETERS', 0);
 define('INVALID_TOKEN',1);
 $json = file_get_contents('php://input');

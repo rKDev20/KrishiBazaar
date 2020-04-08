@@ -1,7 +1,7 @@
 <?php
 //DONE
-include '../db.php';
-include '../utils.php';
+include_once '../util/db.php';
+include_once '../util/utils.php';
 $json = file_get_contents('php://input');
 $params = json_decode($json,true);
 if(!(isset($params["token"])&&isset($params["name"])&&isset($params["address"])&&isset($params["pincode"])))
@@ -10,7 +10,7 @@ $token=$params["token"];
 $name=$params["name"];
 $address=$params["address"];
 $pincode=$params["pincode"];
-if ($address===""||!checkPincode($pincode)||$name===""||$token==="") 
+if ($address===""||!checkPincode($conn,$pincode)||$name===""||$token==="") 
 	error();
 $query="UPDATE users INNER JOIN authorisation ON users.mobile = authorisation.mobile SET users.address='".$address."',users.pincode=".$pincode.",users.name='".$name."' WHERE authorisation.token='".$token."';";
 mysqli_query($conn,$query);

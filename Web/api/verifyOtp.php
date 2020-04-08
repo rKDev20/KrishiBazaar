@@ -1,7 +1,7 @@
 <?php
 //DONE
-include '../db.php';
-include '../utils.php';
+include_once '../util/db.php';
+include_once '../util/utils.php';
 define('WRONG_PARAMETERS', 0);
 define('MISMATCH', 1);
 

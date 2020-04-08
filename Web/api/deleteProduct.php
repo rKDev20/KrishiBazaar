@@ -1,6 +1,6 @@
 <?php
 //DONE
-include '../db.php';
+include_once '../util/db.php';
 define('ACTIVE', 1);
 define('INACTIVE',0);
 

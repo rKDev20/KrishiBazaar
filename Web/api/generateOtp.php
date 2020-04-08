@@ -1,17 +1,19 @@
 <?php
 //DONE
-include '../sendSms.php';
-include '../db.php';
-include '../utils.php';
+include_once '../util/sendSms.php';
+include_once '../util/db.php';
+include_once '../util/utils.php';
+include_once '../sms/constants.php';
+
 $json = file_get_contents('php://input');
 $params = json_decode($json,true);
 if(!isset($params["mobile"]))
-	error();
+	error(2);
 $mobile=$params["mobile"];
 if (!checkMobile($mobile))
-	error();
+	error(4);
 $otp= rand(100000,999999);
-$otpMessage="Welcome to KrishiBazaar!%0a Your OTP is $otp. Do not share it with anyone.";
+$otpMessage="Welcome to KrishiBazaar! Your OTP is $otp. Do not share it with anyone.";
 $query="SELECT clock FROM otpverification WHERE mobile = ".$mobile.";";
 $result = mysqli_query($conn,$query);
 if(mysqli_num_rows($result)==0)
@@ -23,21 +25,20 @@ else{
 	$diff=$diff->format('%i');
 	if($diff>1)
 		$query="UPDATE otpverification SET clock='".getCurrentTimestamp()."', otp=".$otp." WHERE mobile = ".$mobile.";";
-	else error();
+	else success();
 }
 $result=mysqli_query($conn,$query);
-echo mysqli_error($conn);
 if(!$result)
-	error();
+	error(6);
 if(sendSms($mobile,$otpMessage))
 	success();
-error();
+error(7);
 function success(){
 	echo json_encode(array('status' => 1));
 	die();	
 }
-function error(){
-	echo json_encode(array("status"=>0));
+function error($err){
+	echo json_encode(array("status"=>$err));
 	die();
 }
 ?>
