@@ -1,21 +1,21 @@
 package com.krishibazaar.Utils;
 
 public class Constants {
-    public static final String BASE_ADDRESS = "http://192.168.100.8/KrishiBazaar/api/";
-    public static final String GEOCODE_PHP = BASE_ADDRESS + "geocode.php";
-    public static final String SEARCH_PHP = BASE_ADDRESS + "search.php";
-//    public static final String SEARCH_PHP = "http://192.168.137.1/KrishiBazaar/search.php";
-    public static final String GET_PROFILE_PHP = BASE_ADDRESS + "profile.php";
-    public static final String GET_TRANSACTION_PHP = BASE_ADDRESS + "getTransaction.php";
-    public static final String GENERATE_OTP_PHP = BASE_ADDRESS + "generateOtp.php";
-    public static final String VERIFY_OTP_PHP = BASE_ADDRESS + "verifyOtp.php";
-    public static final String REGISTER_PHP = BASE_ADDRESS + "register.php";
-    public static final String GET_PRODUCT_DETAILS_PHP = BASE_ADDRESS + "getProductDetails.php";
-    public static final String MAKE_TRANSACTION_PHP = BASE_ADDRESS + "makeTransaction.php";
-    public static final String SELL_PRODUCT_PHP = BASE_ADDRESS + "sellProduct.php";
-    public static final String DELETE_PRODUCT_PHP = BASE_ADDRESS + "deleteProduct.php";
-    public static final String CHANGE_TRANSACTION_STATUS_PHP = BASE_ADDRESS + "changeTransaction.php";
-    public static final String LOGOUT_PHP = BASE_ADDRESS + "logout.php";
+    public static final String BASE_ADDRESS = "http://192.168.100.8/KrishiBazaar/";
+    public static final String API_ADDRESS = BASE_ADDRESS + "api/";
+    public static final String GEOCODE_PHP = API_ADDRESS + "geocode.php";
+    public static final String SEARCH_PHP = API_ADDRESS + "search.php";
+    public static final String GET_PROFILE_PHP = API_ADDRESS + "profile.php";
+    public static final String GET_TRANSACTION_PHP = API_ADDRESS + "getTransaction.php";
+    public static final String GENERATE_OTP_PHP = API_ADDRESS + "generateOtp.php";
+    public static final String VERIFY_OTP_PHP = API_ADDRESS + "verifyOtp.php";
+    public static final String REGISTER_PHP = API_ADDRESS + "register.php";
+    public static final String GET_PRODUCT_DETAILS_PHP = API_ADDRESS + "getProductDetails.php";
+    public static final String MAKE_TRANSACTION_PHP = API_ADDRESS + "makeTransaction.php";
+    public static final String SELL_PRODUCT_PHP = API_ADDRESS + "sellProduct.php";
+    public static final String DELETE_PRODUCT_PHP = API_ADDRESS + "deleteProduct.php";
+    public static final String CHANGE_TRANSACTION_STATUS_PHP = API_ADDRESS + "changeTransaction.php";
+    public static final String LOGOUT_PHP = API_ADDRESS + "logout.php";
 
 
     public static final String LATITUDE = "latitude";
@@ -63,7 +63,6 @@ public class Constants {
     public static final int DELETED = 6;//show seller that product is no more active
 
 
-
     //sendOtp
     //MOBILE
     //STATUS
@@ -82,10 +81,10 @@ public class Constants {
     public static final int STATUS_NOT_DECIDED = 0;
     public static final int STATUS_ACCEPTED = 1;
     public static final int STATUS_DENIED = 2;
-    public static final String TRANSACTION_ID="tran_id";
-    public static final String TIMESTAMP="timestamp";
-    public static final String SUB_CATEGORY="sub";
+    public static final String TRANSACTION_ID = "tran_id";
+    public static final String TIMESTAMP = "timestamp";
+    public static final String SUB_CATEGORY = "sub";
 
-    public static final String FCM="fcm";
+    public static final String FCM = "fcm";
 
 }

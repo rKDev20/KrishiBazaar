@@ -52,8 +52,9 @@ public class ProfileActivity extends Fragment {
     private Button retry;
     private ProgressBar errorProgress;
     private Context context;
+    private Button logout;
 
-
+    boolean logoutStatus = false;
     private RecyclerView recyclerView;
     private final int ITEMS_TO_LOAD = 3;
     private int pageOffset = 0;
@@ -102,6 +103,7 @@ public class ProfileActivity extends Fragment {
         transactionErrorText = view.findViewById(R.id.transactionErrorText);
         transactionProgress = view.findViewById(R.id.transactionProgress);
         transactionRetry = view.findViewById(R.id.transactionErrorRetry);
+        logout = view.findViewById(R.id.logout);
         retry.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -124,7 +126,22 @@ public class ProfileActivity extends Fragment {
                 }
             }
         });
-
+        logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (logoutStatus) {
+                    VolleyRequestMaker.logout(context, SharedPreferenceManager.getToken(context));
+                    SharedPreferenceManager.clear(context);
+                    getActivity().finish();
+                    Intent intent = new Intent(context, MainActivity.class);
+                    startActivity(intent);
+                } else {
+                    logout.setAlpha(0.7f);
+                    logout.setText("Are you sure?");
+                    logoutStatus = true;
+                }
+            }
+        });
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         initScrollListener();
     }
@@ -133,7 +150,13 @@ public class ProfileActivity extends Fragment {
         if (editMode) {
             setEdit(false);
             return false;
-        } else return true;
+        } else if (logoutStatus) {
+            logout.setAlpha(1f);
+            logout.setText("Logout");
+            logoutStatus = false;
+            return false;
+        }
+        return true;
     }
 
     private void initUser() {

@@ -1,5 +1,7 @@
 package com.krishibazaar.Models;
 
+import android.net.Uri;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -16,6 +18,7 @@ import static com.krishibazaar.Utils.Constants.PRODUCT_ID;
 import static com.krishibazaar.Utils.Constants.QUANTITY;
 import static com.krishibazaar.Utils.Constants.SEARCH;
 import static com.krishibazaar.Utils.Constants.SIZE;
+import static com.krishibazaar.Utils.Constants.TOKEN;
 
 public class Search {
     public static class Query {
@@ -24,12 +27,14 @@ public class Search {
         public int pageOffset;
         public Double latitude;
         public Double longitude;
+        public String token;
 
         public JSONObject getJSON() throws JSONException {
             JSONObject params = new JSONObject();
             params.put(SEARCH, search);
             params.put(SIZE, size);
             params.put(PAGE_OFFSET, pageOffset);
+            params.put(TOKEN, token);
             if (latitude != null && longitude != null) {
                 params.put(LATITUDE, latitude);
                 params.put(LONGITUDE, longitude);
@@ -37,12 +42,13 @@ public class Search {
             return params;
         }
 
-        public Query(String search, int size, int pageOffset, Double latitude, Double longitude) {
+        public Query(String search, int size, int pageOffset, Double latitude, Double longitude, String token) {
             this.search = search;
             this.size = size;
             this.pageOffset = pageOffset;
             this.latitude = latitude;
             this.longitude = longitude;
+            this.token = token;
         }
     }
 
@@ -56,7 +62,8 @@ public class Search {
         private Float distance;
 
         public Response(JSONObject object) throws JSONException {
-            image_url = object.getString(IMAGE_URL);
+            if (object.has(IMAGE_URL))
+                image_url = object.getString(IMAGE_URL);
             product_id = object.getLong(PRODUCT_ID);
             name = object.getString(NAME);
             quantity = (float) object.getDouble(QUANTITY);
@@ -68,7 +75,8 @@ public class Search {
         }
 
         public String getImageUrl() {
-            return BASE_ADDRESS + image_url;
+//            return "https://pngimage.net/wp-content/uploads/2018/05/basmati-rice-png-5.png";
+            return Uri.parse(BASE_ADDRESS + image_url).toString();
         }
 
 
@@ -94,6 +102,10 @@ public class Search {
 
         public String getDistance() {
             return distance + "km away";
+        }
+
+        public boolean hasDistance() {
+            return distance != null;
         }
     }
 }

@@ -168,10 +168,11 @@ public class ProductViewActivity extends AppCompatActivity implements OnMapReady
                 name.setText(response.getName());
                 lat = response.getLatitude();
                 lon = response.getLongitude();
-                Glide.with(ProductViewActivity.this)
-                        .load(response.getImageUrl())
-                        .error(R.drawable.default_picture)
-                        .into(productImage);
+                if (response.getImageUrl() != null)
+                    Glide.with(ProductViewActivity.this)
+                            .load(response.getImageUrl())
+                            .error(R.drawable.default_picture)
+                            .into(productImage);
                 updateMap(response.getLatitude(), response.getLongitude());
                 if (status == OWNED) {
                     if (buyers != null) {
@@ -220,7 +221,7 @@ public class ProductViewActivity extends AppCompatActivity implements OnMapReady
     }
 
     public void makeTransaction(int productId, float negotiablePrice, int pinCode) {
-        VolleyRequestMaker.makeTransaction(this, new TransactionDetails.Query("kiit", productId, negotiablePrice, pinCode), new VolleyRequestMaker.TaskFinishListener<Integer>() {
+        VolleyRequestMaker.makeTransaction(this, new TransactionDetails.Query(SharedPreferenceManager.getToken(this), productId, negotiablePrice, pinCode), new VolleyRequestMaker.TaskFinishListener<Integer>() {
             @Override
             public void onSuccess(Integer response) {
                 proStatus.setVisibility(View.VISIBLE);
@@ -241,7 +242,7 @@ public class ProductViewActivity extends AppCompatActivity implements OnMapReady
     }
 
     private void updateMap(double lat, double lon) {
-        if (map != null){
+        if (map != null) {
             CameraPosition camPos = new CameraPosition.Builder()
                     .target(new LatLng(lat, lon))
                     .zoom(50)

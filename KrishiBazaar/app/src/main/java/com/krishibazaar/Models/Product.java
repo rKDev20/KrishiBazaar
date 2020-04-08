@@ -1,5 +1,9 @@
 package com.krishibazaar.Models;
 
+import android.net.Uri;
+
+import androidx.annotation.Nullable;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -74,7 +78,8 @@ public class Product {
         List<BuyerDetails> buyers;
 
         public Response(JSONObject object) throws JSONException {
-            image_url = object.getString(IMAGE_URL);
+            if (object.has(IMAGE_URL))
+                image_url = object.getString(IMAGE_URL);
             name = object.getString(NAME);
             if (object.has(CATEGORY))
                 category = object.getString(CATEGORY);
@@ -101,8 +106,11 @@ public class Product {
             } else buyers = null;
         }
 
+        @Nullable
         public String getImageUrl() {
-            return BASE_ADDRESS + image_url;
+            if (image_url != null)
+                return Uri.parse(BASE_ADDRESS + image_url).toString();
+            else return null;
         }
 
         public String getName() {

@@ -21,7 +21,6 @@ import androidx.palette.graphics.Palette;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
@@ -49,7 +48,7 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         isMaxLimitReached = false;
         isReloadFailed = false;
         this.reloadListener = reloadListener;
-        this.clickListener=clickListener;
+        this.clickListener = clickListener;
     }
 
     public void addData(List<Search.Response> data) {
@@ -78,30 +77,32 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             final SearchViewHolder viewHolder = (SearchViewHolder) holder;
             Glide.with(context).clear(viewHolder.image);
             viewHolder.image.setImageResource(R.drawable.image);
-            final Search.Response response=data.get(position);
-            Glide.with(context).load(response
-                    .getImageUrl())
-                    .listener(new RequestListener<Drawable>() {
-                        @Override
-                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                            return false;
-                        }
+            final Search.Response response = data.get(position);
+            if (response.getImageUrl() != null)
+                Glide.with(context).load(response
+                        .getImageUrl())
+                        .listener(new RequestListener<Drawable>() {
+                            @Override
+                            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                                return false;
+                            }
 
-                        @Override
-                        public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                            BitmapDrawable drawable = (BitmapDrawable) resource;
-                            Bitmap bitmap = drawable.getBitmap();
-                            Palette.from(bitmap).generate(new Palette.PaletteAsyncListener() {
-                                public void onGenerated(Palette p) {
-                                    int color = p.getDominantColor(context.getResources().getColor(R.color.blue));
-                                    ViewCompat.setBackgroundTintList(viewHolder.wave, ColorStateList.valueOf(color));
-                                    viewHolder.container.setStrokeColor(color);
-                                }
-                            });
-                            return false;
-                        }
-                    })
-                    .into(viewHolder.image);
+                            @Override
+                            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, com.bumptech.glide.load.DataSource dataSource, boolean isFirstResource) {
+                                BitmapDrawable drawable = (BitmapDrawable) resource;
+                                Bitmap bitmap = drawable.getBitmap();
+                                Palette.from(bitmap).generate(new Palette.PaletteAsyncListener() {
+                                    public void onGenerated(Palette p) {
+                                        int color = p.getDominantColor(context.getResources().getColor(R.color.blue));
+                                        ViewCompat.setBackgroundTintList(viewHolder.wave, ColorStateList.valueOf(color));
+                                        viewHolder.container.setStrokeColor(color);
+                                    }
+                                });
+                                return false;
+                            }
+                        })
+                        .into(viewHolder.image);
+            else viewHolder.image.setImageDrawable(null);
             viewHolder.container.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -112,7 +113,12 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             viewHolder.description.setText(response.getDescription());
             viewHolder.quantity.setText(response.getQuantity());
             viewHolder.price.setText(response.getPrice());
-            viewHolder.location.setText(response.getDistance());
+            if (response.hasDistance()) {
+                viewHolder.location.setVisibility(View.VISIBLE);
+                viewHolder.location.setText(response.getDistance());
+            } else {
+                viewHolder.location.setVisibility(View.GONE);
+            }
         } else {
             LoadingViewHolder viewHolder = (LoadingViewHolder) holder;
             Log.d("abcd", "here");

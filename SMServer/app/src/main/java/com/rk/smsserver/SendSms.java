@@ -1,11 +1,13 @@
 package com.rk.smsserver;
 
 import android.telephony.SmsManager;
+import android.util.Log;
 
 import java.util.ArrayList;
 
-public class SendSms {
-    public static void send(String number,String text){
+class SendSms {
+    static void send(String number, String text){
+        Log.d("abcd",number+text);
         SmsManager smsManager = SmsManager.getDefault();
         ArrayList<String> parts = smsManager.divideMessage(text);
         smsManager.sendMultipartTextMessage(number, null, parts,

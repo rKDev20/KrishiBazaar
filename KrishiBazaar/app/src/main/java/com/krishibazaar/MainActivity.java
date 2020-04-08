@@ -33,9 +33,10 @@ public class MainActivity extends LocationManagerActivity implements BottomNavig
         setContentView(R.layout.activity_main);
         String token = SharedPreferenceManager.getToken(this);
         //String token="123456789098765432123456789";
-        if (token == null)
+        if (token == null) {
             startActivity(new Intent(this, LoginActivity.class));
-        else {
+            finish();
+        } else {
             initViews();
             loadFragment(HOME);
         }

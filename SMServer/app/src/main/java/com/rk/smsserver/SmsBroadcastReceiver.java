@@ -9,7 +9,6 @@ import android.telephony.SmsMessage;
 import android.util.Log;
 
 public class SmsBroadcastReceiver extends BroadcastReceiver {
-
     public void onReceive(Context context, Intent intent) {
         Bundle intentExtras = intent.getExtras();
         Log.d("abcd","received");

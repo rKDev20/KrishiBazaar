@@ -120,6 +120,7 @@ public class VolleyRequestMaker {
     public static void loadProducts(final Context context, Search.Query query, final TaskFinishListener<List<Search.Response>> listener) {
         try {
             JSONObject params = query.getJSON();
+            Log.d("abcd", params.toString());
             JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, SEARCH_PHP, params,
                     new Response.Listener<JSONObject>() {
                         @Override
@@ -128,12 +129,16 @@ public class VolleyRequestMaker {
                                 Log.d("abcd", response.toString());
                                 if (response.has(SUCCESS)) {
                                     final JSONArray details = response.getJSONArray(SUCCESS);
-                                    List<Search.Response> resArr = new ArrayList<>();
-                                    for (int i = 0; i < details.length(); ++i) {
-                                        Search.Response res = new Search.Response(details.getJSONObject(i));
-                                        resArr.add(res);
+                                    if (details.length() == 0)
+                                        listener.onError(context.getString(R.string.error_nothing_found));
+                                    else {
+                                        List<Search.Response> resArr = new ArrayList<>();
+                                        for (int i = 0; i < details.length(); ++i) {
+                                            Search.Response res = new Search.Response(details.getJSONObject(i));
+                                            resArr.add(res);
+                                        }
+                                        listener.onSuccess(resArr);
                                     }
-                                    listener.onSuccess(resArr);
                                 } else
                                     listener.onError(context.getString(R.string.error_nothing_found));
                             } catch (JSONException e) {
@@ -359,6 +364,8 @@ public class VolleyRequestMaker {
     public static void makeTransaction(final Context context, TransactionDetails.Query query, final TaskFinishListener<Integer> listener) {
         try {
             JSONObject params = query.getJSON();
+            Log.d("maketransaction", params.toString());
+            final int WRONG_PINCODE = -2;
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, MAKE_TRANSACTION_PHP, params,
                     new Response.Listener<JSONObject>() {
                         @Override
@@ -366,6 +373,8 @@ public class VolleyRequestMaker {
                             try {
                                 if (response.getInt(STATUS) == STATUS_SUCCESS)
                                     listener.onSuccess(0);
+                                else if (response.getInt(STATUS) == WRONG_PINCODE)
+                                    listener.onError(context.getString(R.string.invalid_pincode));
                                 else listener.onError(context.getString(R.string.error_unknown));
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -388,7 +397,6 @@ public class VolleyRequestMaker {
         try {
             JSONObject params = query.getJSON();
             Log.d("abcd", params.toString());
-            final int WRONG_PARAMS = -1;
             final int WRONG_PINCODE = -2;
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, SELL_PRODUCT_PHP, params,
                     new Response.Listener<JSONObject>() {
@@ -399,9 +407,10 @@ public class VolleyRequestMaker {
                                 int status = response.getInt(STATUS);
                                 if (status > 0)
                                     listener.onSuccess(status);
-                                else if(status==WRONG_PARAMS)
+                                else if (status == WRONG_PINCODE)
+                                    listener.onError(context.getString(R.string.invalid_pincode));
+                                else
                                     listener.onError(context.getString(R.string.error_unknown));
-                                else listener.onError(context.getString(R.string.invalid_pincode));
                             } catch (JSONException e) {
                                 Log.d("abcd", "", e);
                                 listener.onError(context.getString(R.string.error_unknown));
@@ -458,6 +467,7 @@ public class VolleyRequestMaker {
             params.put(TOKEN, token);
             params.put(TRANSACTION_ID, tranId);
             params.put(STATUS, status);
+            Log.d("abcd", params.toString());
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, CHANGE_TRANSACTION_STATUS_PHP, params,
                     new Response.Listener<JSONObject>() {
                         @Override

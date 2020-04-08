@@ -47,7 +47,7 @@ public class SharedPreferenceManager {
                     preferences.getString(ADDRESS, null),
                     preferences.getInt(PINCODE, -1));
         } catch (IllegalArgumentException e) {
-            Log.d("abcd","exeption thrown and caught");
+            Log.d("abcd", "exeption thrown and caught");
             return null;
         }
     }
@@ -72,5 +72,14 @@ public class SharedPreferenceManager {
     public static String getToken(Context context) {
         SharedPreferences preferences = context.getSharedPreferences(SP_USER, 0);
         return preferences.getString(TOKEN, null);
+    }
+
+    public static void clear(Context context) {
+        SharedPreferences.Editor edit = context.getSharedPreferences(SP_USER, 0).edit();
+        edit.clear();
+        edit.apply();
+        edit = context.getSharedPreferences(SP_LOCATION, 0).edit();
+        edit.clear();
+        edit.apply();
     }
 }

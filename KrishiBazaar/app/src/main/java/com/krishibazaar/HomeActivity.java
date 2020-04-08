@@ -191,11 +191,13 @@ public class HomeActivity extends Fragment {
         if (pageOffset == 0) {
             errorBox.setVisibility(View.VISIBLE);
             errorText.setText(error);
+            recyclerView.setVisibility(View.GONE);
         }
     }
 
     private void removeError() {
         errorBox.setVisibility(View.GONE);
+        recyclerView.setVisibility(View.VISIBLE);
     }
 
     private void loadProducts() {
@@ -206,7 +208,7 @@ public class HomeActivity extends Fragment {
             longitude = locationDetails.getLongitude();
             latitude = locationDetails.getLatitude();
         }
-        Search.Query query = new Search.Query(searchText, ITEMS_TO_LOAD, pageOffset + 1, latitude, longitude);
+        Search.Query query = new Search.Query(searchText, ITEMS_TO_LOAD, pageOffset + 1, latitude, longitude, SharedPreferenceManager.getToken(context));
         VolleyRequestMaker.loadProducts(context, query, new VolleyRequestMaker.TaskFinishListener<List<Search.Response>>() {
             @Override
             public void onSuccess(List<Search.Response> response) {
@@ -253,7 +255,7 @@ public class HomeActivity extends Fragment {
 
     private void openProductView(long productId) {
         Intent intent = new Intent(context, ProductViewActivity.class);
-        intent.putExtra(PRODUCT_ID, (int)productId);
+        intent.putExtra(PRODUCT_ID, (int) productId);
         startActivity(intent);
     }
 
