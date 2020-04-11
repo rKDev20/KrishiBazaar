@@ -1,20 +1,22 @@
 -- phpMyAdmin SQL Dump
--- version 3.5.2.2
--- http://www.phpmyadmin.net
+-- version 5.0.1
+-- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 16, 2020 at 05:46 PM
--- Server version: 5.5.27
--- PHP Version: 5.4.7
+-- Generation Time: Apr 09, 2020 at 02:12 AM
+-- Server version: 10.4.11-MariaDB
+-- PHP Version: 7.4.2
 
-SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
+START TRANSACTION;
 SET time_zone = "+00:00";
 
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
+/*!40101 SET NAMES utf8mb4 */;
 
 --
 -- Database: `krishikhata`
@@ -26,8 +28,8 @@ SET time_zone = "+00:00";
 -- Table structure for table `advertisements`
 --
 
-CREATE TABLE IF NOT EXISTS `advertisements` (
-  `ad_id` int(10) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `advertisements` (
+  `ad_id` int(10) NOT NULL,
   `mobile` bigint(10) NOT NULL,
   `category` int(10) DEFAULT NULL,
   `sub_category` int(10) DEFAULT NULL,
@@ -36,22 +38,9 @@ CREATE TABLE IF NOT EXISTS `advertisements` (
   `rate` float NOT NULL,
   `description` varchar(300) NOT NULL,
   `pincode` int(6) NOT NULL,
-  `clock` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `status` int(1) NOT NULL DEFAULT '1',
-  PRIMARY KEY (`ad_id`),
-  KEY `mobile` (`mobile`),
-  KEY `mobile_2` (`mobile`),
-  KEY `category` (`category`),
-  KEY `sub_category` (`sub_category`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=23 ;
-
---
--- Dumping data for table `advertisements`
---
-
-INSERT INTO `advertisements` (`ad_id`, `mobile`, `category`, `sub_category`, `name`, `quantity`, `rate`, `description`, `pincode`, `clock`, `status`) VALUES
-(20, 8981874182, NULL, NULL, 'rice', 34, 21, 'my rice', 700102, '2020-02-08 20:15:34', 1),
-(22, 7652089925, 6, 7, 'rice', 34, 21, 'tasty tasty rice', 751024, '2020-02-08 20:17:48', 1);
+  `clock` timestamp NOT NULL DEFAULT current_timestamp(),
+  `status` int(1) NOT NULL DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -59,24 +48,11 @@ INSERT INTO `advertisements` (`ad_id`, `mobile`, `category`, `sub_category`, `na
 -- Table structure for table `authorisation`
 --
 
-CREATE TABLE IF NOT EXISTS `authorisation` (
+CREATE TABLE `authorisation` (
   `token` varchar(32) NOT NULL,
   `mobile` bigint(10) NOT NULL,
-  `fcm` varchar(255) NOT NULL,
-  PRIMARY KEY (`token`),
-  KEY `mobile` (`mobile`)
+  `fcm` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `authorisation`
---
-
-INSERT INTO `authorisation` (`token`, `mobile`, `fcm`) VALUES
-('28e06f15b902e31c3268ee5c9627b015', 9559277825, 'edRtLdFTpgs:APA91bHpGCvq0djKdedq552NGe4tpTLPy-6sbBomAE8NdbcNPGAGmQtf6PDQgqaeAotDnkTyBsqbnkO7O-eLTkS6bwYNB3DVaMdvyADI8cLLpQGRTIhMunWXY7LTXIgiWenDLb60gsSD'),
-('6f7b2f9e255c6cfc865d974d447b9bec', 8981874182, '2'),
-('9db8c926f7fd8bf6e1cb278f7ac9732e', 8981874182, 'eAg61-tM_lA:APA91bGcji8F4WYqaaXZQqi0hruJa3IjCiGhDDJ4YGLhYW514adzsbjk9Z9BDeZ6kv3enaYBeLylzX-4loazzDXhu2Og5YS1MuwrId6u_IgdFjDhexw-xk7MRi63xocS5YvjK-vTBS3h'),
-('dde72148969b02e238174678e7cc3062', 8981874182, 'eX742imfeeg:APA91bHFyxPvl6ytTuaYkgDMZsI12f366U52r1wKEQ4JSaLKORyDUJtjWyd-srPDX6NBm9d89HBbg7tqoywQJ89KCsUkZBALSfWmwSjHQZR1aMkZcJgpLHS2258wXASfE4mIKEucbg8l'),
-('eba1d20d809756f6425c91fe6a941ca9', 8981874182, 'eX742imfeeg:APA91bHFyxPvl6ytTuaYkgDMZsI12f366U52r1wKEQ4JSaLKORyDUJtjWyd-srPDX6NBm9d89HBbg7tqoywQJ89KCsUkZBALSfWmwSjHQZR1aMkZcJgpLHS2258wXASfE4mIKEucbg8l');
 
 -- --------------------------------------------------------
 
@@ -84,13 +60,11 @@ INSERT INTO `authorisation` (`token`, `mobile`, `fcm`) VALUES
 -- Table structure for table `categories`
 --
 
-CREATE TABLE IF NOT EXISTS `categories` (
-  `category_id` int(10) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `categories` (
+  `category_id` int(10) NOT NULL,
   `name` varchar(50) NOT NULL,
-  `variety_id` int(11) NOT NULL,
-  PRIMARY KEY (`category_id`),
-  KEY `variety_id` (`variety_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=106 ;
+  `variety_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `categories`
@@ -207,13 +181,10 @@ INSERT INTO `categories` (`category_id`, `name`, `variety_id`) VALUES
 -- Table structure for table `otpverification`
 --
 
-CREATE TABLE IF NOT EXISTS `otpverification` (
-  `clock` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+CREATE TABLE `otpverification` (
+  `clock` timestamp NOT NULL DEFAULT current_timestamp(),
   `otp` int(6) NOT NULL,
-  `mobile` bigint(10) NOT NULL,
-  PRIMARY KEY (`mobile`),
-  UNIQUE KEY `mobile` (`mobile`),
-  KEY `mobile_2` (`mobile`)
+  `mobile` bigint(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -222,11 +193,10 @@ CREATE TABLE IF NOT EXISTS `otpverification` (
 -- Table structure for table `pincode`
 --
 
-CREATE TABLE IF NOT EXISTS `pincode` (
+CREATE TABLE `pincode` (
   `pincode` int(11) NOT NULL,
-  `latitude` float NOT NULL,
-  `longitude` float NOT NULL,
-  PRIMARY KEY (`pincode`)
+  `latitude` double NOT NULL,
+  `longitude` double NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -235,8 +205,8 @@ CREATE TABLE IF NOT EXISTS `pincode` (
 -- Table structure for table `sms_instance`
 --
 
-CREATE TABLE IF NOT EXISTS `sms_instance` (
-  `sms_id` int(10) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `sms_instance` (
+  `sms_id` int(10) NOT NULL,
   `mobile` bigint(10) NOT NULL,
   `status` int(2) NOT NULL,
   `ad_id` int(11) DEFAULT NULL,
@@ -245,18 +215,8 @@ CREATE TABLE IF NOT EXISTS `sms_instance` (
   `pincode` int(6) DEFAULT NULL,
   `quantity` float DEFAULT NULL,
   `rate` float DEFAULT NULL,
-  `clock` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`sms_id`),
-  KEY `mobile` (`mobile`),
-  KEY `product_id` (`ad_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=11 ;
-
---
--- Dumping data for table `sms_instance`
---
-
-INSERT INTO `sms_instance` (`sms_id`, `mobile`, `status`, `ad_id`, `name`, `description`, `pincode`, `quantity`, `rate`, `clock`) VALUES
-(10, 7652089925, 8, 22, NULL, NULL, NULL, NULL, NULL, '2020-02-12 18:23:12');
+  `clock` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -264,13 +224,11 @@ INSERT INTO `sms_instance` (`sms_id`, `mobile`, `status`, `ad_id`, `name`, `desc
 -- Table structure for table `sub_categories`
 --
 
-CREATE TABLE IF NOT EXISTS `sub_categories` (
-  `sub_id` int(10) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `sub_categories` (
+  `sub_id` int(10) NOT NULL,
   `category_id` int(10) NOT NULL,
-  `name` varchar(50) NOT NULL,
-  PRIMARY KEY (`sub_id`),
-  KEY `category_id` (`category_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=39 ;
+  `name` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `sub_categories`
@@ -321,28 +279,15 @@ INSERT INTO `sub_categories` (`sub_id`, `category_id`, `name`) VALUES
 -- Table structure for table `transactions`
 --
 
-CREATE TABLE IF NOT EXISTS `transactions` (
-  `transaction_id` int(10) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `transactions` (
+  `transaction_id` int(10) NOT NULL,
   `ad_id` int(10) NOT NULL,
   `proposed_rate` float DEFAULT NULL,
   `mobile` bigint(10) NOT NULL,
-  `clock` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `clock` timestamp NULL DEFAULT NULL,
   `pincode` int(6) NOT NULL,
-  `status` int(2) NOT NULL,
-  PRIMARY KEY (`ad_id`,`mobile`),
-  UNIQUE KEY `transaction_id_2` (`transaction_id`),
-  KEY `ad_id` (`ad_id`,`mobile`),
-  KEY `transaction_id` (`transaction_id`),
-  KEY `mobile` (`mobile`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=8 ;
-
---
--- Dumping data for table `transactions`
---
-
-INSERT INTO `transactions` (`transaction_id`, `ad_id`, `proposed_rate`, `mobile`, `clock`, `pincode`, `status`) VALUES
-(7, 20, NULL, 9559277825, '2020-02-15 22:03:24', 751024, 2),
-(2, 22, NULL, 8981874182, '2020-02-09 12:04:40', 333333, 2);
+  `status` int(2) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -350,26 +295,12 @@ INSERT INTO `transactions` (`transaction_id`, `ad_id`, `proposed_rate`, `mobile`
 -- Table structure for table `users`
 --
 
-CREATE TABLE IF NOT EXISTS `users` (
+CREATE TABLE `users` (
   `mobile` bigint(10) NOT NULL,
   `address` varchar(200) DEFAULT NULL,
   `pincode` int(6) DEFAULT NULL,
-  `name` varchar(200) DEFAULT NULL,
-  PRIMARY KEY (`mobile`)
+  `name` varchar(200) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `users`
---
-
-INSERT INTO `users` (`mobile`, `address`, `pincode`, `name`) VALUES
-(7375088919, 'scasca', 232323, 'ayush'),
-(7376088919, NULL, NULL, NULL),
-(7652089925, NULL, NULL, NULL),
-(8383893403, 'KP 10 B', 751024, 'Vipul Gehun'),
-(8825141548, NULL, NULL, NULL),
-(8981874182, 'kiti uncd', 333333, 'anon'),
-(9559277825, '8b152', 751024, 'Ayush ');
 
 -- --------------------------------------------------------
 
@@ -377,11 +308,10 @@ INSERT INTO `users` (`mobile`, `address`, `pincode`, `name`) VALUES
 -- Table structure for table `variety`
 --
 
-CREATE TABLE IF NOT EXISTS `variety` (
-  `variety_id` int(11) NOT NULL AUTO_INCREMENT,
-  `variety` varchar(50) NOT NULL,
-  PRIMARY KEY (`variety_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=8 ;
+CREATE TABLE `variety` (
+  `variety_id` int(11) NOT NULL,
+  `variety` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `variety`
@@ -395,6 +325,125 @@ INSERT INTO `variety` (`variety_id`, `variety`) VALUES
 (5, 'Dry fruits'),
 (6, 'Spices'),
 (7, 'Vegetables');
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `advertisements`
+--
+ALTER TABLE `advertisements`
+  ADD PRIMARY KEY (`ad_id`),
+  ADD KEY `mobile` (`mobile`),
+  ADD KEY `mobile_2` (`mobile`),
+  ADD KEY `category` (`category`),
+  ADD KEY `sub_category` (`sub_category`);
+
+--
+-- Indexes for table `authorisation`
+--
+ALTER TABLE `authorisation`
+  ADD PRIMARY KEY (`token`),
+  ADD KEY `mobile` (`mobile`);
+
+--
+-- Indexes for table `categories`
+--
+ALTER TABLE `categories`
+  ADD PRIMARY KEY (`category_id`),
+  ADD KEY `variety_id` (`variety_id`);
+
+--
+-- Indexes for table `otpverification`
+--
+ALTER TABLE `otpverification`
+  ADD PRIMARY KEY (`mobile`),
+  ADD UNIQUE KEY `mobile` (`mobile`),
+  ADD KEY `mobile_2` (`mobile`);
+
+--
+-- Indexes for table `pincode`
+--
+ALTER TABLE `pincode`
+  ADD PRIMARY KEY (`pincode`);
+
+--
+-- Indexes for table `sms_instance`
+--
+ALTER TABLE `sms_instance`
+  ADD PRIMARY KEY (`sms_id`),
+  ADD KEY `mobile` (`mobile`),
+  ADD KEY `product_id` (`ad_id`);
+
+--
+-- Indexes for table `sub_categories`
+--
+ALTER TABLE `sub_categories`
+  ADD PRIMARY KEY (`sub_id`),
+  ADD KEY `category_id` (`category_id`);
+
+--
+-- Indexes for table `transactions`
+--
+ALTER TABLE `transactions`
+  ADD PRIMARY KEY (`ad_id`,`mobile`),
+  ADD UNIQUE KEY `transaction_id_2` (`transaction_id`),
+  ADD KEY `ad_id` (`ad_id`,`mobile`),
+  ADD KEY `transaction_id` (`transaction_id`),
+  ADD KEY `mobile` (`mobile`);
+
+--
+-- Indexes for table `users`
+--
+ALTER TABLE `users`
+  ADD PRIMARY KEY (`mobile`);
+
+--
+-- Indexes for table `variety`
+--
+ALTER TABLE `variety`
+  ADD PRIMARY KEY (`variety_id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `advertisements`
+--
+ALTER TABLE `advertisements`
+  MODIFY `ad_id` int(10) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `categories`
+--
+ALTER TABLE `categories`
+  MODIFY `category_id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=106;
+
+--
+-- AUTO_INCREMENT for table `sms_instance`
+--
+ALTER TABLE `sms_instance`
+  MODIFY `sms_id` int(10) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `sub_categories`
+--
+ALTER TABLE `sub_categories`
+  MODIFY `sub_id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
+
+--
+-- AUTO_INCREMENT for table `transactions`
+--
+ALTER TABLE `transactions`
+  MODIFY `transaction_id` int(10) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `variety`
+--
+ALTER TABLE `variety`
+  MODIFY `variety_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- Constraints for dumped tables
@@ -438,6 +487,7 @@ ALTER TABLE `sub_categories`
 ALTER TABLE `transactions`
   ADD CONSTRAINT `transactions_ibfk_4` FOREIGN KEY (`ad_id`) REFERENCES `advertisements` (`ad_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `transactions_ibfk_5` FOREIGN KEY (`mobile`) REFERENCES `users` (`mobile`) ON DELETE CASCADE ON UPDATE CASCADE;
+COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
