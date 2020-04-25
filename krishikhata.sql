@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 09, 2020 at 02:12 AM
+-- Generation Time: Apr 25, 2020 at 05:21 PM
 -- Server version: 10.4.11-MariaDB
 -- PHP Version: 7.4.2
 
@@ -21,6 +21,14 @@ SET time_zone = "+00:00";
 --
 -- Database: `krishikhata`
 --
+
+DELIMITER $$
+--
+-- Functions
+--
+CREATE DEFINER=`root`@`localhost` FUNCTION `LAT_LONG_DISTANCE` (`lat1` FLOAT, `lng1` FLOAT, `lat2` FLOAT, `lng2` FLOAT) RETURNS FLOAT RETURN ROUND((111.111 *DEGREES(ACOS(LEAST(1.0, COS(RADIANS(lat1))* COS(RADIANS(lat2))* COS(RADIANS(lng1 - lng2))+ SIN(RADIANS(lat1))* SIN(RADIANS(lat2)))))),2)$$
+
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -336,9 +344,9 @@ INSERT INTO `variety` (`variety_id`, `variety`) VALUES
 ALTER TABLE `advertisements`
   ADD PRIMARY KEY (`ad_id`),
   ADD KEY `mobile` (`mobile`),
-  ADD KEY `mobile_2` (`mobile`),
   ADD KEY `category` (`category`),
-  ADD KEY `sub_category` (`sub_category`);
+  ADD KEY `sub_category` (`sub_category`),
+  ADD KEY `pincode` (`pincode`);
 
 --
 -- Indexes for table `authorisation`
@@ -374,7 +382,8 @@ ALTER TABLE `pincode`
 ALTER TABLE `sms_instance`
   ADD PRIMARY KEY (`sms_id`),
   ADD KEY `mobile` (`mobile`),
-  ADD KEY `product_id` (`ad_id`);
+  ADD KEY `product_id` (`ad_id`),
+  ADD KEY `pincode` (`pincode`);
 
 --
 -- Indexes for table `sub_categories`
@@ -388,16 +397,17 @@ ALTER TABLE `sub_categories`
 --
 ALTER TABLE `transactions`
   ADD PRIMARY KEY (`ad_id`,`mobile`),
-  ADD UNIQUE KEY `transaction_id_2` (`transaction_id`),
   ADD KEY `ad_id` (`ad_id`,`mobile`),
   ADD KEY `transaction_id` (`transaction_id`),
-  ADD KEY `mobile` (`mobile`);
+  ADD KEY `mobile` (`mobile`),
+  ADD KEY `pincode` (`pincode`);
 
 --
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
-  ADD PRIMARY KEY (`mobile`);
+  ADD PRIMARY KEY (`mobile`),
+  ADD KEY `pincode` (`pincode`);
 
 --
 -- Indexes for table `variety`
@@ -455,7 +465,8 @@ ALTER TABLE `variety`
 ALTER TABLE `advertisements`
   ADD CONSTRAINT `advertisements_ibfk_2` FOREIGN KEY (`mobile`) REFERENCES `users` (`mobile`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `advertisements_ibfk_3` FOREIGN KEY (`category`) REFERENCES `categories` (`category_id`) ON DELETE SET NULL ON UPDATE SET NULL,
-  ADD CONSTRAINT `advertisements_ibfk_4` FOREIGN KEY (`sub_category`) REFERENCES `sub_categories` (`sub_id`) ON DELETE SET NULL ON UPDATE SET NULL;
+  ADD CONSTRAINT `advertisements_ibfk_4` FOREIGN KEY (`sub_category`) REFERENCES `sub_categories` (`sub_id`) ON DELETE SET NULL ON UPDATE SET NULL,
+  ADD CONSTRAINT `pincode` FOREIGN KEY (`pincode`) REFERENCES `pincode` (`pincode`);
 
 --
 -- Constraints for table `authorisation`
@@ -473,6 +484,7 @@ ALTER TABLE `categories`
 -- Constraints for table `sms_instance`
 --
 ALTER TABLE `sms_instance`
+  ADD CONSTRAINT `pincode_ibfk_1` FOREIGN KEY (`pincode`) REFERENCES `pincode` (`pincode`),
   ADD CONSTRAINT `sms_instance_ibfk_2` FOREIGN KEY (`mobile`) REFERENCES `users` (`mobile`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
@@ -485,8 +497,15 @@ ALTER TABLE `sub_categories`
 -- Constraints for table `transactions`
 --
 ALTER TABLE `transactions`
+  ADD CONSTRAINT `pincode_ibfk_2` FOREIGN KEY (`pincode`) REFERENCES `pincode` (`pincode`),
   ADD CONSTRAINT `transactions_ibfk_4` FOREIGN KEY (`ad_id`) REFERENCES `advertisements` (`ad_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `transactions_ibfk_5` FOREIGN KEY (`mobile`) REFERENCES `users` (`mobile`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `users`
+--
+ALTER TABLE `users`
+  ADD CONSTRAINT `pincode_ibfk_3` FOREIGN KEY (`pincode`) REFERENCES `pincode` (`pincode`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
