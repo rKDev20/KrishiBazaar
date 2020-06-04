@@ -1,6 +1,7 @@
 <?php
 session_start();
 include('../../util/db.php');
+include('../../util/notify.php');
 if(isset($_SESSION['mobile']))
 {
   $mobile = $_SESSION['mobile'];
@@ -21,7 +22,8 @@ if(isset($_SESSION['mobile']))
 	if($q)
 	{
 		echo "Success";
-		header('location:'.$_POST['redirect']);
+    
+    header('location:'.$_POST['redirect']);
 		exit();
 	}
 	else {
