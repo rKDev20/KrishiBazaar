@@ -29,7 +29,7 @@
 									<input type="text" class="form-control" placeholder="Address" name="address">
 								</div>
 								<div class="form-group">
-									<input type="text" class="form-control" placeholder="Pin Code" name = "pinCode">
+									<input type="text" class="form-control" placeholder="Pin Code" name = "pincode">
 								</div>
 								<div class="form-group">
 									<input type="tel" class="form-control" placeholder="Mobile" id="mobile" name="mobile">
