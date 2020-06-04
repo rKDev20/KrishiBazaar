@@ -14,7 +14,6 @@ public class SmsBroadcastReceiver extends BroadcastReceiver {
         Log.d("abcd","received");
         if (intentExtras != null) {
             SmsMessage[] smsMessage = Telephony.Sms.Intents.getMessagesFromIntent(intent);
-            String smsMessageStr = "";
             for (SmsMessage message : smsMessage) {
                 String number=message.getOriginatingAddress();
                 number=number.substring(number.length()-10);

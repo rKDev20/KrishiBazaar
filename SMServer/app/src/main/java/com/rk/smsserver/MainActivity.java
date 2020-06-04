@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
             if (isChecked) {
                 SharedPreferenceManager.setChannel(this, SharedPreferenceManager.CHANNEL_ACTION);
                 FirebaseMessaging.getInstance().subscribeToTopic("all");
-                toggleSms(true);
+                toggleSms(false);
                 botServer.setChecked(false);
             } else {
                 if (!botServer.isChecked()) {
@@ -70,6 +70,5 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
         ComponentName componentName = new ComponentName(this, SmsBroadcastReceiver.class);
         int state = enable ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED : PackageManager.COMPONENT_ENABLED_STATE_DISABLED;
         pm.setComponentEnabledSetting(componentName, state, PackageManager.DONT_KILL_APP);
-
     }
 }
