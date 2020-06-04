@@ -32,11 +32,13 @@ if($runQry)
   //echo "Posted \n";
   //echo $qry;
   header('location:../profile/profile.php');
+	exit();
 }
 else {
   $_SESSION['message'] = "Could not post add!!";
   //echo "Not Posted \n";
   //echo $qry;
   header('location:sell.php');
+	exit();
 }
 ?>
