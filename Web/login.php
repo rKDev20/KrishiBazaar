@@ -13,7 +13,15 @@ $row = mysqli_query($conn,$qry);
 if(mysqli_num_rows($row) == 1)
 {
 	$qry = "SELECT name, pincode FROM users WHERE mobile = $mobile";
+	//echo $qry;
   $row = mysqli_query($conn, $qry);
+	if(mysqli_num_rows($row) != 1)
+	{
+		$_SESSION['message'] = "User not found. Please SignUp.";
+		echo $_SESSION['message'];
+		header('location:'.$_POST['redirect']);
+		exit();
+	}
 	$userData = mysqli_fetch_assoc($row);
   $_SESSION['id']= session_id();
   $_SESSION['user_name'] = $userData['name'];
@@ -23,7 +31,7 @@ if(mysqli_num_rows($row) == 1)
 }
 else {
   $_SESSION['message'] = "Invalid Input";
-  //echo "not ok";
+  echo "not ok";
   header('location:'.$_POST['redirect']);
 }
 ?>
