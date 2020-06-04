@@ -16,7 +16,7 @@ else {
   $qry = "SELECT * FROM advertisements WHERE status = 1 LIMIT 6";
   $_SESSION['query'] = "SELECT * FROM advertisements WHERE status = 1 ";
 }
-echo $qry;
+//echo $qry;
 $row = mysqli_query($conn,$qry);
 ?>
 <!DOCTYPE html>
