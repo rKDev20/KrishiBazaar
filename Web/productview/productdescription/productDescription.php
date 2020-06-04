@@ -69,8 +69,8 @@ $q2 = mysqli_query($conn,$qry2);
             <?php echo $_SESSION['user_name']; ?>
           </a>
           <div class="dropdown-menu bg-dark" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" href="../profile/profile.php">PROFILE</a>
-            <a class="dropdown-item" href="../logout.php">LOGOUT</a>
+            <a class="dropdown-item" href="../../profile/profile.php">PROFILE</a>
+            <a class="dropdown-item" href="../../logout.php">LOGOUT</a>
           </div>
         </li>
           <?php
