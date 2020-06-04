@@ -128,16 +128,13 @@ $q2 = mysqli_query($conn,$qry2);
           //echo $qry2;
           //echo mysqli_num_rows($q2);
           if (isset($_SESSION['mobile'])) {
-            if(mysqli_num_rows($q2)==0)
+            if(mysqli_num_rows($q2) == 0)
             {
          ?>
            <form class="form-inline" method="post" action="bid.php">
-           <div class="form-group mb-2">
-             <label for="staticEmail2" class="sr-only">Proposed Rate</label>
-             <input type="text" readonly class="form-control-plaintext" id="staticEmail2" value="Your Offer Price">
-           </div>
+
            <div class="form-group mx-sm-3 mb-2">
-             <label for="inputPassword2" class="sr-only">Price</label>
+             <div class="form-group mx-sm-3 mb-2"><label>Your Offer Price </label></div>
              <input type="number" class="form-control" id="price" placeholder="Price" name="price">
              <input type="number" name="ad_id" value="<?php echo $product['ad_id']?>" hidden>
              <input type="hidden" class="redirect" name = "redirect" value="productDescription.php?id=<?php echo $id;?>">
@@ -182,7 +179,7 @@ $q2 = mysqli_query($conn,$qry2);
                 <label >Enter OTP</label>
                 <input  type="number" class="form-control" id="otp" name="otp" id="exampleInputPassword1" placeholder="OTP">
                 <br>
-                <input type="hidden" class="redirect" name = "redirect" value="productdescription/productDescription.php?id=<?php echo $id;?>">
+                <input type="hidden" class="redirect" name = "redirect" value="productview/productdescription/productDescription.php?id=<?php echo $id;?>">
                 <center><input type="button" onclick="loginButton()" id="login" class="btn btn-primary" data-dismiss="modal" value="Login"/></center>
                 </div>
                 <br>
@@ -234,3 +231,15 @@ $q2 = mysqli_query($conn,$qry2);
       <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
     </body>
 </html>
+<?php
+if(isset($_SESSION['message']))
+{
+  $message = $_SESSION['message'];
+  echo "<script type='text/javascript'>
+  $(document).ready(function(){
+    alert('$message');
+  });
+  </script>";
+  unset($_SESSION['message']);
+}
+?>

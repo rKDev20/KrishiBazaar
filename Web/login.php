@@ -27,6 +27,7 @@ if(mysqli_num_rows($row) == 1)
   $_SESSION['user_name'] = $userData['name'];
 	$_SESSION['mobile'] = $mobile;
 	$_SESSION['pincode'] = $userData['pincode'];
+	echo $_SESSION['pincode'];
 	header('location:'.$_POST['redirect']);
 }
 else {
