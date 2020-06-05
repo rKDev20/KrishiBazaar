@@ -4,6 +4,7 @@ if(!isset($_SESSION['mobile']))
 {
 		$_SESSION['message'] = "Please LogIn/SignUp to post ad.";
 	  header('location:../index.php');
+		exit();
 }
 include_once '../util/db.php';
 $qryCat = "SELECT * FROM categories";
