@@ -1,6 +1,5 @@
 package com.krishibazaar.Adapters;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,22 +8,23 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.krishibazaar.Models.Category;
+import com.krishibazaar.Models.CategoryInterface;
 import com.krishibazaar.Popups.SpinnerChooser;
 import com.krishibazaar.R;
-import com.krishibazaar.Utils.AssetsHandler;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class SpinnerChooserAdapter extends RecyclerView.Adapter<ItemViewHolder> {
-    private ArrayList<String> itemList, temp;
-    private SpinnerChooser.ItemSelectedListener listener;
-    private AssetsHandler assetsHandler;
+public class CategoryAdapter<T extends CategoryInterface> extends RecyclerView.Adapter<ItemViewHolder> {
+    private List<T> itemList;
+    private List<T> origList;
+    private SpinnerChooser.ItemChooseListener<T> listener;
 
-    public SpinnerChooserAdapter(ArrayList<String> itemList, SpinnerChooser.ItemSelectedListener listener, Context context) {
+    public CategoryAdapter(List<T> itemList, SpinnerChooser.ItemChooseListener listener) {
         this.itemList = itemList;
-        this.temp = itemList;
         this.listener = listener;
-        assetsHandler = new AssetsHandler(context);
+        origList=new ArrayList<>(itemList);
     }
 
     @NonNull
@@ -37,13 +37,10 @@ public class SpinnerChooserAdapter extends RecyclerView.Adapter<ItemViewHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull ItemViewHolder holder, final int position) {
-        holder.itemName.setText(itemList.get(position));
-        holder.itemName.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                boolean hasSubCategory = assetsHandler.hasSubCategory(itemList.get(position));
-                listener.onItemSelected(temp.indexOf(itemList.get(position)), itemList.get(position), hasSubCategory);
-            }
+        final T category = itemList.get(position);
+        holder.itemName.setText(category.getName());
+        holder.itemName.setOnClickListener(view -> {
+            listener.onItemSelected(category);
         });
     }
 
@@ -55,9 +52,11 @@ public class SpinnerChooserAdapter extends RecyclerView.Adapter<ItemViewHolder> 
     }
 
 
-    public void filterList(ArrayList<String> filteredNames, ArrayList<String> tempList) {
-        itemList = filteredNames;
-        temp = tempList;
+    public void filterList(String search) {
+        itemList = new ArrayList<>();
+        for (T e : origList)
+            if (e.getName().toLowerCase().startsWith(search.toLowerCase()))
+                itemList.add(e);
         notifyDataSetChanged();
     }
 }

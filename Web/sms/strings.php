@@ -1,6 +1,6 @@
 <?php
 
-define('WELCOME_MSG', 'What would you like to do?\n Send 1 for uploading an ad.\nSend 2 for deleting an ad.');
+define('WELCOME_MSG', 'What would you like to do? Send 1 for uploading an ad. Send 2 for deleting an ad.');
 define('ENTER_NAME','What do you want to sell?');
 define('ENTER_DESCRIPTION', 'Please describe the "%s" you want to sell. You can say what quality it is, what type it is, how old it is, or anything else.');
 define('ENTER_LOCATION','Enter your pincode so that others can locate you.');

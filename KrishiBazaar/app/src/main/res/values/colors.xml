@@ -13,7 +13,7 @@
     <color name="accepted">#6BCC0D</color>
     <color name="rejected">#DD2020</color>
     <color name="sold">#DBDADA</color>
-    <color name="available">#000000</color>
+    <color name="available">#00AEFF</color>
 
     <color name="light_grey">#DBDADA</color>
     <array name="status_color">
@@ -22,6 +22,7 @@
         <item >@color/pending</item>
         <item >@color/accepted</item>
         <item >@color/rejected</item>
+        <item >@color/sold</item>
         <item >@color/sold</item>
     </array>
 </resources>

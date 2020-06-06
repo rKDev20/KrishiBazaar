@@ -1,6 +1,7 @@
 package com.krishibazaar.Adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +9,8 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.krishibazaar.Models.BuyerDetails;
 import com.krishibazaar.R;
@@ -18,18 +21,20 @@ import java.util.Date;
 import java.util.List;
 
 import static com.krishibazaar.Utils.Constants.ACCEPTED;
+import static com.krishibazaar.Utils.Constants.PENDING;
 import static com.krishibazaar.Utils.Constants.REJECTED;
 
 public class ProductRequestAdapter extends BaseAdapter {
     Context context;
     List<BuyerDetails> list;
-    TextView price, name, timestamp, distance, actionStatus;
-    Button accept, reject;
-
+    String[] statusList;
+    int[] colorList;
 
     public ProductRequestAdapter(Context context, List<BuyerDetails> list) {
         this.list = list;
         this.context = context;
+        statusList = context.getResources().getStringArray(R.array.status_array);
+        colorList = context.getResources().getIntArray(R.array.status_color);
     }
 
     @Override
@@ -49,85 +54,107 @@ public class ProductRequestAdapter extends BaseAdapter {
 
     @Override
     public View getView(final int i, View view, ViewGroup viewGroup) {
-        view = LayoutInflater.from(context).inflate(R.layout.adapter_product_requests, viewGroup, false);
-        price = view.findViewById(R.id.price);
-        actionStatus = view.findViewById(R.id.action);
-        actionStatus.setVisibility(View.GONE);
-        accept = view.findViewById(R.id.accept);
-        reject = view.findViewById(R.id.reject);
-        name = view.findViewById(R.id.name);
-        timestamp = view.findViewById(R.id.ts);
-        distance = view.findViewById(R.id.dis);
-        if (list.get(i).getPrice() != null)
-            price.setText(String.valueOf(list.get(i).getPrice()));
+        ProductRequestViewHolder holder;
+        BuyerDetails details = list.get(i);
+        if (view == null) {
+            view = LayoutInflater.from(context).inflate(R.layout.adapter_product_requests, viewGroup, false);
+            view.setTag(holder = new ProductRequestViewHolder(view));
+        } else {
+            holder = (ProductRequestViewHolder) view.getTag();
+        }
+
+        holder.name.setText(details.getName());
+        if (details.getStatus() == PENDING) {
+            holder.showButtons();
+        } else {
+            holder.showStatus(details.getStatus());
+        }
+        holder.distance.setText(details.getDistance() + " kms away");
+        holder.timestamp.setText(getTime(details.getTimestamp()));
+        if (details.getPrice() == null)
+            holder.price.setVisibility(View.GONE);
         else
-            price.setText("None");
-        name.setText(list.get(i).getName());
-        distance.setText(String.valueOf(list.get(i).getDistance()));
-        timestamp.setText(getTime(list.get(i).getTimestamp()));
-        View.OnClickListener listener = new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                int status;
-                if (view.getId() == R.id.accept) {
-                    status = ACCEPTED;
-                    accept.setVisibility(View.GONE);
-                    reject.setVisibility(View.GONE);
-                    actionStatus.setText(view.getResources().getStringArray(R.array.status_array)[3]);
-                    actionStatus.setBackgroundColor(view.getResources().getColor(R.color.accepted));
-                } else {
-                    status = REJECTED;
-                    accept.setVisibility(View.GONE);
-                    reject.setVisibility(View.GONE);
-                    actionStatus.setText(view.getResources().getStringArray(R.array.status_array)[4]);
-                    actionStatus.setBackgroundColor(view.getResources().getColor(R.color.rejected));
+            holder.price.setText(String.valueOf(details.getPrice()));
+        View.OnClickListener listener = v -> {
+            holder.showLoading();
+            int status;
+            if (v.getId() == R.id.accept)
+                status = ACCEPTED;
+            else
+                status = REJECTED;
+            VolleyRequestMaker.changeTransaction(context, SharedPreferenceManager.getToken(context), list.get(i).getTranId(), status, new VolleyRequestMaker.TaskFinishListener<Integer>() {
+                @Override
+                public void onSuccess(Integer response) {
+                    holder.showStatus(status);
+                    holder.stopLoading();
                 }
-                actionMade(view, i, status);
-            }
+
+                @Override
+                public void onError(String error) {
+                    Toast.makeText(context, error, Toast.LENGTH_SHORT).show();
+                    holder.stopLoading();
+                    holder.showButtons();
+                }
+            });
         };
-        accept.setOnClickListener(listener);
-        reject.setOnClickListener(listener);
+        holder.accept.setOnClickListener(listener);
+        holder.reject.setOnClickListener(listener);
         return view;
     }
 
     private String getTime(long timestamp) {
+        Log.d("abcd time ",timestamp+"");
         Date now = new Date();
         long diff = (now.getTime() / 1000 - timestamp);
         if (diff < 60)
-            return diff + " seconds ago";
+            return diff + " second(s) ago";
         else if (diff < 3600)
-            return diff / 60 + " minutes ago";
+            return diff / 60 + " minute(s) ago";
         else if (diff < 86400)
-            return diff / 3600 + " hours ago";
+            return diff / 3600 + " hour(s) ago";
         else
-            return diff / 86400 + " days ago";
+            return diff / 86400 + " day(s) ago";
     }
 
-    public void actionMade(final View view, int i, final int status) {
-        //TODO
-        VolleyRequestMaker.changeTransaction(context, SharedPreferenceManager.getToken(context), list.get(i).getTranId(), status, new VolleyRequestMaker.TaskFinishListener<Integer>() {
-            @Override
-            public void onSuccess(Integer response) {
-                if (status == ACCEPTED) {
-                    actionStatus.setVisibility(View.VISIBLE);
-                    accept.setVisibility(View.GONE);
-                    reject.setVisibility(View.GONE);
-                    actionStatus.setText(view.getResources().getStringArray(R.array.status_array)[3]);
-                    actionStatus.setBackgroundColor(view.getResources().getColor(R.color.accepted));
+    class ProductRequestViewHolder {
+        TextView price, name, timestamp, distance, status;
+        Button accept, reject;
+        ConstraintLayout loading;
 
-                } else {
-                    actionStatus.setVisibility(View.VISIBLE);
-                    accept.setVisibility(View.GONE);
-                    reject.setVisibility(View.GONE);
-                    actionStatus.setText(view.getResources().getStringArray(R.array.status_array)[4]);
-                    actionStatus.setBackgroundColor(view.getResources().getColor(R.color.rejected));
-                }
-            }
+        public ProductRequestViewHolder(View view) {
+            price = view.findViewById(R.id.price);
+            name = view.findViewById(R.id.name);
+            timestamp = view.findViewById(R.id.ts);
+            distance = view.findViewById(R.id.dis);
+            status = view.findViewById(R.id.status);
+            accept = view.findViewById(R.id.accept);
+            reject = view.findViewById(R.id.reject);
+            loading = view.findViewById(R.id.loading);
+        }
 
-            @Override
-            public void onError(String error) {
-                Toast.makeText(context, error, Toast.LENGTH_SHORT).show();
-            }
-        });
+        void showLoading() {
+            loading.setVisibility(View.VISIBLE);
+        }
+
+        void stopLoading() {
+            loading.setVisibility(View.GONE);
+        }
+
+        void showStatus(int stat) {
+            loading.setVisibility(View.GONE);
+            reject.setVisibility(View.GONE);
+            accept.setVisibility(View.GONE);
+            status.setVisibility(View.VISIBLE);
+            status.setBackgroundColor(colorList[stat]);
+            status.setText(statusList[stat]);
+        }
+
+        void showButtons() {
+            loading.setVisibility(View.GONE);
+            reject.setVisibility(View.VISIBLE);
+            accept.setVisibility(View.VISIBLE);
+            status.setVisibility(View.GONE);
+        }
+
     }
 }

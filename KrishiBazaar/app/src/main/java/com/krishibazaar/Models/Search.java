@@ -75,7 +75,6 @@ public class Search {
         }
 
         public String getImageUrl() {
-//            return "https://pngimage.net/wp-content/uploads/2018/05/basmati-rice-png-5.png";
             return Uri.parse(BASE_ADDRESS + image_url).toString();
         }
 
@@ -89,7 +88,7 @@ public class Search {
         }
 
         public String getQuantity() {
-            return quantity + " quintal";
+            return quantity + " Kg";
         }
 
         public String getPrice() {

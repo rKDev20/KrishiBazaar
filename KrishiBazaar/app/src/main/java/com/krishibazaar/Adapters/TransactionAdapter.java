@@ -39,7 +39,6 @@ public class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         statusText = context.getResources().getStringArray(R.array.status_array);
     }
 
-
     public void addData(List<Transaction.Response> data) {
         this.data.addAll(data);
     }

@@ -58,6 +58,12 @@ public class LoadingButton extends FrameLayout {
         arr.recycle();
     }
 
+
+    @Override
+    public void setOnClickListener(@Nullable OnClickListener l) {
+        super.setOnClickListener(l);
+    }
+
     public void setButtonText(String text) {
         buttonText.setText(text);
     }

@@ -21,7 +21,7 @@ if (!is_integer($pageOffset) || !is_integer($size)) {
     error(1);
 }
 $start = $size * ($pageOffset - 1);
-$end = $start + $size;
+$end = $size;
 if (isset($params["search"])) {
     $search = $params["search"];
     if (isset($params["latitude"]) && isset($params["longitude"]) && is_numeric($params["latitude"]) && is_numeric($params["longitude"])) {
@@ -38,7 +38,6 @@ if (isset($params["search"])) {
         $query = getTrending($token, $start, $end);
     }
 }
-
 $result = mysqli_query($conn, $query);
 $resultArray = array();
 while ($row = mysqli_fetch_assoc($result)) {
@@ -69,8 +68,8 @@ function getSearchByLocation($token, $search, $start, $end, $latitude, $longitud
     }
     $query = "SELECT ad.* , LAT_LONG_DISTANCE(pin.latitude,pin.longitude,$latitude,$longitude) AS distance, cat.name AS image
     FROM advertisements ad
-    INNER JOIN categories cat ON cat.category_id=ad.category
-    INNER JOIN sub_categories sub ON sub.sub_id=ad.sub_category
+    LEFT JOIN categories cat ON cat.category_id=ad.category
+    LEFT JOIN sub_categories sub ON sub.sub_id=ad.sub_category
     INNER JOIN pincode pin ON pin.pincode=ad.pincode
     WHERE ad.status= " . ACTIVE . " AND ad.mobile!=(SELECT mobile FROM authorisation WHERE token = '$token') AND ";
     $query = $query . implode(' AND ', $searchTermBits);
@@ -89,8 +88,8 @@ function getSearch($token, $search, $start, $end) {
     }
     $query = "SELECT ad.*, cat.name AS image
     FROM advertisements ad
-    INNER JOIN categories cat ON cat.category_id=ad.category
-    INNER JOIN sub_categories sub ON sub.sub_id=ad.sub_category
+    LEFT JOIN categories cat ON cat.category_id=ad.category
+    LEFT JOIN sub_categories sub ON sub.sub_id=ad.sub_category
     WHERE ad.status= " . ACTIVE . " AND ad.mobile!=(SELECT mobile FROM authorisation WHERE token = '$token') AND ";
     $query = $query . implode(' AND ', $searchTermBits);
     $query = $query . " ORDER BY ad.clock LIMIT $start,$end";
@@ -100,7 +99,8 @@ function getSearch($token, $search, $start, $end) {
 function getTrending($token, $start, $end) {
     $query = "SELECT ad.*, cat.name AS image
     FROM advertisements ad
-    INNER JOIN categories cat ON cat.category_id=ad.category
+    LEFT JOIN categories cat ON cat.category_id=ad.category
+	LEFT JOIN sub_categories sub ON sub.sub_id=ad.sub_category
     WHERE ad.status= " . ACTIVE . " AND ad.mobile!=(SELECT mobile FROM authorisation WHERE token = '$token')
     ORDER BY clock
     LIMIT $start,$end";
@@ -109,8 +109,9 @@ function getTrending($token, $start, $end) {
 function getTrendingByLocation($token, $start, $end, $latitude, $longitude) {
     $query = "SELECT ad.* , LAT_LONG_DISTANCE(pin.latitude,pin.longitude,$latitude,$longitude) AS distance, cat.name AS image
     FROM advertisements ad
-    INNER JOIN categories cat ON cat.category_id=ad.category
-    INNER JOIN pincode pin ON pin.pincode=ad.pincode
+    LEFT JOIN categories cat ON cat.category_id=ad.category
+    LEFT JOIN sub_categories sub ON sub.sub_id=ad.sub_category
+	INNER JOIN pincode pin ON pin.pincode=ad.pincode
     WHERE ad.status= " . ACTIVE . " AND ad.mobile!=(SELECT mobile FROM authorisation WHERE token = '$token')
     ORDER BY distance
     LIMIT $start,$end";

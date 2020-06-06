@@ -81,7 +81,7 @@ public class Transaction {
         }
 
         public String getQuantity() {
-            return quantity + " quintal";
+            return quantity + " Kg";
         }
 
         public String getPrice() {

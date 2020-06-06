@@ -11,7 +11,7 @@ define('REJECTED', 4);
 $json = file_get_contents('php://input');
 $params = json_decode($json, true);
 $mobile = $params["mobile"];
-$text = trim($params["text"]);
+$text = strtoupper(trim($params["text"]));
 $auth=$params["auth"];
 
 if($auth!="KKejNeOGdQR46bm6RNgl3344E29ICQjZ"){

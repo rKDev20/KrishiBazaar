@@ -17,21 +17,24 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
-import com.krishibazaar.Adapters.SpinnerChooserAdapter;
+import com.krishibazaar.Adapters.CategoryAdapter;
+import com.krishibazaar.Models.Category;
+import com.krishibazaar.Models.CategoryInterface;
+import com.krishibazaar.Models.SubCategory;
 import com.krishibazaar.R;
 import com.krishibazaar.Utils.AssetsHandler;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class BottomSheetDialog extends BottomSheetDialogFragment {
-    private SpinnerChooser.ItemSelectedListener listener;
+    private SpinnerChooser.ItemChooseListener listener;
     private boolean isCategory;
     private Context context;
     private int category;
-    private SpinnerChooserAdapter chooser;
-    private ArrayList<String> itemList;
+    private CategoryAdapter chooser;
+    private List<CategoryInterface> itemList;
 
-    BottomSheetDialog(boolean isCategory, Context context, int category, SpinnerChooser.ItemSelectedListener listener) {
+    BottomSheetDialog(boolean isCategory, Context context, int category, SpinnerChooser.ItemChooseListener listener) {
         this.isCategory = isCategory;
         this.context = context;
         this.category = category;
@@ -51,23 +54,13 @@ public class BottomSheetDialog extends BottomSheetDialogFragment {
         initHeader(view);
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
         EditText searchItem = view.findViewById(R.id.search_item);
-        ArrayList<String> categoryList = new AssetsHandler(context).getCategoryArray();
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
-        if (isCategory) {
-            itemList = categoryList;
-            chooser = new SpinnerChooserAdapter(itemList, listener, context);
-            recyclerView.setAdapter(chooser);
-        } else {
-            itemList = new AssetsHandler(context).getSubcategoryArray(categoryList.get(category));
-            chooser = new SpinnerChooserAdapter(itemList, listener, context);
-            recyclerView.setAdapter(chooser);
-        }
-        recyclerView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dismiss();
-            }
-        });
+        if (isCategory)
+            chooser = new CategoryAdapter<>(AssetsHandler.getInstance(context).getCategoryArray(), listener);
+        else
+            chooser = new CategoryAdapter<>(AssetsHandler.getInstance(context).getSubcategoryArray(category), listener);
+        recyclerView.setAdapter(chooser);
+        recyclerView.setOnClickListener(view1 -> dismiss());
         searchItem.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -79,7 +72,7 @@ public class BottomSheetDialog extends BottomSheetDialogFragment {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                filter(editable.toString());
+                chooser.filterList(editable.toString());
             }
         });
         return view;
@@ -90,13 +83,5 @@ public class BottomSheetDialog extends BottomSheetDialogFragment {
             ((TextView) view.findViewById(R.id.textView8)).setText("Select category");
         else
             ((TextView) view.findViewById(R.id.textView8)).setText("Select sub-category");
-    }
-
-    private void filter(String text) {
-        ArrayList<String> filteredNames = new ArrayList<>();
-        for (String s : itemList)
-            if (s.toLowerCase().startsWith(text.toLowerCase()))
-                filteredNames.add(s);
-        chooser.filterList(filteredNames, itemList);
     }
 }

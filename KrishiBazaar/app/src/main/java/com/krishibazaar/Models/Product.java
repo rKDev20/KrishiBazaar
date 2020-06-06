@@ -118,7 +118,7 @@ public class Product {
         }
 
         public String getQuantity() {
-            return quantity + " quintal";
+            return quantity + " Kg";
         }
 
         public String getPrice() {
@@ -136,7 +136,9 @@ public class Product {
         }
 
         public String getDistance() {
-            return distance + "km away";
+            if (distance != null)
+                return distance + "km away";
+            else return null;
         }
 
         public int getPincode() {

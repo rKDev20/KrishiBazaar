@@ -37,7 +37,7 @@ function success($conn,$tran_id) {
     die();
 }
 function error() {
-    echo json_encode(array("status" => 0));
+    echo json_encode(array("status" => 0 ));
     die();
 }
 ?>

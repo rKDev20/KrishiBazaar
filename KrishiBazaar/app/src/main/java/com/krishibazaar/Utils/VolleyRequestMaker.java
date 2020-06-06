@@ -337,23 +337,18 @@ public class VolleyRequestMaker {
         try {
             final JSONObject params = query.getJSON();
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, GET_PRODUCT_DETAILS_PHP, params,
-                    new Response.Listener<JSONObject>() {
-                        @Override
-                        public void onResponse(JSONObject response) {
-                            try {
-                                Product.Response data = new Product.Response(response.getJSONObject(SUCCESS));
-                                listener.onSuccess(data);
-                            } catch (JSONException e) {
-                                listener.onError(context.getString(R.string.error_unknown));
-                            }
+                    response -> {
+                        Log.d("abcd", response.toString());
+                        try {
+                            Product.Response data = new Product.Response(response.getJSONObject(SUCCESS));
+                            listener.onSuccess(data);
+                        } catch (JSONException e) {
+                            listener.onError(context.getString(R.string.error_unknown));
                         }
                     },
-                    new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            Log.d("part2", error.getClass().getName());
-                            listener.onError(context.getString(R.string.error_network));
-                        }
+                    error -> {
+                        Log.d("part2", error.getClass().getName());
+                        listener.onError(context.getString(R.string.error_network));
                     });
             addQueue(context, jsonObjectRequest);
         } catch (JSONException e) {
@@ -367,28 +362,21 @@ public class VolleyRequestMaker {
             Log.d("maketransaction", params.toString());
             final int WRONG_PINCODE = -2;
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, MAKE_TRANSACTION_PHP, params,
-                    new Response.Listener<JSONObject>() {
-                        @Override
-                        public void onResponse(JSONObject response) {
-                            try {
-                                if (response.getInt(STATUS) == STATUS_SUCCESS)
-                                    listener.onSuccess(0);
-                                else if (response.getInt(STATUS) == WRONG_PINCODE)
-                                    listener.onError(context.getString(R.string.invalid_pincode));
-                                else listener.onError(context.getString(R.string.error_unknown));
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
+                    response -> {
+                        try {
+                            if (response.getInt(STATUS) == STATUS_SUCCESS)
+                                listener.onSuccess(0);
+                            else if (response.getInt(STATUS) == WRONG_PINCODE)
+                                listener.onError(context.getString(R.string.invalid_pincode));
+                            else listener.onError(context.getString(R.string.error_unknown));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
                     },
-                    new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            listener.onError(context.getString(R.string.error_network));
-                        }
-                    });
+                    error -> listener.onError(context.getString(R.string.error_network)));
             addQueue(context, jsonObjectRequest);
         } catch (JSONException e) {
+            e.printStackTrace();
             listener.onError(context.getString(R.string.error_unknown));
         }
     }
@@ -437,24 +425,16 @@ public class VolleyRequestMaker {
             params.put(TOKEN, token);
             params.put(PRODUCT_ID, productId);
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, DELETE_PRODUCT_PHP, params,
-                    new Response.Listener<JSONObject>() {
-                        @Override
-                        public void onResponse(JSONObject response) {
-                            try {
-                                if (response.getInt(STATUS) == STATUS_SUCCESS)
-                                    listener.onSuccess(0);
-                                else listener.onError(context.getString(R.string.error_unknown));
-                            } catch (JSONException e) {
-                                listener.onError(context.getString(R.string.error_unknown));
-                            }
+                    response -> {
+                        try {
+                            if (response.getInt(STATUS) == STATUS_SUCCESS)
+                                listener.onSuccess(0);
+                            else listener.onError(context.getString(R.string.error_unknown));
+                        } catch (JSONException e) {
+                            listener.onError(context.getString(R.string.error_unknown));
                         }
                     },
-                    new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            listener.onError(context.getString(R.string.error_network));
-                        }
-                    });
+                    error -> listener.onError(context.getString(R.string.error_network)));
             addQueue(context, jsonObjectRequest);
         } catch (JSONException e) {
             listener.onError(context.getString(R.string.error_unknown));
@@ -469,23 +449,19 @@ public class VolleyRequestMaker {
             params.put(STATUS, status);
             Log.d("abcd", params.toString());
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, CHANGE_TRANSACTION_STATUS_PHP, params,
-                    new Response.Listener<JSONObject>() {
-                        @Override
-                        public void onResponse(JSONObject response) {
-                            try {
-                                if (response.getInt(STATUS) == STATUS_SUCCESS)
-                                    listener.onSuccess(0);
-                                else listener.onError(context.getString(R.string.error_unknown));
-                            } catch (JSONException e) {
-                                listener.onError(context.getString(R.string.error_unknown));
-                            }
+                    response -> {
+                        try {
+                            if (response.getInt(STATUS) == STATUS_SUCCESS)
+                                listener.onSuccess(0);
+                            else listener.onError(context.getString(R.string.error_unknown));
+                        } catch (JSONException e) {
+                            listener.onError(context.getString(R.string.error_unknown));
                         }
                     },
-                    new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            listener.onError(context.getString(R.string.error_network));
-                        }
+                    error -> {
+                        listener.onError(context.getString(R.string.error_network))
+                        ;
+                        Log.d("abcd", error.getClass().getName());
                     });
             addQueue(context, jsonObjectRequest);
         } catch (JSONException e) {

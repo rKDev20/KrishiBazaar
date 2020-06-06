@@ -3,7 +3,6 @@ package com.rk.smsserver;
 import android.content.ComponentName;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 
@@ -42,7 +41,7 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
             if (isChecked) {
                 SharedPreferenceManager.setChannel(this, SharedPreferenceManager.CHANNEL_ACTION);
                 FirebaseMessaging.getInstance().subscribeToTopic("all");
-                toggleSms(false);
+                toggleSms(true);
                 botServer.setChecked(false);
             } else {
                 if (!botServer.isChecked()) {

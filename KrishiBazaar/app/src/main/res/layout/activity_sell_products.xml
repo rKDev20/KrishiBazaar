@@ -180,7 +180,7 @@
                         android:drawableStart="@drawable/ic_quantity"
                         android:drawablePadding="5dp"
                         android:ellipsize="end"
-                        android:hint="Enter the total weight of your product."
+                        android:hint="Enter the weight in Kg."
                         android:inputType="numberDecimal"
                         android:maxLines="1"
                         android:paddingHorizontal="15dp"

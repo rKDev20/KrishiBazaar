@@ -1,7 +1,7 @@
 package com.krishibazaar.Utils;
 
 public class Constants {
-    public static final String BASE_ADDRESS = "http://192.168.100.8/KrishiBazaar/";
+    public static final String BASE_ADDRESS = "http://192.168.100.8/KrishiBazaar/web/";
     public static final String API_ADDRESS = BASE_ADDRESS + "api/";
     public static final String GEOCODE_PHP = API_ADDRESS + "geocode.php";
     public static final String SEARCH_PHP = API_ADDRESS + "search.php";
@@ -78,9 +78,6 @@ public class Constants {
     public static final String FARMER_MOBILE = "farmer_mobile";
     public static final String BUYER_DETAILS = "buyers";
     //BUYERS
-    public static final int STATUS_NOT_DECIDED = 0;
-    public static final int STATUS_ACCEPTED = 1;
-    public static final int STATUS_DENIED = 2;
     public static final String TRANSACTION_ID = "tran_id";
     public static final String TIMESTAMP = "timestamp";
     public static final String SUB_CATEGORY = "sub";

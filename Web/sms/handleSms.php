@@ -21,23 +21,23 @@ if (!$conn) {
 $instance = generateSmsInstance($conn, $mobile); //id,status
 
 switch ($instance['status']) {
-case STATE_NEW:sendNewMessage($conn, $instance['id']);
+    case STATE_NEW:sendNewMessage($conn, $instance['id']);
     break;
-case STATE_EXPECT_ACTION:processAction($conn, $instance['id'], $text);
+    case STATE_EXPECT_ACTION:processAction($conn, $instance['id'], $text);
     break;
-case STATE_EXPECT_NAME:processName($conn, $instance['id'], $text);
+    case STATE_EXPECT_NAME:processName($conn, $instance['id'], $text);
     break;
-case STATE_EXPECT_DESCRIPTION:processDescription($conn, $instance['id'], $text);
+    case STATE_EXPECT_DESCRIPTION:processDescription($conn, $instance['id'], $text);
     break;
-case STATE_EXPECT_LOCATION:processLocation($conn, $instance['id'], $text);
+    case STATE_EXPECT_LOCATION:processLocation($conn, $instance['id'], $text);
     break;
-case STATE_EXPECT_QUANTITY:processQuantity($conn, $instance['id'], $text);
+    case STATE_EXPECT_QUANTITY:processQuantity($conn, $instance['id'], $text);
     break;
-case STATE_EXPECT_PRICE:processPrice($conn, $instance['id'], $text);
+    case STATE_EXPECT_PRICE:processPrice($conn, $instance['id'], $text);
     break;
-case STATE_EXPECT_ITEM_ID_REMOVE:processDeleteRequest($conn, $instance['id'], $text);
+    case STATE_EXPECT_ITEM_ID_REMOVE:processDeleteRequest($conn, $instance['id'], $text);
     break;
-case STATE_EXPECT_REMOVE_CONFIRMATION:processDeleteRequestConfirmation($conn, $instance['id'], $text);
+    case STATE_EXPECT_REMOVE_CONFIRMATION:processDeleteRequestConfirmation($conn, $instance['id'], $text);
     break;
 }
 
@@ -50,14 +50,14 @@ function sendNewMessage($conn, $id) {
 
 function processAction($conn, $id, $text) {
     switch ($text) {
-    case ACTION_UPLOAD:
+        case ACTION_UPLOAD:
         $time = getCurrentTimestamp();
         $query = "UPDATE sms_instance SET status=" . STATE_EXPECT_NAME . ", clock='$time' WHERE sms_id=$id;";
         mysqli_query($conn, $query);
         sendSms(ENTER_NAME);
         break;
 
-    case ACTION_REMOVE:
+        case ACTION_REMOVE:
         $time = getCurrentTimestamp();
         $query = "UPDATE sms_instance SET status=" . STATE_EXPECT_ITEM_ID_REMOVE . ", clock='$time' WHERE sms_id=$id;";
         mysqli_query($conn, $query);
@@ -71,7 +71,7 @@ function processAction($conn, $id, $text) {
     // sendSms(ENTER_PRODUCT_ID_DETAILS);
     // break;
 
-    default:
+        default:
         sendSms(WRONG_INPUT);
         break;
     }
@@ -143,7 +143,36 @@ function processPrice($conn, $id, $text) {
 }
 
 function addProduct($conn, $id) {
-    $query = "INSERT INTO advertisements (mobile,name,quantity,rate,description,pincode) SELECT mobile,name,quantity,rate,description,pincode from sms_instance WHERE sms_id=" . $id . ";";
+    $query="SELECT name,description FROM sms_instance WHERE sms_id=$id";
+    $result=mysqli_query($conn,$query);
+    $cat="NULL";
+    $sub_cat="NULL";
+    if(mysqli_num_rows($result)>=1){
+        $row = mysqli_fetch_assoc($result);
+        $name=$row['name'];
+        $description=$row['description'];       
+        $st1 = explode(' ', $name);
+        $st2=explode(' ',$description);
+        $searchTerms=array_merge($st1,$st2);
+        $searchTermBits = array();
+        foreach ($searchTerms as $term) {
+            $term = trim($term);
+            if (!empty($term)) {
+                $searchTermBits[] = "name LIKE '%$term%'";
+            }
+        }
+        $cat_query="SELECT category_id FROM categories WHERE ". implode(' OR ', $searchTermBits);
+        $sub_cat_query="SELECT sub_id FROM sub_categories WHERE ". implode(' OR ', $searchTermBits);
+        $cat_result=mysqli_query($conn,$cat_query);
+        $sub_cat_result=mysqli_query($conn,$sub_cat_query);
+        if ($cat_result&&$sub_cat_result) {
+            if(mysqli_num_rows($cat_result)>=1)
+                $cat = mysqli_fetch_assoc($cat_result)['category_id'];
+            if(mysqli_num_rows($sub_cat_result)>=1)
+                $sub_cat = mysqli_fetch_assoc($sub_cat_result)['sub_id'];  
+        }
+    }
+    $query = "INSERT INTO advertisements (mobile,category,sub_category,name,quantity,rate,description,pincode) SELECT mobile,$cat,$sub_cat,name,quantity,rate,description,pincode from sms_instance WHERE sms_id=" . $id . ";";
     mysqli_query($conn, $query);
     $ad_id = mysqli_insert_id($conn);
     sendSms(sprintf(SUCCESS_AD_POSTED, $ad_id));
@@ -225,8 +254,5 @@ function generateSmsInstance($conn, $mobile) {
 
 function sendSms($text) {
     echo json_encode(array('text' => $text));
-}
-function getCurrentTimestamp() {
-    return (new DateTime())->format('Y-m-d H:i:s');
 }
 ?>
