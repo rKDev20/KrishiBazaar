@@ -92,7 +92,7 @@ $subCat = mysqli_query($conn,$qrySubCat);
 						    <label>Category</label>
 								<div>
 								<select class="btn btn-secondary dropdown-toggle" name="category">
-									<option value="">Select Category</option>
+									<option value="-1" selected >Select Category</option>
 									<?php
 									while ($category = mysqli_fetch_assoc($cat)) {
 										echo "<option value = ".$category['category_id'].">".$category['name']."</option>";
@@ -105,7 +105,7 @@ $subCat = mysqli_query($conn,$qrySubCat);
 							<label>Sub Category</label>
 							<div>
 							<select class="btn btn-secondary dropdown-toggle" name="SubCategory">
-								<option value="">Select Sub Category</option>
+								<option value="-1" selected >Select Sub Category</option>
 								<?php
 								while ($Subcategory = mysqli_fetch_assoc($subCat)) {
 									echo "<option value = ".$Subcategory['sub_id'].">".$Subcategory['name']."</option>";

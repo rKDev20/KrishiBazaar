@@ -8,8 +8,21 @@ if(!isset($_SESSION['mobile']))
 include_once '../util/db.php';
 include_once '../util/utils.php';
 $pname = $_POST['pname'];
-$cat = $_POST['category'];
-$sub = $_POST['SubCategory'];
+if($_POST['category'] == -1)
+	{
+		$cat = 'NULL';
+	}
+else {
+	$cat = $_POST['category'];
+}
+if($_POST['SubCategory'] != -1)
+	{
+		$sub = $_POST['SubCategory'];
+	}
+else {
+	$sub = 'NULL';
+}
+
 $q = $_POST['quantity'];
 $price = $_POST['price'];
 $pin = $_POST['pin'];
@@ -35,9 +48,13 @@ if($runQry)
 	exit();
 }
 else {
+	echo $_POST['category'];
+	echo $_POST['SubCategory'];
+	echo $cat;
+	echo $sub;
   $_SESSION['message'] = "Could not post add!!";
-  //echo "Not Posted \n";
-  //echo $qry;
+  echo "Not Posted \n";
+  echo $qry;
   header('location:sell.php');
 	exit();
 }
