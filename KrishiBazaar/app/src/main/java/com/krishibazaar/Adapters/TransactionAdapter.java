@@ -1,7 +1,6 @@
 package com.krishibazaar.Adapters;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,12 +62,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             viewHolder.status.setText(statusText[response.getStatus()]);
             viewHolder.status.setBackgroundColor(statusColor[response.getStatus()]);
             viewHolder.timestamp.setText(response.getTime());
-            viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    clickListener.onClick(response.getProductId());
-                }
-            });
+            viewHolder.itemView.setOnClickListener(v -> clickListener.onClick(response.getProductId()));
             if (response.getDistance() != null) {
                 viewHolder.location.setVisibility(View.VISIBLE);
                 viewHolder.location.setText(response.getDistance());
@@ -76,15 +70,11 @@ public class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 viewHolder.location.setVisibility(View.GONE);
         } else {
             LoadingViewHolder viewHolder = (LoadingViewHolder) holder;
-            Log.d("abcd", "here");
             if (isReloadFailed)
-                viewHolder.setRefresh(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        isReloadFailed = false;
-                        notifyItemChanged(position);
-                        reloadListener.onReload();
-                    }
+                viewHolder.setRefresh(view -> {
+                    isReloadFailed = false;
+                    notifyItemChanged(position);
+                    reloadListener.onReload();
                 });
             else viewHolder.setProgressBar();
         }

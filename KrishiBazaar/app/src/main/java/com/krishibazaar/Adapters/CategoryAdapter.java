@@ -8,7 +8,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.krishibazaar.Models.Category;
 import com.krishibazaar.Models.CategoryInterface;
 import com.krishibazaar.Popups.SpinnerChooser;
 import com.krishibazaar.R;
@@ -39,9 +38,7 @@ public class CategoryAdapter<T extends CategoryInterface> extends RecyclerView.A
     public void onBindViewHolder(@NonNull ItemViewHolder holder, final int position) {
         final T category = itemList.get(position);
         holder.itemName.setText(category.getName());
-        holder.itemName.setOnClickListener(view -> {
-            listener.onItemSelected(category);
-        });
+        holder.itemName.setOnClickListener(view -> listener.onItemSelected(category));
     }
 
     @Override

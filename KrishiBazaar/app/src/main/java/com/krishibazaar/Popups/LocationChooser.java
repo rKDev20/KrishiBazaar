@@ -49,12 +49,9 @@ public class LocationChooser {
             public void onSuccess(final LocationDetails details) {
                 setLocation(details.getName());
                 unsetGpsLoading();
-                result.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        listener.onLocationSelected(details);
-                        dialog.cancel();
-                    }
+                result.setOnClickListener(view1 -> {
+                    listener.onLocationSelected(details);
+                    dialog.cancel();
                 });
             }
 
@@ -64,48 +61,34 @@ public class LocationChooser {
                 setError(error);
             }
         };
-        search.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String search = location.getText().toString();
-                if (!search.isEmpty() && search.length() > 3) {
-                    setSearchLoading();
-                    VolleyRequestMaker.getLocationByAddress(context, search, new VolleyRequestMaker.TaskFinishListener<LocationDetails>() {
-                        @Override
-                        public void onSuccess(final LocationDetails details) {
-                            unsetSearchLoading();
-                            setLocation(details.getName());
-                            result.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    listener.onLocationSelected(details);
-                                    dialog.cancel();
-                                }
-                            });
-                        }
+        search.setOnClickListener(view12 -> {
+            String search = location.getText().toString();
+            if (!search.isEmpty() && search.length() > 3) {
+                setSearchLoading();
+                VolleyRequestMaker.getLocationByAddress(context, search, new VolleyRequestMaker.TaskFinishListener<LocationDetails>() {
+                    @Override
+                    public void onSuccess(final LocationDetails details) {
+                        unsetSearchLoading();
+                        setLocation(details.getName());
+                        result.setOnClickListener(view121 -> {
+                            listener.onLocationSelected(details);
+                            dialog.cancel();
+                        });
+                    }
 
-                        @Override
-                        public void onError(String error) {
-                            unsetSearchLoading();
-                            setError(error);
-                        }
-                    });
-                }
+                    @Override
+                    public void onError(String error) {
+                        unsetSearchLoading();
+                        setError(error);
+                    }
+                });
             }
         });
-        gps.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                setGpsLoading();
-                context.getLocation(l);
-            }
+        gps.setOnClickListener(view13 -> {
+            setGpsLoading();
+            context.getLocation(l);
         });
-        view.findViewById(R.id.close).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.cancel();
-            }
-        });
+        view.findViewById(R.id.close).setOnClickListener(v -> dialog.cancel());
         dialog.show();
     }
 

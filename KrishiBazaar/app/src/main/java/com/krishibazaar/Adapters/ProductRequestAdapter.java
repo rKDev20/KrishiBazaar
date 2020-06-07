@@ -1,7 +1,6 @@
 package com.krishibazaar.Adapters;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -103,7 +102,6 @@ public class ProductRequestAdapter extends BaseAdapter {
     }
 
     private String getTime(long timestamp) {
-        Log.d("abcd time ",timestamp+"");
         Date now = new Date();
         long diff = (now.getTime() / 1000 - timestamp);
         if (diff < 60)

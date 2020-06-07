@@ -7,6 +7,18 @@
     android:background="@drawable/drawing"
     tools:context=".MainActivity">
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="136dp"
+        android:fontFamily="@font/title"
+        android:text="KRISHI BAZAAR"
+        android:textColor="@color/white"
+        android:textSize="35sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/login1"
@@ -74,15 +86,15 @@
 
         <com.krishibazaar.Utils.LoadingButton
             android:id="@+id/otpbutton"
-            android:paddingVertical="7dp"
-            android:paddingHorizontal="15dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:name="Request OTP"
             android:layout_marginBottom="72dp"
+            android:paddingHorizontal="15dp"
+            android:paddingVertical="7dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:name="Request OTP" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -118,13 +130,13 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
+            android:layout_marginBottom="72dp"
             android:paddingHorizontal="15dp"
             android:paddingVertical="7dp"
-            app:name="Login"
-            android:layout_marginBottom="72dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:name="Login" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

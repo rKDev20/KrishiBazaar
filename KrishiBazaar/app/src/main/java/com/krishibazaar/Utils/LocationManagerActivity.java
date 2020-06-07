@@ -5,7 +5,6 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
-import android.location.Location;
 import android.os.Build;
 import android.util.Log;
 
@@ -47,7 +46,6 @@ public class LocationManagerActivity extends AppCompatActivity {
     }
 
     private void checkForLocationPermission() {
-        Log.d("abcd", "checkForLocationPermission()");
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED)
                 permissionAvailable();
@@ -57,7 +55,6 @@ public class LocationManagerActivity extends AppCompatActivity {
     }
 
     private void permissionAvailable() {
-        Log.d("abcd", "permissionAvailable()");
         LocationRequest gps = new LocationRequest();
         gps.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
         gps.setInterval(1000);
@@ -102,7 +99,6 @@ public class LocationManagerActivity extends AppCompatActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        Log.d("abcd", "onPermissionResult()");
         if (requestCode == RC_PERMISSION_LOCATION) {
             if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 permissionAvailable();
@@ -112,26 +108,19 @@ public class LocationManagerActivity extends AppCompatActivity {
         }
     }
 
+    @SuppressLint("MissingPermission")
     private void searchLocationPassively() {
         Log.d("abcd", "searchLocationPassively()");
         FusedLocationProviderClient client = LocationServices.getFusedLocationProviderClient(this);
-        client.getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
-            @Override
-            public void onSuccess(Location location) {
-                if (location != null)
-                    getLocationAddress(location.getLatitude(), location.getLongitude());
-                else searchLocationActively();
-            }
-        }).addOnFailureListener(this, new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                onError(getString(R.string.failed_location));
-            }
-        });
+        client.getLastLocation().addOnSuccessListener(this, location -> {
+            if (location != null)
+                getLocationAddress(location.getLatitude(), location.getLongitude());
+            else searchLocationActively();
+        }).addOnFailureListener(this, e -> onError(getString(R.string.failed_location)));
     }
 
+    @SuppressLint("MissingPermission")
     private void searchLocationActively() {
-        Log.d("abcd", "searchLocationActively()");
         final FusedLocationProviderClient client = LocationServices.getFusedLocationProviderClient(this);
         LocationRequest request = new LocationRequest();
         request.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
@@ -139,8 +128,6 @@ public class LocationManagerActivity extends AppCompatActivity {
         final LocationCallback callback = new LocationCallback() {
             @Override
             public void onLocationResult(LocationResult locationResult) {
-                Log.d("abcd", "onLocationResult()");
-
                 getLocationAddress(locationResult.getLastLocation().getLatitude(), locationResult.getLastLocation().getLongitude());
                 client.removeLocationUpdates(this);
             }
@@ -156,7 +143,6 @@ public class LocationManagerActivity extends AppCompatActivity {
     }
 
     private void getLocationAddress(final double latitude, final double longitude) {
-        Log.d("abcd", "getLocationAddress()");
         VolleyRequestMaker.getLocationByCoordinates(this, latitude, longitude, new VolleyRequestMaker.TaskFinishListener<LocationDetails>() {
             @Override
             public void onSuccess(LocationDetails details) {

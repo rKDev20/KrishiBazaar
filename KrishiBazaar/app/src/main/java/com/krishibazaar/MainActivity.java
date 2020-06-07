@@ -32,7 +32,6 @@ public class MainActivity extends LocationManagerActivity implements BottomNavig
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         String token = SharedPreferenceManager.getToken(this);
-        //String token="123456789098765432123456789";
         if (token == null) {
             startActivity(new Intent(this, LoginActivity.class));
             finish();
@@ -40,7 +39,6 @@ public class MainActivity extends LocationManagerActivity implements BottomNavig
             initViews();
             loadFragment(HOME);
         }
-//        startActivity(new Intent(this, ProductViewActivity.class));
     }
 
     private void initViews() {

@@ -21,7 +21,6 @@ import androidx.palette.graphics.Palette;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
@@ -91,24 +90,17 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                             public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, com.bumptech.glide.load.DataSource dataSource, boolean isFirstResource) {
                                 BitmapDrawable drawable = (BitmapDrawable) resource;
                                 Bitmap bitmap = drawable.getBitmap();
-                                Palette.from(bitmap).generate(new Palette.PaletteAsyncListener() {
-                                    public void onGenerated(Palette p) {
-                                        int color = p.getDominantColor(context.getResources().getColor(R.color.blue));
-                                        ViewCompat.setBackgroundTintList(viewHolder.wave, ColorStateList.valueOf(color));
-                                        viewHolder.container.setStrokeColor(color);
-                                    }
+                                Palette.from(bitmap).generate(p -> {
+                                    int color = p.getDominantColor(context.getResources().getColor(R.color.blue));
+                                    ViewCompat.setBackgroundTintList(viewHolder.wave, ColorStateList.valueOf(color));
+                                    viewHolder.container.setStrokeColor(color);
                                 });
                                 return false;
                             }
                         })
                         .into(viewHolder.image);
             else viewHolder.image.setImageDrawable(null);
-            viewHolder.container.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    clickListener.onClick(response.getProductId());
-                }
-            });
+            viewHolder.container.setOnClickListener(v -> clickListener.onClick(response.getProductId()));
             viewHolder.name.setText(response.getName());
             viewHolder.description.setText(response.getDescription());
             viewHolder.quantity.setText(response.getQuantity());
@@ -121,15 +113,11 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             }
         } else {
             LoadingViewHolder viewHolder = (LoadingViewHolder) holder;
-            Log.d("abcd", "here");
             if (isReloadFailed)
-                viewHolder.setRefresh(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        isReloadFailed = false;
-                        reloadListener.onReload();
-                        notifyItemChanged(position);
-                    }
+                viewHolder.setRefresh(view -> {
+                    isReloadFailed = false;
+                    reloadListener.onReload();
+                    notifyItemChanged(position);
                 });
             else viewHolder.setProgressBar();
         }

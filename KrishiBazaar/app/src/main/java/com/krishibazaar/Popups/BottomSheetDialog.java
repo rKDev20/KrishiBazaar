@@ -18,9 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.krishibazaar.Adapters.CategoryAdapter;
-import com.krishibazaar.Models.Category;
 import com.krishibazaar.Models.CategoryInterface;
-import com.krishibazaar.Models.SubCategory;
 import com.krishibazaar.R;
 import com.krishibazaar.Utils.AssetsHandler;
 

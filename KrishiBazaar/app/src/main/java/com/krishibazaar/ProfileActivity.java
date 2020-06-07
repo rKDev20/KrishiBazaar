@@ -66,7 +66,6 @@ public class ProfileActivity extends Fragment {
     private CardView transactionError;
     private CardView transactionProgress;
     private TextView transactionErrorText;
-    private Button transactionRetry;
 
     @Nullable
     @Override
@@ -79,7 +78,6 @@ public class ProfileActivity extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        Log.d("abcd", "here mf");
         context = getContext();
         initUser();
         initTransactions();
@@ -102,44 +100,28 @@ public class ProfileActivity extends Fragment {
         transactionError = view.findViewById(R.id.transactionError);
         transactionErrorText = view.findViewById(R.id.transactionErrorText);
         transactionProgress = view.findViewById(R.id.transactionProgress);
-        transactionRetry = view.findViewById(R.id.transactionErrorRetry);
+        Button transactionRetry = view.findViewById(R.id.transactionErrorRetry);
         logout = view.findViewById(R.id.logout);
-        retry.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                initUser();
+        retry.setOnClickListener(v -> initUser());
+        transactionRetry.setOnClickListener(v -> loadTransactions());
+        edit.setOnClickListener(view1 -> {
+            if (editMode) {
+                changeProfile();
+            } else {
+                setEdit(true);
             }
         });
-        transactionRetry.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                loadTransactions();
-            }
-        });
-        edit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (editMode) {
-                    changeProfile();
-                } else {
-                    setEdit(true);
-                }
-            }
-        });
-        logout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (logoutStatus) {
-                    VolleyRequestMaker.logout(context, SharedPreferenceManager.getToken(context));
-                    SharedPreferenceManager.clear(context);
-                    getActivity().finish();
-                    Intent intent = new Intent(context, MainActivity.class);
-                    startActivity(intent);
-                } else {
-                    logout.setAlpha(0.7f);
-                    logout.setText("Are you sure?");
-                    logoutStatus = true;
-                }
+        logout.setOnClickListener(v -> {
+            if (logoutStatus) {
+                VolleyRequestMaker.logout(context, SharedPreferenceManager.getToken(context));
+                SharedPreferenceManager.clear(context);
+                requireActivity().finish();
+                Intent intent = new Intent(context, MainActivity.class);
+                startActivity(intent);
+            } else {
+                logout.setAlpha(0.7f);
+                logout.setText("Are you sure?");
+                logoutStatus = true;
             }
         });
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
@@ -276,7 +258,7 @@ public class ProfileActivity extends Fragment {
         if (!nameText.isEmpty() && pincodeText.length() == 6 && mobileText.length() == 10 && !addressText.isEmpty()) {
             showLoading();
             String token = SharedPreferenceManager.getToken(context);
-            int pin = Integer.valueOf(pincodeText);
+            int pin = Integer.parseInt(pincodeText);
             final NewUser tmp = new NewUser(nameText, token, addressText, pin);
             VolleyRequestMaker.register(context, tmp, new VolleyRequestMaker.TaskFinishListener<Integer>() {
                 @Override
@@ -383,17 +365,7 @@ public class ProfileActivity extends Fragment {
 
     private void initList(List<Transaction.Response> response) {
         if (adapter == null) {
-            adapter = new TransactionAdapter(context, response, new TransactionAdapter.ReloadListener() {
-                @Override
-                public void onReload() {
-                    loadTransactions();
-                }
-            }, new TransactionAdapter.OnClickListener() {
-                @Override
-                public void onClick(long productId) {
-                    openProductView(productId);
-                }
-            });
+            adapter = new TransactionAdapter(context, response, this::loadTransactions, this::openProductView);
             recyclerView.setAdapter(adapter);
         } else adapter.addData(response);
         adapter.notifyDataSetChanged();

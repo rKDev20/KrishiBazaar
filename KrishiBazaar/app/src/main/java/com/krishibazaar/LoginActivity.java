@@ -3,7 +3,6 @@ package com.krishibazaar;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -16,7 +15,6 @@ import com.krishibazaar.Models.Authentication;
 import com.krishibazaar.Utils.LoadingButton;
 import com.krishibazaar.Utils.SharedPreferenceManager;
 import com.krishibazaar.Utils.VolleyRequestMaker;
-import com.mukesh.OnOtpCompletionListener;
 import com.mukesh.OtpView;
 
 import static com.krishibazaar.Utils.Constants.STATUS_SUCCESS_EXIST;
@@ -42,63 +40,44 @@ public class LoginActivity extends AppCompatActivity {
         mob = findViewById(R.id.num);
         sendOtp = findViewById(R.id.otpbutton);
         loginButton = findViewById(R.id.loginbutton);
-        sendOtp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String mobile = mob.getText().toString();
-                if (mobile.length() == 10) {
-                    mobileNumber = Long.parseLong(mobile);
-                    generateOTP(mobileNumber);
-                } else {
-                    Toast.makeText(LoginActivity.this, "Invalid Mobile Number", Toast.LENGTH_LONG).show();
-                }
+        sendOtp.setOnClickListener(view -> {
+            String mobile = mob.getText().toString();
+            if (mobile.length() == 10) {
+                mobileNumber = Long.parseLong(mobile);
+                generateOTP(mobileNumber);
+            } else {
+                Toast.makeText(LoginActivity.this, "Invalid Mobile Number", Toast.LENGTH_LONG).show();
             }
         });
 
-        otpView.setOtpCompletionListener(new OnOtpCompletionListener() {
-            @Override
-            public void onOtpCompleted(final String enteredotp) {
-                InputMethodManager manager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
-                View view = getCurrentFocus();
-                if (view == null) {
-                    view = new View(LoginActivity.this);
-                }
-                assert manager != null;
-                manager.hideSoftInputFromWindow(view.getWindowToken(), 0);
-                loginButton.setClickable(true);
-                loginButton.setFocusable(true);
-                loginButton.setBackground(getResources().getDrawable(R.drawable.login_button_background));
-                loginButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        verifyOTP(mobileNumber, Integer.parseInt(enteredotp));
-                    }
-                });
+        otpView.setOtpCompletionListener(enteredotp -> {
+            InputMethodManager manager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+            View view = getCurrentFocus();
+            if (view == null) {
+                view = new View(LoginActivity.this);
             }
+            assert manager != null;
+            manager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+            loginButton.setClickable(true);
+            loginButton.setFocusable(true);
+            loginButton.setBackground(getResources().getDrawable(R.drawable.login_button_background));
+            loginButton.setOnClickListener(view1 -> verifyOTP(mobileNumber, Integer.parseInt(enteredotp)));
         });
 
-        loginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String otp = otpView.getText().toString();
-                if (otp.length() == 6) {
-                    verifyOTP(mobileNumber, Integer.parseInt(otp));
-                } else
-                    Toast.makeText(LoginActivity.this, "Enter otp", Toast.LENGTH_SHORT).show();
-            }
+        loginButton.setOnClickListener(view -> {
+            String otp = otpView.getText().toString();
+            if (otp.length() == 6) {
+                verifyOTP(mobileNumber, Integer.parseInt(otp));
+            } else
+                Toast.makeText(LoginActivity.this, "Enter otp", Toast.LENGTH_SHORT).show();
         });
     }
 
     public void generateOTP(long mobileNumber) {
         sendOtp.setClickable(false);
         mob.setFocusable(false);
-//        sendOtp.setBackground(getResources().getDrawable(R.drawable.button_disable));
         sendOtp.setButtonText("Requesting");
         sendOtp.startProgressBar();
-        Log.d("volley","clicked");
-//        Sprite wave=new Wave();
-//        loading.setIndeterminateDrawable(wave);
-//        loading.setVisibility(View.VISIBLE);
         VolleyRequestMaker.sendOtp(this, mobileNumber, new VolleyRequestMaker.TaskFinishListener<Boolean>() {
             @Override
             public void onSuccess(Boolean response) {
@@ -107,7 +86,6 @@ public class LoginActivity extends AppCompatActivity {
                 l2.setVisibility(View.VISIBLE);
                 loginButton.setClickable(false);
                 loginButton.setFocusable(false);
-//                loginButton.setBackground(getResources().getDrawable(R.drawable.button_disable));
             }
 
             @Override
@@ -127,7 +105,6 @@ public class LoginActivity extends AppCompatActivity {
         loginButton.setFocusable(false);
         loginButton.setButtonText("Logging In");
         loginButton.startProgressBar();
-        //loginButton.setBackground(getResources().getDrawable(R.drawable.button_disable));
         VolleyRequestMaker.verifyOtp(this, mobileNumber, otpPassword, new VolleyRequestMaker.TaskFinishListener<Authentication>() {
             @Override
             public void onSuccess(Authentication response) {
@@ -150,7 +127,6 @@ public class LoginActivity extends AppCompatActivity {
                 loginButton.setFocusable(true);
                 loginButton.stopProgressBar();
                 loginButton.setButtonText("Retry");
-                //loginButton.setBackground(getResources().getDrawable(R.drawable.login_button_background));
             }
         });
     }

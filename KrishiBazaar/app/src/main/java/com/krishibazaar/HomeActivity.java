@@ -28,7 +28,6 @@ import com.krishibazaar.Adapters.SearchAdapter;
 import com.krishibazaar.Models.LocationDetails;
 import com.krishibazaar.Models.Search;
 import com.krishibazaar.Popups.LocationChooser;
-import com.krishibazaar.Popups.PopupListener;
 import com.krishibazaar.Utils.LocationManagerActivity;
 import com.krishibazaar.Utils.SharedPreferenceManager;
 import com.krishibazaar.Utils.VolleyRequestMaker;
@@ -52,13 +51,11 @@ public class HomeActivity extends Fragment {
     private LocationManagerActivity activity;
     private Context context;
     private String searchText;
-    private LocationManagerActivity.LocationListener listener;
     private ProgressBar progressBar;
     private TextView errorText;
     private ConstraintLayout errorBox;
     private LinearLayout loadingBox;
     private ShimmerFrameLayout shimmerFrameLayout;
-    private Button retry;
 
     @Nullable
     @Override
@@ -72,14 +69,12 @@ public class HomeActivity extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        Log.d("abcd", "here mf");
-
-        activity = (LocationManagerActivity) getActivity();
+        activity = (LocationManagerActivity) requireActivity();
         context = activity.getApplicationContext();
         locationDetails = SharedPreferenceManager.getLocation(context);
         if (locationDetails != null)
             locationText.setText(locationDetails.getName());
-        listener = new LocationManagerActivity.LocationListener() {
+        LocationManagerActivity.LocationListener listener = new LocationManagerActivity.LocationListener() {
             @Override
             public void onSuccess(LocationDetails details) {
                 SharedPreferenceManager.setLocation(context, details);
@@ -98,42 +93,28 @@ public class HomeActivity extends Fragment {
 
     private void initViews(View view) {
         locationText = view.findViewById(R.id.location);
-        locationText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                LocationChooser chooser = new LocationChooser(activity, new PopupListener() {
-                    @Override
-                    public void onLocationSelected(LocationDetails details) {
-                        locationText.setText(details.getName());
-                        locationDetails = details;
-                    }
-                });
-                chooser.popup();
-            }
+        locationText.setOnClickListener(view1 -> {
+            LocationChooser chooser = new LocationChooser(activity, details -> {
+                locationText.setText(details.getName());
+                locationDetails = details;
+            });
+            chooser.popup();
         });
         searchBox = view.findViewById(R.id.search_box);
         progressBar = view.findViewById(R.id.progressBar);
         searchButton = view.findViewById(R.id.searchButton);
-        searchButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                initSearch(false);
-            }
-        });
+        searchButton.setOnClickListener(v -> initSearch(false));
         recyclerView = view.findViewById(R.id.recyclerView);
         errorText = view.findViewById(R.id.errorText);
         errorBox = view.findViewById(R.id.errorContainer);
 
         loadingBox = view.findViewById(R.id.loadingContainer);
         shimmerFrameLayout = view.findViewById(R.id.shimmer_view_container);
-        retry = view.findViewById(R.id.retry);
-        retry.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (searchText == null || searchText.compareTo("") == 0)
-                    initSearch(true);
-                else initSearch(false);
-            }
+        Button retry = view.findViewById(R.id.retry);
+        retry.setOnClickListener(v -> {
+            if (searchText == null || searchText.compareTo("") == 0)
+                initSearch(true);
+            else initSearch(false);
         });
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         initScrollListener();
@@ -141,8 +122,8 @@ public class HomeActivity extends Fragment {
 
     private void initLoading(LayoutInflater inflater) {
         DisplayMetrics metrics = new DisplayMetrics();
-        getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
-        int n = metrics.heightPixels / (int) getActivity().getResources().getDimension(R.dimen.shimmer_container);
+        requireActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        int n = metrics.heightPixels / (int) requireActivity().getResources().getDimension(R.dimen.shimmer_container);
         for (int i = 0; i < n - 2; i++) {
             Log.d("abcd", n + "sss");
             loadingBox.addView(inflater.inflate(R.layout.shimmer_home_activity, loadingBox, false));
@@ -235,17 +216,7 @@ public class HomeActivity extends Fragment {
 
     private void refreshList(List<Search.Response> response) {
         if (adapter == null) {
-            adapter = new SearchAdapter(context, new SearchAdapter.ReloadListener() {
-                @Override
-                public void onReload() {
-                    loadProducts();
-                }
-            }, new SearchAdapter.OnClickListener() {
-                @Override
-                public void onClick(long productId) {
-                    openProductView(productId);
-                }
-            });
+            adapter = new SearchAdapter(context, this::loadProducts, this::openProductView);
             recyclerView.setAdapter(adapter);
         }
         if (pageOffset == 0)

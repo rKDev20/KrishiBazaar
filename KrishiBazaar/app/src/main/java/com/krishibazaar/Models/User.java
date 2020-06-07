@@ -1,7 +1,5 @@
 package com.krishibazaar.Models;
 
-import android.util.Log;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -24,19 +22,9 @@ public class User {
         pincode = user.getInt(PINCODE);
     }
 
-    public JSONObject getJSON() throws JSONException{
-        JSONObject object = new JSONObject();
-        object.put(NAME,name);
-        object.put(MOBILE,mobile);
-        object.put(ADDRESS,address);
-        object.put(PINCODE,pincode);
-        return object;
-    }
     public User(String name, long mobile, String address, int pincode) throws IllegalArgumentException{
-        Log.d("abcd",name+mobile+address+pincode);
 
         if (name==null||mobile==-1||address==null||pincode==-1){
-            Log.d("abcd","exeption thrown");
             throw new IllegalArgumentException();
         }
         this.name = name;

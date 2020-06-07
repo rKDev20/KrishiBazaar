@@ -52,12 +52,6 @@ public class Product {
             this.proId = proId;
         }
 
-        public Query(String token, int proID, Double latitude, Double longitude) {
-            this.token = token;
-            this.proId = proID;
-            this.latitude = latitude;
-            this.longitude = longitude;
-        }
     }
 
     public static class Response {
