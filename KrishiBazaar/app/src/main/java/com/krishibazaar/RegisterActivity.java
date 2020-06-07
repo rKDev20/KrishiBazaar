@@ -2,13 +2,13 @@ package com.krishibazaar;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.krishibazaar.Models.NewUser;
+import com.krishibazaar.Utils.LoadingButton;
 import com.krishibazaar.Utils.SharedPreferenceManager;
 import com.krishibazaar.Utils.VolleyRequestMaker;
 
@@ -16,7 +16,7 @@ import static com.krishibazaar.Utils.Constants.TOKEN;
 
 public class RegisterActivity extends AppCompatActivity {
     EditText name, address, pin;
-    Button button;
+    LoadingButton button;
     String token;
 
     @Override
@@ -33,6 +33,7 @@ public class RegisterActivity extends AppCompatActivity {
             pin = findViewById(R.id.pin);
             button = findViewById(R.id.reg);
             button.setOnClickListener(view -> {
+                button.startProgressBar();
                 if (name.getText().toString().length() != 0 && pin.getText().toString().length() == 6) {
                     NewUser user = new NewUser(name.getText().toString(),
                             token,
@@ -41,6 +42,7 @@ public class RegisterActivity extends AppCompatActivity {
                     VolleyRequestMaker.register(getApplicationContext(), user, new VolleyRequestMaker.TaskFinishListener<Integer>() {
                         @Override
                         public void onSuccess(Integer response) {
+                            button.stopProgressBar();
                             SharedPreferenceManager.setToken(RegisterActivity.this, token);
                             Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
                             startActivity(intent);
@@ -48,6 +50,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                         @Override
                         public void onError(String error) {
+                            button.stopProgressBar();
                             Toast.makeText(getApplicationContext(), error, Toast.LENGTH_SHORT).show();
                         }
                     });

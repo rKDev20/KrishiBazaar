@@ -34,8 +34,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".LoginActivity" />
-        <activity android:name=".RegisterActivity" />
+        <activity android:name=".LoginActivity"
+            android:noHistory="true"/>
+        <activity
+            android:noHistory="true" android:name=".RegisterActivity" />
         <activity android:name=".ProductViewActivity" />
     </application>
 

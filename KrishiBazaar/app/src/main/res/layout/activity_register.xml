@@ -4,41 +4,31 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/drawing3"
+    android:background="@drawable/drawing"
     tools:context=".RegisterActivity">
 
-<!--    <EditText-->
-<!--        android:id="@+id/name"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_alignParentEnd="true"-->
-<!--        android:layout_alignParentBottom="true"-->
-<!--        android:layout_marginBottom="40dp"-->
-<!--        android:background="@drawable/login_mobile_edittext"-->
-<!--        android:ems="10"-->
-<!--        android:inputType="textPersonName"-->
-<!--        android:padding="10dp"-->
-<!--        android:textAlignment="center"-->
-<!--        android:textSize="20sp"-->
-<!--        app:layout_constraintBottom_toTopOf="@+id/address"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintHorizontal_bias="0.497"-->
-<!--        app:layout_constraintStart_toStartOf="parent" />-->
-    <libs.mjn.fieldset.FieldSetView
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="136dp"
+        android:fontFamily="@font/title"
+        android:text="KRISHI BAZAAR"
+        android:textColor="@color/white"
+        android:textSize="35sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
         android:id="@+id/name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="40dp"
-        app:fsv_borderAlpha="0.75"
-        app:fsv_borderColor="#C2185B"
-        app:fsv_borderRadius="12dp"
-        app:fsv_borderWidth="3dp"
-        app:fsv_legend="Gender"
-        app:fsv_legendColor="#C2185B"
-        app:fsv_legendPosition="center"
-        app:fsv_legendSize="16sp"
+        android:background="@drawable/login_mobile_edittext"
         android:ems="10"
         android:inputType="textPersonName"
         android:padding="10dp"
@@ -46,8 +36,8 @@
         android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/address"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent" />
+
 
     <EditText
         android:id="@+id/address"
@@ -63,7 +53,6 @@
         android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/pin"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
@@ -81,10 +70,9 @@
         android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/reg"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.504"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <Button
+    <com.krishibazaar.Utils.LoadingButton
         android:id="@+id/reg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -92,15 +80,15 @@
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="56dp"
         android:background="@drawable/login_button_background"
-        android:paddingLeft="25dp"
-        android:paddingRight="25dp"
-        android:text="Register"
+        android:paddingHorizontal="25dp"
+        android:paddingVertical="10dp"
         android:textColor="@android:color/background_light"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:name="Register" />
 
     <TextView
         android:id="@+id/textView4"
